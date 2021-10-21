@@ -15,23 +15,25 @@
                 <th>When to buy</th>
                 <th>Dividend amount</th>
                 <th>Dividend to price ratio</th>
+                <th>Has special dividend</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var stock in Stocks)
             {
-                <tr style="@ShouldDisplay(stock)">
-                    <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
-                    <td>@stock.ShortName</td>
-                    <td>@stock.Price</td>
-                    <td>@stock.LatestDividendHistory.ExDate.ToShortDateString()</td>
-                    <td>@stock.LatestDividendHistory.RecordDate.ToShortDateString()</td>
-                    <td>@stock.LatestDividendHistory.PayDate.ToShortDateString()</td>
-                    <td>@stock.LatestDividendHistory.DeclarationDate.ToShortDateString()</td>
-                    <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToShortDateString()</td>
-                    <td>@stock.LatestDividendHistory.Amount</td>
-                    <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@Common.DividendToPriceDisplay(stock.DividendToPrice)</td>
-                </tr>
+            <tr style="@ShouldDisplay(stock)">
+                <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
+                <td>@stock.ShortName</td>
+                <td>@stock.Price</td>
+                <td>@stock.LatestDividendHistory.ExDate.ToShortDateString()</td>
+                <td>@stock.LatestDividendHistory.RecordDate.ToShortDateString()</td>
+                <td>@stock.LatestDividendHistory.PayDate.ToShortDateString()</td>
+                <td>@stock.LatestDividendHistory.DeclarationDate.ToShortDateString()</td>
+                <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToShortDateString()</td>
+                <td>@stock.LatestDividendHistory.Amount</td>
+                <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@Common.DividendToPriceDisplay(stock.DividendToPrice)</td>
+                <td>@stock.HasSpecial</td>
+            </tr>
             }
         </tbody>
     </table>
@@ -58,6 +60,7 @@
         {
             var n when n == Common.SwitchToUpcoming && (days <= 0 || days > 14) => "display:none",
             var n when n == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice <= 0.01 => "display:none",
+var n when n == Common.HasSpecial && !stockDividend.HasSpecial => "display:none",
             _ => ""
         };
     }

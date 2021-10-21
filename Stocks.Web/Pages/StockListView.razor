@@ -9,6 +9,7 @@
 <button class="btn btn-primary" @onclick="Reload">Reload</button>
 <button class="btn btn-info" @onclick="SwitchToUpcoming">Show upcoming</button>
 <button class="btn btn-info" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
+<button class="btn btn-info" @onclick="SwitchSpecial">Show with special</button>
 <button class="btn btn-info" @onclick="DownloadFile">Download Excel</button>
 
 @if (isDownloading)
@@ -37,20 +38,36 @@ else
 
     private bool _shouldSetVisibility = false;
     private bool _shouldSetVisibility2 = false;
+    private bool _shouldSetSpecial = false;
     private string _visibilitySwitch = "";
+
+    void DeselectAllVisibility()
+    {
+        _shouldSetVisibility = false;
+        _shouldSetVisibility2 = false;
+        _shouldSetSpecial = false;
+    }
 
     private void SwitchToUpcoming()
     {
+        DeselectAllVisibility();
         _shouldSetVisibility = !_shouldSetVisibility;
-        _shouldSetVisibility2 = false;
         _visibilitySwitch = _shouldSetVisibility ? Common.SwitchToUpcoming : "";
     }
 
     private void SwitchToGraterThan1()
     {
+        DeselectAllVisibility();
         _shouldSetVisibility2 = !_shouldSetVisibility2;
-        _shouldSetVisibility = false;
         _visibilitySwitch = _shouldSetVisibility2 ? Common.SwitchToGraterThan1 : "";
+    }
+
+
+    private void SwitchSpecial()
+    {
+        DeselectAllVisibility();
+        _shouldSetSpecial = !_shouldSetSpecial;
+        _visibilitySwitch = _shouldSetSpecial ? Common.HasSpecial : "";
     }
 
     private async Task UpdateStocks()

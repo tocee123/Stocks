@@ -15,5 +15,7 @@ namespace Stocks.Core.Models
         [JsonIgnore]
         public double DividendToPrice { get => LatestDividendHistory.Amount / Price; }
         public bool IsCorrectlyDownloaded { get; set; } = false;
+        [JsonIgnore]
+        public bool HasSpecial { get => DividendHistories.Any(dh => dh.HasSpecial); }
     }
 }

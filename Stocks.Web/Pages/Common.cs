@@ -6,17 +6,18 @@ namespace Stocks.Web.Pages
     {
         public const string SwitchToUpcoming = nameof(SwitchToUpcoming);
         public const string SwitchToGraterThan1 = nameof(SwitchToGraterThan1);
+        public const string HasSpecial = nameof(HasSpecial);
 
         public static string GetCssForDividendToPrice(double dividendToPriceRatio)
-    => dividendToPriceRatio switch
-    {
-        var n when n > 0.02 => "p-3 mb-2 bg-success text-white",
-        var n when n >= 0.015 && n <= 0.02 => "p-3 mb-2 bg-primary text-white",
-        var n when n > 0.01 && n < 0.015 => "p-3 mb-2 bg-info text-white",
-        var n when (n > 0.005 && n <= 0.01) => "p-3 mb-2 bg-warning text-dark",
-        var n when n <= 0.005 => "p-3 mb-2 bg-danger text-white",
-        _ => ""
-    };
+        => dividendToPriceRatio switch
+        {
+            var n when n > 0.02 => "p-3 mb-2 bg-success text-white",
+            var n when n >= 0.015 && n <= 0.02 => "p-3 mb-2 bg-primary text-white",
+            var n when n > 0.01 && n < 0.015 => "p-3 mb-2 bg-info text-white",
+            var n when (n > 0.005 && n <= 0.01) => "p-3 mb-2 bg-warning text-dark",
+            var n when n <= 0.005 => "p-3 mb-2 bg-danger text-white",
+            _ => ""
+        };
 
         public static string GetCssForWhenToBuy(DateTime whenToBuy)
         => (whenToBuy - DateTime.Today).Days switch
