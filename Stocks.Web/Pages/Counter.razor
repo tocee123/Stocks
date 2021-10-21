@@ -1,0 +1,24 @@
+﻿@page "/counter"
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+<p>Toggle value: @_toggle</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="Toggle">Click me</button>
+
+@code {
+    private int currentCount = 0;
+    private bool _toggle = false;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    private void Toggle()
+    {
+        _toggle = !_toggle;
+    }
+}

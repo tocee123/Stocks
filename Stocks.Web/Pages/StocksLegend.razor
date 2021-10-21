@@ -1,0 +1,33 @@
+﻿@page "/stockslegend"
+<h1>Stocks legend</h1>
+
+<h3>Date colors, when today is @DateTime.Today.ToShortDateString()</h3>
+<ul>
+    <li class="@Common.GetCssForWhenToBuy(_between0and3days)">Between 0-3 days @_between0and3days.ToShortDateString()</li>
+    <li class="@Common.GetCssForWhenToBuy(_between3and7days)">Between 3-7 days @_between3and7days.ToShortDateString()</li>
+    <li class="@Common.GetCssForWhenToBuy(_between7and14days)">Between 7-14 days @_between7and14days.ToShortDateString()</li>
+    <li class="@Common.GetCssForWhenToBuy(_moreThan14days)">More than 14 days @_moreThan14days.ToShortDateString()</li>
+    <li class="@Common.GetCssForWhenToBuy(_lessThan0Days)">Past @_lessThan0Days.ToShortDateString()</li>
+</ul>
+<h3>Dividend to price ratio colors</h3>
+<ul>
+    <li class="@Common.GetCssForDividendToPrice(_moreThan2)">More than @Common.DividendToPriceDisplay(0.02)</li>
+    <li class="@Common.GetCssForDividendToPrice(_between15and20)">Between @Common.DividendToPriceDisplay(0.015) and @Common.DividendToPriceDisplay(0.02)</li>
+    <li class="@Common.GetCssForDividendToPrice(_between10and15)">Between @Common.DividendToPriceDisplay(0.01) and @Common.DividendToPriceDisplay(0.015)</li>
+    <li class="@Common.GetCssForDividendToPrice(_between05and10)">Between @Common.DividendToPriceDisplay(0.005) and @Common.DividendToPriceDisplay(0.01)</li>
+    <li class="@Common.GetCssForDividendToPrice(_lessThan05)">Less than @Common.DividendToPriceDisplay(0.005) </li>
+</ul>
+@code
+{
+    DateTime _between3and7days = DateTime.Today.AddDays(4);
+    DateTime _between7and14days = DateTime.Today.AddDays(8);
+    DateTime _moreThan14days = DateTime.Today.AddDays(15);
+    DateTime _between0and3days = DateTime.Today.AddDays(2);
+    DateTime _lessThan0Days = DateTime.Today.AddDays(-1);
+
+    double _moreThan2 = 0.021;
+    double _between15and20 = 0.016;
+    double _between10and15 = 0.014;
+    double _between05and10 = 0.009;
+    double _lessThan05 = 0.004;
+}

@@ -1,0 +1,91 @@
+﻿@page "/"
+@using Stocks.Core;
+@using Stocks.Core.Models;
+@inject IJSRuntime JSRuntime
+@inject IStocksRepository stockRepository;
+@inject IStockExcelWriter stockExcelWriter;
+<h1>Let's see some stocks</h1>
+
+<button class="btn btn-primary" @onclick="Reload">Reload</button>
+<button class="btn btn-info" @onclick="SwitchToUpcoming">Show upcoming</button>
+<button class="btn btn-info" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
+<button class="btn btn-info" @onclick="DownloadFile">Download Excel</button>
+
+@if (isDownloading)
+{
+    <p><em>File being generated...</em></p>
+}
+
+@if (_stocks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" />
+    <h3 class="text-center">Today @DateTime.Today.ToShortDateString()</h3>
+    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" />
+}
+
+@code{
+
+    private IEnumerable<StockDividend> _stocks;
+    private IEnumerable<StockDividend> _upComingstocks;
+    private IEnumerable<StockDividend> _oldStocks;
+
+    private bool isDownloading = false;
+
+    private bool _shouldSetVisibility = false;
+    private bool _shouldSetVisibility2 = false;
+    private string _visibilitySwitch = "";
+
+    private void SwitchToUpcoming()
+    {
+        _shouldSetVisibility = !_shouldSetVisibility;
+        _shouldSetVisibility2 = false;
+        _visibilitySwitch = _shouldSetVisibility ? Common.SwitchToUpcoming : "";
+    }
+
+    private void SwitchToGraterThan1()
+    {
+        _shouldSetVisibility2 = !_shouldSetVisibility2;
+        _shouldSetVisibility = false;
+        _visibilitySwitch = _shouldSetVisibility2 ? Common.SwitchToGraterThan1 : "";
+    }
+
+    private async Task UpdateStocks()
+    {
+        _stocks = await stockRepository.GetStocks();
+        _upComingstocks = FilterWhenToBuyComparedToToday(days => days >= 0);
+        _oldStocks = FilterWhenToBuyComparedToToday(days => days < 0);
+    }
+
+    private IEnumerable<StockDividend> FilterWhenToBuyComparedToToday(Func<int, bool> compare)
+        => _stocks.Where(s => compare((s.LatestDividendHistory.WhenToBuy - DateTime.Today).Days));
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateStocks();
+    }
+
+    private async Task Reload()
+    {
+        _visibilitySwitch = null;
+        _stocks = null;
+        await UpdateStocks();
+    }
+
+    async Task DownloadFile()
+    {
+        isDownloading = true;
+        var bytes = await stockExcelWriter.WriteToExcelAsync();
+        await JSRuntime.InvokeVoidAsync(
+         "downloadFromByteArray",
+         new
+         {
+             ByteArray = bytes,
+             FileName = "stocks.xlsx"
+         });
+        isDownloading = false;
+    }
+}
