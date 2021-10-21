@@ -1,1 +1,55 @@
-﻿@page "/stockdetail"
+﻿@page "/stockdetail/{shortname}"
+@using Stocks.Core.Models;
+@using Stocks.Core;
+@using System.Linq;
+@inject IStocksRepository stockRepository;
+
+@if (Stock is not null)
+{
+    <a href="/">Back</a>
+    <h2>Details for @Stock.Name with short name @Stock.ShortName</h2>
+    <h3>Price: @Stock.Price</h3>
+    <h3>Dividend to price ratio: @Common.DividendToPriceDisplay(Stock.DividendToPrice)</h3>
+    <h3>Dividend history</h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ExDate</th>
+                <th>RecordDate</th>
+                <th>PayDate</th>
+                <th>DeclarationDate</th>
+                <th>WhenToBuy</th>
+                <th>Type</th>
+                <th>Dividend amount</th>
+                <th>Dividend to price ratio</th>
+            </tr>
+            @foreach (var history in Stock.DividendHistories)
+            {
+                <tr>
+                    <td>@history.ExDate.ToShortDateString()</td>
+                    <td>@history.RecordDate.ToShortDateString()</td>
+                    <td>@history.PayDate.ToShortDateString()</td>
+                    <td>@history.DeclarationDate.ToShortDateString()</td>
+                    <td>@history.WhenToBuy.ToShortDateString()</td>
+                    <td>@history.Type</td>
+                    <td>@history.Amount</td>
+                    <td class="@Common.GetCssForDividendToPrice(history.Amount / Stock.Price)">@Common.DividendToPriceDisplay(history.Amount / Stock.Price)</td>
+                </tr>
+            }
+        </thead>
+    </table>
+}
+@code
+{
+    [Parameter]
+    public string shortname { get; set; }
+
+    private StockDividend Stock { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stocks = await stockRepository.GetStocks();
+        Stock = stocks.Single(x => x.ShortName == shortname);
+    }
+}
