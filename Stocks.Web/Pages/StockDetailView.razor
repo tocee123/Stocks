@@ -32,7 +32,7 @@
                     <td>@history.PayDate.ToShortDateString()</td>
                     <td>@history.DeclarationDate.ToShortDateString()</td>
                     <td>@history.WhenToBuy.ToShortDateString()</td>
-                    <td>@history.Type</td>
+                    <td class="@GetTypeBackgroundColor(history.Type)">@history.Type</td>
                     <td>@history.Amount</td>
                     <td class="@Common.GetCssForDividendToPrice(history.Amount / Stock.Price)">@Common.DividendToPriceDisplay(history.Amount / Stock.Price)</td>
                 </tr>
@@ -52,4 +52,7 @@
         var stocks = await stockRepository.GetStocks();
         Stock = stocks.Single(x => x.ShortName == shortname);
     }
+
+    private string GetTypeBackgroundColor(string type)
+        => type == "Special" ? "p-3 mb-2 bg-primary text-white" : "p-3 mb-2 bg-secondary text-white";
 }

@@ -9,9 +9,9 @@
                 <th>Short name</th>
                 <th>Price</th>
                 <th>Ex-Date</th>
-                <th>Record date</th>
-                <th>Pay date</th>
-                <th>Declaration date</th>
+                <th style="@ShouldShowSpecialDate()">Record date</th>
+                <th style="@ShouldShowSpecialDate()">Pay date</th>
+                <th style="@ShouldShowSpecialDate()">Declaration date</th>
                 <th>When to buy</th>
                 <th>Dividend amount</th>
                 <th>Dividend to price ratio</th>
@@ -21,19 +21,19 @@
         <tbody>
             @foreach (var stock in Stocks)
             {
-            <tr style="@ShouldDisplay(stock)">
-                <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
-                <td>@stock.ShortName</td>
-                <td>@stock.Price</td>
-                <td>@stock.LatestDividendHistory.ExDate.ToShortDateString()</td>
-                <td>@stock.LatestDividendHistory.RecordDate.ToShortDateString()</td>
-                <td>@stock.LatestDividendHistory.PayDate.ToShortDateString()</td>
-                <td>@stock.LatestDividendHistory.DeclarationDate.ToShortDateString()</td>
-                <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToShortDateString()</td>
-                <td>@stock.LatestDividendHistory.Amount</td>
-                <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@Common.DividendToPriceDisplay(stock.DividendToPrice)</td>
-                <td>@stock.HasSpecial</td>
-            </tr>
+                <tr style="@ShouldDisplay(stock)">
+                    <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
+                    <td>@stock.ShortName</td>
+                    <td>@stock.Price</td>
+                    <td>@stock.LatestDividendHistory.ExDate.ToShortDateString()</td>
+                    <td style="@ShouldShowSpecialDate()">@stock.LatestDividendHistory.RecordDate.ToShortDateString()</td>
+                    <td style="@ShouldShowSpecialDate()">@stock.LatestDividendHistory.PayDate.ToShortDateString()</td>
+                    <td style="@ShouldShowSpecialDate()">@stock.LatestDividendHistory.DeclarationDate.ToShortDateString()</td>
+                    <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToShortDateString()</td>
+                    <td>@stock.LatestDividendHistory.Amount</td>
+                    <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@Common.DividendToPriceDisplay(stock.DividendToPrice)</td>
+                    <td>@stock.HasSpecial</td>
+                </tr>
             }
         </tbody>
     </table>
@@ -52,16 +52,27 @@
     [Parameter]
     public EventCallback<string> VisibilitySwitchChanged { get; set; }
 
+    [Parameter]
+    public bool ShowSpecialDates { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ShowSpecialDatesChanged { get; set; }
+
+    private string _displayNone = "display:none";
+
     private string ShouldDisplay(StockDividend stockDividend)
     {
         var days = (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
 
         return VisibilitySwitch switch
         {
-            var n when n == Common.SwitchToUpcoming && (days <= 0 || days > 14) => "display:none",
-            var n when n == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice <= 0.01 => "display:none",
-var n when n == Common.HasSpecial && !stockDividend.HasSpecial => "display:none",
+            var n when n == Common.SwitchToUpcoming && (days <= 0 || days > 14) => _displayNone,
+            var n when n == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice <= 0.01 => _displayNone,
+            var n when n == Common.HasSpecial && !stockDividend.HasSpecial => _displayNone,
             _ => ""
         };
     }
+
+    private string ShouldShowSpecialDate()
+        => ShowSpecialDates ? "" : _displayNone;
 }

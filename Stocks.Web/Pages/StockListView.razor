@@ -10,6 +10,7 @@
 <button class="btn btn-info" @onclick="SwitchToUpcoming">Show upcoming</button>
 <button class="btn btn-info" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
 <button class="btn btn-info" @onclick="SwitchSpecial">Show with special</button>
+<button class="btn btn-light" @onclick="ShowSpecialDates">Show extra columns</button>
 <button class="btn btn-info" @onclick="DownloadFile">Download Excel</button>
 
 @if (isDownloading)
@@ -23,9 +24,9 @@
 }
 else
 {
-    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" />
+    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" />
     <h3 class="text-center">Today @DateTime.Today.ToShortDateString()</h3>
-    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" />
+    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" />
 }
 
 @code{
@@ -34,40 +35,43 @@ else
     private IEnumerable<StockDividend> _upComingstocks;
     private IEnumerable<StockDividend> _oldStocks;
 
+    private bool _showSpecialDates = false;
+
+    private Dictionary<string, bool> _mySwitch;
+
     private bool isDownloading = false;
 
-    private bool _shouldSetVisibility = false;
-    private bool _shouldSetVisibility2 = false;
-    private bool _shouldSetSpecial = false;
     private string _visibilitySwitch = "";
-
-    void DeselectAllVisibility()
-    {
-        _shouldSetVisibility = false;
-        _shouldSetVisibility2 = false;
-        _shouldSetSpecial = false;
-    }
 
     private void SwitchToUpcoming()
     {
-        DeselectAllVisibility();
-        _shouldSetVisibility = !_shouldSetVisibility;
-        _visibilitySwitch = _shouldSetVisibility ? Common.SwitchToUpcoming : "";
+        SwitchSelection(Common.SwitchToUpcoming);
     }
 
     private void SwitchToGraterThan1()
     {
-        DeselectAllVisibility();
-        _shouldSetVisibility2 = !_shouldSetVisibility2;
-        _visibilitySwitch = _shouldSetVisibility2 ? Common.SwitchToGraterThan1 : "";
+        SwitchSelection(Common.SwitchToGraterThan1);
     }
-
 
     private void SwitchSpecial()
     {
-        DeselectAllVisibility();
-        _shouldSetSpecial = !_shouldSetSpecial;
-        _visibilitySwitch = _shouldSetSpecial ? Common.HasSpecial : "";
+        SwitchSelection(Common.HasSpecial);
+    }
+
+    private void SwitchSelection(string key)
+    {
+        var deselect = _mySwitch.Where(x => x.Key != key);
+        foreach (var item in deselect)
+        {
+            _mySwitch[item.Key] = false;
+        }
+        _mySwitch[key] = !_mySwitch[key];
+        _visibilitySwitch = _mySwitch[key] ? key : "";
+    }
+
+    private void ShowSpecialDates()
+    {
+        _showSpecialDates = !_showSpecialDates;
     }
 
     private async Task UpdateStocks()
@@ -83,6 +87,12 @@ else
     protected override async Task OnInitializedAsync()
     {
         await UpdateStocks();
+        _mySwitch = new Dictionary<string, bool>
+        {
+            [Common.SwitchToUpcoming] = false,
+            [Common.SwitchToGraterThan1] = false,
+            [Common.HasSpecial] = false
+        };
     }
 
     private async Task Reload()
