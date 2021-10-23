@@ -27,11 +27,11 @@
             @foreach (var history in Stock.DividendHistories)
             {
                 <tr>
-                    <td>@history.ExDate.ToShortDateString()</td>
-                    <td>@history.RecordDate.ToShortDateString()</td>
-                    <td>@history.PayDate.ToShortDateString()</td>
-                    <td>@history.DeclarationDate.ToShortDateString()</td>
-                    <td>@history.WhenToBuy.ToShortDateString()</td>
+                    <td>@history.ExDate.ToYyyyMmDd()</td>
+                    <td>@history.RecordDate.ToYyyyMmDd()</td>
+                    <td>@history.PayDate.ToYyyyMmDd()</td>
+                    <td>@history.DeclarationDate.ToYyyyMmDd()</td>
+                    <td>@history.WhenToBuy.ToYyyyMmDd()</td>
                     <td class="@GetTypeBackgroundColor(history.Type)">@history.Type</td>
                     <td>@history.Amount</td>
                     <td class="@Common.GetCssForDividendToPrice(history.Amount / Stock.Price)">@Common.DividendToPriceDisplay(history.Amount / Stock.Price)</td>
