@@ -25,11 +25,11 @@
                     <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
                     <td>@stock.ShortName</td>
                     <td>@stock.Price</td>
-                    <td>@stock.LatestDividendHistory.ExDate.ToShortDateString()</td>
-                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.RecordDate.ToShortDateString()</td>
-                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.PayDate.ToShortDateString()</td>
-                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.DeclarationDate.ToShortDateString()</td>
-                    <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToShortDateString()</td>
+                    <td>@stock.LatestDividendHistory.ExDate.ToYyyyMmDd()</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.RecordDate.ToYyyyMmDd()</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.PayDate.ToYyyyMmDd()</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.DeclarationDate.ToYyyyMmDd()</td>
+                    <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToYyyyMmDd()</td>
                     <td>@stock.LatestDividendHistory.Amount</td>
                     <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@Common.DividendToPriceDisplay(stock.DividendToPrice)</td>
                     <td>@stock.HasSpecial</td>
