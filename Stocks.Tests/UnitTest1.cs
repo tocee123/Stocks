@@ -19,18 +19,11 @@ namespace WebDownloading.Test
         {
             var url = "https://www.etoro.com/markets/agnc";
 
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-            request.AllowAutoRedirect = false; // find out if this site is up and don't follow a redirector
-            request.Method = "HEAD";
-            try
-            {
-                var response = request.GetResponse();
-                // do something with response.Headers to find out information about the request
-            }
-            catch (WebException wex)
-            {
-                //set flag if there was a timeout or some other issues
-            }
+            WebRequest request = WebRequest.Create(url);
+            WebResponse response = request.GetResponse();
+            string result = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            // Using WebClient
+            string result1 = new WebClient().DownloadString(url);
 
         }
 

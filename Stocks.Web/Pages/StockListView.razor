@@ -7,11 +7,14 @@
 <h1>Let's see some stocks</h1>
 
 <button class="btn btn-primary" @onclick="Reload">Reload</button>
-<button class="btn btn-info" @onclick="SwitchToUpcoming">Show upcoming</button>
-<button class="btn btn-info" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
-<button class="btn btn-info" @onclick="SwitchSpecial">Show with special</button>
-<button class="btn btn-light" @onclick="ShowSpecialDates">Show extra columns</button>
-<button class="btn btn-info" @onclick="DownloadFile">Download Excel</button>
+<button id="SwitchToUpcoming" class="btn @SwitchToUpcomingClass" @onclick="SwitchToUpcoming">Show upcoming</button>
+<button id="SwitchToGraterThan1" class="btn @SwitchToGraterThan1Class" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
+<button id="SwitchSpecial" class="btn @SwitchSpecialClass" @onclick="SwitchSpecial">Show with special</button>
+<button id="ShowSpecialDates" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Show extra columns</button>
+<button id="DownloadFile" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
+<br />
+<label>Filter short name: </label>
+<input value="@_shortNameFilter" @oninput="(EventArgs) => {SetShortNameFilter(EventArgs.Value.ToString()); }" />
 
 @if (isDownloading)
 {
@@ -24,9 +27,9 @@
 }
 else
 {
-    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" />
+    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-ShortNameFilter="_shortNameFilter" />
     <h3 class="text-center">Today @DateTime.Today.ToShortDateString()</h3>
-    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" />
+    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-ShortNameFilter="_shortNameFilter" />
 }
 
 @code{
@@ -35,6 +38,7 @@ else
     private IEnumerable<StockDividend> _upComingstocks;
     private IEnumerable<StockDividend> _oldStocks;
 
+    string _shortNameFilter;
     private bool _showSpecialDates = false;
 
     private Dictionary<string, bool> _mySwitch;
@@ -43,22 +47,35 @@ else
 
     private string _visibilitySwitch = "";
 
+    private string SwitchToUpcomingClass;
+    private string SwitchToGraterThan1Class;
+    private string SwitchSpecialClass;
+    private string ShowSpecialDatesClass = "btn-info";
+    private string DownloadFileClass = "btn-info";
+
+    private void ClearButtonClass()
+    {
+        SwitchToUpcomingClass = "btn-info";
+        SwitchToGraterThan1Class = "btn-info";
+        SwitchSpecialClass = "btn-info";
+    }
+
     private void SwitchToUpcoming()
     {
-        SwitchSelection(Common.SwitchToUpcoming);
+        SwitchSelection(Common.SwitchToUpcoming, ref SwitchToUpcomingClass);
     }
 
     private void SwitchToGraterThan1()
     {
-        SwitchSelection(Common.SwitchToGraterThan1);
+        SwitchSelection(Common.SwitchToGraterThan1, ref SwitchToGraterThan1Class);
     }
 
     private void SwitchSpecial()
     {
-        SwitchSelection(Common.HasSpecial);
+        SwitchSelection(Common.HasSpecial, ref SwitchSpecialClass);
     }
 
-    private void SwitchSelection(string key)
+    private void SwitchSelection(string key, ref string className)
     {
         var deselect = _mySwitch.Where(x => x.Key != key);
         foreach (var item in deselect)
@@ -66,12 +83,15 @@ else
             _mySwitch[item.Key] = false;
         }
         _mySwitch[key] = !_mySwitch[key];
+        ClearButtonClass();
+        className = _mySwitch[key] ? "btn-danger" : "btn-info";
         _visibilitySwitch = _mySwitch[key] ? key : "";
     }
 
     private void ShowSpecialDates()
     {
         _showSpecialDates = !_showSpecialDates;
+        ShowSpecialDatesClass = _showSpecialDates ? "btn-danger" : "btn-info";
     }
 
     private async Task UpdateStocks()
@@ -86,6 +106,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        ClearButtonClass();
         await UpdateStocks();
         _mySwitch = new Dictionary<string, bool>
         {
@@ -95,24 +116,48 @@ else
         };
     }
 
-    private async Task Reload()
+    private void ClearFilters()
     {
         _visibilitySwitch = null;
+        _shortNameFilter = null;
+    }
+
+    private async Task Reload()
+    {
         _stocks = null;
+        ClearButtonClass();
+        ClearFilters();
         await UpdateStocks();
     }
 
     async Task DownloadFile()
     {
-        isDownloading = true;
-        var bytes = await stockExcelWriter.WriteToExcelAsync();
+        ChangeDownloadButton(true);
+        await DownloadSeparated();
+        ChangeDownloadButton(false);
+    }
+
+    void ChangeDownloadButton(bool value)
+    {
+        isDownloading = value;
+        DownloadFileClass = value ? "btn-danger" : "btn-info";
+    }
+
+    async Task DownloadSeparated()
+    {
+        //var bytes = ;
         await JSRuntime.InvokeVoidAsync(
          "downloadFromByteArray",
          new
          {
-             ByteArray = bytes,
+             ByteArray = await stockExcelWriter.WriteToExcelAsync(),
              FileName = "stocks.xlsx"
          });
-        isDownloading = false;
+    }
+
+    private void SetShortNameFilter(string Value)
+    {
+        _visibilitySwitch = null;
+        _shortNameFilter = Value;
     }
 }

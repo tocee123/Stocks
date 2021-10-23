@@ -9,9 +9,9 @@
                 <th>Short name</th>
                 <th>Price</th>
                 <th>Ex-Date</th>
-                <th style="@ShouldShowSpecialDate()">Record date</th>
-                <th style="@ShouldShowSpecialDate()">Pay date</th>
-                <th style="@ShouldShowSpecialDate()">Declaration date</th>
+                <th style="@ShouldShowSpecialDates()">Record date</th>
+                <th style="@ShouldShowSpecialDates()">Pay date</th>
+                <th style="@ShouldShowSpecialDates()">Declaration date</th>
                 <th>When to buy</th>
                 <th>Dividend amount</th>
                 <th>Dividend to price ratio</th>
@@ -26,9 +26,9 @@
                     <td>@stock.ShortName</td>
                     <td>@stock.Price</td>
                     <td>@stock.LatestDividendHistory.ExDate.ToShortDateString()</td>
-                    <td style="@ShouldShowSpecialDate()">@stock.LatestDividendHistory.RecordDate.ToShortDateString()</td>
-                    <td style="@ShouldShowSpecialDate()">@stock.LatestDividendHistory.PayDate.ToShortDateString()</td>
-                    <td style="@ShouldShowSpecialDate()">@stock.LatestDividendHistory.DeclarationDate.ToShortDateString()</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.RecordDate.ToShortDateString()</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.PayDate.ToShortDateString()</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.DeclarationDate.ToShortDateString()</td>
                     <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToShortDateString()</td>
                     <td>@stock.LatestDividendHistory.Amount</td>
                     <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@Common.DividendToPriceDisplay(stock.DividendToPrice)</td>
@@ -58,21 +58,54 @@
     [Parameter]
     public EventCallback<bool> ShowSpecialDatesChanged { get; set; }
 
+    [Parameter]
+    public string ShortNameFilter { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ShortNameFilterChanged { get; set; }
+
     private string _displayNone = "display:none";
 
-    private string ShouldDisplay(StockDividend stockDividend)
+    public string ShouldDisplay(StockDividend stockDividend)
     {
-        var days = (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
-
-        return VisibilitySwitch switch
+        var functionsToCheck = new Func<StockDividend, bool>[]
         {
-            var n when n == Common.SwitchToUpcoming && (days <= 0 || days > 14) => _displayNone,
-            var n when n == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice <= 0.01 => _displayNone,
-            var n when n == Common.HasSpecial && !stockDividend.HasSpecial => _displayNone,
-            _ => ""
-        };
+            FilterByShortName,
+            (sd)=>string.IsNullOrEmpty(VisibilitySwitch)
+            };
+        var functionsToCheck1 = new Func<StockDividend, bool>[]
+        {
+            IsUpcoming,
+            IsRatioGraterThan1,
+            HasSpecial
+            };
+        return functionsToCheck.All(f => f(stockDividend)) || functionsToCheck1.Any(f => f(stockDividend)) ? "" : _displayNone;
     }
 
-    private string ShouldShowSpecialDate()
-        => ShowSpecialDates ? "" : _displayNone;
+    private int CalculateWhenToBuyToToday(StockDividend stockDividend)
+        => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
+
+    public bool FilterByShortName(StockDividend stockDividend)
+        => string.IsNullOrEmpty(ShortNameFilter)
+            || (!string.IsNullOrEmpty(ShortNameFilter) && stockDividend.ShortName.ToLower().Contains(ShortNameFilter.ToLower()));
+
+    public bool IsUpcoming(StockDividend stockDividend)
+    {
+        var whenToBuyToToday = CalculateWhenToBuyToToday(stockDividend);
+        return VisibilitySwitch == Common.SwitchToUpcoming && (whenToBuyToToday > 0 && whenToBuyToToday <= 14);
+    }
+
+    public bool IsRatioGraterThan1(StockDividend stockDividend)
+        => VisibilitySwitch == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice >= 0.01;
+
+    private bool HasSpecial(StockDividend stockDividend)
+        => VisibilitySwitch == Common.HasSpecial && stockDividend.HasSpecial;
+
+    //private bool DoesEnabledSwitchSatisfyCondition(StockDividend stockDividend, string switchName, Func<StockDividend, bool> func)
+    //    => VisibilitySwitch == stockDividend && func(stockDividend);
+
+
+    private string ShouldShowSpecialDates()
+    => ShowSpecialDates ? "" : _displayNone;
 }
+
