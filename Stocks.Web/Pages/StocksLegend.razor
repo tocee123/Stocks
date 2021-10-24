@@ -11,11 +11,11 @@
 </ul>
 <h3>Dividend to price ratio colors</h3>
 <ul>
-    <li class="@Common.GetCssForDividendToPrice(_moreThan2)">More than @Common.DividendToPriceDisplay(0.02)</li>
-    <li class="@Common.GetCssForDividendToPrice(_between15and20)">Between @Common.DividendToPriceDisplay(0.015) and @Common.DividendToPriceDisplay(0.02)</li>
-    <li class="@Common.GetCssForDividendToPrice(_between10and15)">Between @Common.DividendToPriceDisplay(0.01) and @Common.DividendToPriceDisplay(0.015)</li>
-    <li class="@Common.GetCssForDividendToPrice(_between05and10)">Between @Common.DividendToPriceDisplay(0.005) and @Common.DividendToPriceDisplay(0.01)</li>
-    <li class="@Common.GetCssForDividendToPrice(_lessThan05)">Less than @Common.DividendToPriceDisplay(0.005) </li>
+    <li class="@Common.GetCssForDividendToPrice(_moreThan2)">More than @Common.ToPercentageDisplay(0.02)</li>
+    <li class="@Common.GetCssForDividendToPrice(_between15and20)">Between @Common.ToPercentageDisplay(0.015) and @Common.ToPercentageDisplay(0.02)</li>
+    <li class="@Common.GetCssForDividendToPrice(_between10and15)">Between @Common.ToPercentageDisplay(0.01) and @Common.ToPercentageDisplay(0.015)</li>
+    <li class="@Common.GetCssForDividendToPrice(_between05and10)">Between @Common.ToPercentageDisplay(0.005) and @Common.ToPercentageDisplay(0.01)</li>
+    <li class="@Common.GetCssForDividendToPrice(_lessThan05)">Less than @Common.ToPercentageDisplay(0.005) </li>
 </ul>
 @code
 {

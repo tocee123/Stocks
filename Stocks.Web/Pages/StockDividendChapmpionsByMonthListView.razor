@@ -1,0 +1,90 @@
+﻿@page "/StockDividendChapmpionsByMonthListView"
+
+@using Stocks.Core;
+@using Stocks.Core.Models;
+@inject IDividendByMonthCollectionPreparer _dividendByMonthCollectionPreparer;
+
+@if (_stocks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h2>Display champions by month for year @_year</h2>
+    <label>If you invest: </label>
+    <input type="number" @bind="_investedAmount" />
+    <button class="btn btn-info" @onclick="Clear">Clear</button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Name</th>
+                <th>Short name</th>
+                <th>Ex-Date</th>
+                <th>Price $</th>
+                <th>Dividend $</th>
+                <th>Dividend to price %</th>
+                <th style="@ShouldShowWhenInvestedIsGraterThan0()">Stock volume</th>
+                <th style="@ShouldShowWhenInvestedIsGraterThan0()">Earn on dividend $</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stock in _stocks)
+            {
+                <tr>
+                    <td>@stock.ExDate.ToString("Y")</td>
+                    <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
+                    <td>@stock.ShortName</td>
+                    <td>@stock.ExDate.ToYyyyMmDd()</td>
+                    <td>@stock.Price</td>
+                    <td>@stock.Dividend</td>
+                    <td>@stock.DividendToPrice.ToPercentageDisplay()</td>
+                    <td style="@ShouldShowWhenInvestedIsGraterThan0()">@ClaculateStockVolume(stock)</td>
+                    <td style="@ShouldShowWhenInvestedIsGraterThan0()">@CalculeateEraning(stock)</td>
+                </tr>
+            }
+            <tr style="@ShouldShowWhenInvestedIsGraterThan0()">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Sum: @GetSum()$</td>
+            </tr>
+        </tbody>
+    </table>
+    @if (_investedAmount > 0)
+    {
+        <h3>In one year that would make @Common.ToPercentageDisplay(GetSum() / _investedAmount)</h3>
+    }
+}
+
+@code
+{
+    private int _year = DateTime.Today.Year;
+    private IEnumerable<StockChampionByDividendToPriceRatio> _stocks;
+    private int _investedAmount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _stocks = await _dividendByMonthCollectionPreparer.GetMonthlyBestStocksByYear(_year);
+    }
+
+    private void Clear()
+        => _investedAmount = 0;
+
+    private double GetSum()
+    => _stocks.Sum(CalculeateEraning).Round();
+
+    private double CalculeateEraning(StockChampionByDividendToPriceRatio stock)
+        => (ClaculateStockVolume(stock) * stock.Dividend).Round();
+
+    private int ClaculateStockVolume(StockChampionByDividendToPriceRatio stock)
+        => (int)(_investedAmount / stock.Price);
+
+    private string ShouldShowWhenInvestedIsGraterThan0()
+        => _investedAmount > 0 ? "" : "display:none";
+}

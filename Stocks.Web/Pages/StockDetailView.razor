@@ -9,7 +9,8 @@
     <a href="/">Back</a>
     <h2>Details for @Stock.Name with short name @Stock.ShortName</h2>
     <h3>Price: @Stock.Price</h3>
-    <h3>Dividend to price ratio: @Common.DividendToPriceDisplay(Stock.DividendToPrice)</h3>
+
+    <h3>Dividend to price ratio: @Stock.DividendToPrice.ToPercentageDisplay()</h3>
     <h3>Dividend history</h3>
 
     <table class="table table-striped">
@@ -34,7 +35,7 @@
                     <td>@history.WhenToBuy.ToYyyyMmDd()</td>
                     <td class="@GetTypeBackgroundColor(history.Type)">@history.Type</td>
                     <td>@history.Amount</td>
-                    <td class="@Common.GetCssForDividendToPrice(history.Amount / Stock.Price)">@Common.DividendToPriceDisplay(history.Amount / Stock.Price)</td>
+                    <td class="@Common.GetCssForDividendToPrice(history.Amount / Stock.Price)">@Common.ToPercentageDisplay(history.Amount / Stock.Price)</td>
                 </tr>
             }
         </thead>

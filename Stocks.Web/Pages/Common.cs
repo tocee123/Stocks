@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Stocks.Web.Pages
 {
@@ -30,10 +29,13 @@ namespace Stocks.Web.Pages
             _ => "p-3 mb-2 bg-secondary text-white"
         };
 
-        public static string DividendToPriceDisplay(double value)
+        public static string ToPercentageDisplay(this double value)
        => $"{value:0.00%}";
 
         public static string ToYyyyMmDd(this DateTime dt)
             => dt.ToString("yyyy-MM-dd");
+
+        public static double Round(this double number)
+            => Math.Round(number, 2);
     }
 }

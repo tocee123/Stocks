@@ -31,7 +31,7 @@
                     <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.DeclarationDate.ToYyyyMmDd()</td>
                     <td class="@Common.GetCssForWhenToBuy(stock.LatestDividendHistory.WhenToBuy)">@stock.LatestDividendHistory.WhenToBuy.ToYyyyMmDd()</td>
                     <td>@stock.LatestDividendHistory.Amount</td>
-                    <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@Common.DividendToPriceDisplay(stock.DividendToPrice)</td>
+                    <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@stock.DividendToPrice.ToPercentageDisplay()</td>
                     <td>@stock.HasSpecial</td>
                 </tr>
             }
