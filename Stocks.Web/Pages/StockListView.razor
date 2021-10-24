@@ -45,19 +45,24 @@ else
 
     private bool isDownloading = false;
 
+    private static string _infoButtonClass = "btn-info";
+    private static string _dangerButtonClass = "btn-danger";
+
+    private string GetButtonClass(bool b) => b ? _dangerButtonClass : _infoButtonClass;
+
     private string _visibilitySwitch = "";
 
     private string SwitchToUpcomingClass;
     private string SwitchToGraterThan1Class;
     private string SwitchSpecialClass;
-    private string ShowSpecialDatesClass = "btn-info";
-    private string DownloadFileClass = "btn-info";
+    private string ShowSpecialDatesClass = _infoButtonClass;
+    private string DownloadFileClass = _infoButtonClass;
 
     private void ClearButtonClass()
     {
-        SwitchToUpcomingClass = "btn-info";
-        SwitchToGraterThan1Class = "btn-info";
-        SwitchSpecialClass = "btn-info";
+        SwitchToUpcomingClass = _infoButtonClass;
+        SwitchToGraterThan1Class = _infoButtonClass;
+        SwitchSpecialClass = _infoButtonClass;
     }
 
     private void SwitchToUpcoming()
@@ -84,14 +89,14 @@ else
         }
         _mySwitch[key] = !_mySwitch[key];
         ClearButtonClass();
-        className = _mySwitch[key] ? "btn-danger" : "btn-info";
+        className = GetButtonClass(_mySwitch[key]);
         _visibilitySwitch = _mySwitch[key] ? key : "";
     }
 
     private void ShowSpecialDates()
     {
         _showSpecialDates = !_showSpecialDates;
-        ShowSpecialDatesClass = _showSpecialDates ? "btn-danger" : "btn-info";
+        ShowSpecialDatesClass = GetButtonClass(_showSpecialDates);
     }
 
     private async Task UpdateStocks()
@@ -140,12 +145,11 @@ else
     void ChangeDownloadButton(bool value)
     {
         isDownloading = value;
-        DownloadFileClass = value ? "btn-danger" : "btn-info";
+        DownloadFileClass = GetButtonClass(value);
     }
 
     async Task DownloadSeparated()
     {
-        //var bytes = ;
         await JSRuntime.InvokeVoidAsync(
          "downloadFromByteArray",
          new
