@@ -29,7 +29,7 @@ namespace Stocks.Core.Models
         public double Amount { get; set; }
 
         [JsonIgnore]
-        public bool HasSpecial { get => Type == "Special"; } 
+        public bool HasSpecial { get => Type == "Special"; }
 
         public override string ToString()
         => JsonConvert.SerializeObject(this, Formatting.Indented);

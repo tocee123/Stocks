@@ -12,17 +12,29 @@ namespace WebDownloading.Test
     public class DividendByMonthCollectionPreparerTest
 
     {
-        private StocksRepository _target;
+        private IDividendByMonthCollectionPreparer _target;
+
+        private StocksRepository _stockRepository;
         [SetUp]
         public void Setup()
         {
-            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new RedisCache());
+            _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new RedisCache());
+            _target = new DividendByMonthCollectionPreparer(_stockRepository);
+        }
+
+        [Test]
+        public async Task GetMonthlyBestStocksByYear_ReturnsNotNullList()
+        {
+            var result = await _target.GetMonthlyBestStocksByYear(DateTime.Today.Year);
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Any());
+            Assert.AreEqual(12, result.Count());
         }
 
         [Test]
         public async Task SelectTop1DividnedByMonth()
         {
-            var stocks = (await _target.GetStocks()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.ShortName });
+            var stocks = (await _stockRepository.GetStocks()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.ShortName });
 
             var grouppedByMonth = stocks.GroupBy(s => new { s.ExDate.Month, s.ExDate.Year }).Select(s => new { s.Key, TopDividendPayer = s.OrderByDescending(so => so.DividendToPrice).FirstOrDefault() });
             Console.WriteLine("Monthly best ratios:");
