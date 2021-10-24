@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using Stocks.Core;
-using Stocks.Core.Models;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,7 +9,7 @@ using System.Threading.Tasks;
 namespace WebDownloading.Test
 {
     [TestFixture]
-    public class DividendByMonthCollectionTest
+    public class DividendByMonthCollectionPreparerTest
 
     {
         private StocksRepository _target;
