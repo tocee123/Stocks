@@ -22,22 +22,22 @@ namespace Stocks.Web.Pages
             return functionsToCheck.All(f => f(stockDividend)) || functionsToCheck1.Any(f => f(stockDividend));
         }
 
-        private bool FilterByShortName(StockDividend stockDividend)
+        internal bool FilterByShortName(StockDividend stockDividend)
         => string.IsNullOrEmpty(ShortNameFilter)
             || (!string.IsNullOrEmpty(ShortNameFilter) && stockDividend.ShortName.ToLower().Contains(ShortNameFilter.ToLower()));
 
-        public bool IsUpcoming(StockDividend stockDividend)
+        internal bool IsUpcoming(StockDividend stockDividend)
         {
             var whenToBuyToToday = CalculateWhenToBuyToToday(stockDividend);
-            return VisibilitySwitch == Common.SwitchToUpcoming && (whenToBuyToToday >= Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks);
+            return VisibilitySwitch == Common.SwitchToUpcoming && (whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks);
         }
-        private int CalculateWhenToBuyToToday(StockDividend stockDividend)
+        private static int CalculateWhenToBuyToToday(StockDividend stockDividend)
             => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
 
-        public bool IsRatioGraterThan1(StockDividend stockDividend)
+        internal bool IsRatioGraterThan1(StockDividend stockDividend)
             => VisibilitySwitch == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice >= Common.OnePercent;
 
-        private bool HasSpecial(StockDividend stockDividend)
+        internal bool HasSpecial(StockDividend stockDividend)
             => VisibilitySwitch == Common.HasSpecial && stockDividend.HasSpecial;
     }
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace WebDownloading.Test
 {
-    public class StockDetailViewTests
+    public class StockDividendTableStockFilterTests
     {
         [SetUp]
         public void Setup()
@@ -17,10 +17,8 @@ namespace WebDownloading.Test
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
         public void IsUpcoming_When(StockDividend sd, bool expected)
         {
-            var target = new StockDividendTable
-            {
-                VisibilitySwitch = Common.SwitchToUpcoming
-            };
+            var target = new StockDividendTableStockFilter("", Common.SwitchToUpcoming);
+
             var result = target.IsUpcoming(sd);
             Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
         }
@@ -41,14 +39,11 @@ namespace WebDownloading.Test
             => new() { DividendHistories = new[] { new DividendHistory { ExDate = DateTime.Today.AddDays(daysToAdd) } } };
 
 
-
         [TestCaseSource(nameof(IsRatioGraterThan1StockDividends))]
         public void IsRatioGraterThan1_When(StockDividend sd, bool expected)
         {
-            var target = new StockDividendTable
-            {
-                VisibilitySwitch = Common.SwitchToGraterThan1
-            };
+            var target = new StockDividendTableStockFilter("", Common.SwitchToGraterThan1);
+
             var result = target.IsRatioGraterThan1(sd);
             Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
         }
@@ -69,10 +64,7 @@ namespace WebDownloading.Test
         [TestCaseSource(nameof(FilterByShortNameStockDividends))]
         public void FilterByShortName_When(StockDividend sd, string shortName, bool expected)
         {
-            var target = new StockDividendTable
-            {
-                ShortNameFilter = shortName
-            };
+            var target = new StockDividendTableStockFilter(shortName, null);
             var result = target.FilterByShortName(sd);
             Assert.AreEqual(expected, result, shortName);
         }
