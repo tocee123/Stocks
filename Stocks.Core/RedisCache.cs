@@ -7,7 +7,7 @@ namespace Stocks.Core
 {
     public class RedisCache : IRedisCache
     {
-        const string _redisConnectionString = "realking.redis.cache.windows.net:6380,password=01aiSPXiOXFKmdYyIxFdpxOZcyDYbzgDFcFmhWau6Xc=,ssl=True,abortConnect=False";
+        const string _redisConnectionString = "stockredis.redis.cache.windows.net:6380,password=jxQt8QqLPu7ezjjBjANAhmVx2v3hftB5YhFwZXqhOHk=,ssl=True,abortConnect=False";
         public T ReadFromCache<T>(string key)
         {
             using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
