@@ -7,11 +7,10 @@
 @if (Stock is not null)
 {
     <a href="/">Back</a>
-    <h2>Details for @Stock.Name with short name @Stock.ShortName</h2>
-    <h3>Price: @Stock.Price</h3>
-
-    <h3>Dividend to price ratio: @Stock.DividendToPrice.ToPercentageDisplay()</h3>
-    <h3>Dividend history</h3>
+    <h1>Details for @Stock.Name (@Stock.ShortName)</h1>
+    <p><em>For more information click on <a href=@CreateLinkToYCharts()>link</a></em></p>
+    <h3>Current price: @Stock.Price$</h3>
+    <h3 class="text-center">Dividend history</h3>
 
     <table class="table table-striped">
         <thead>
@@ -56,4 +55,7 @@
 
     private string GetTypeBackgroundColor(string type)
         => type == "Special" ? "p-3 mb-2 bg-primary text-white" : "p-3 mb-2 bg-secondary text-white";
+
+    private string CreateLinkToYCharts()
+        => $"https://ycharts.com/companies/{Stock.ShortName}/dividend";
 }

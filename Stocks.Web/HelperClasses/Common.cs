@@ -7,6 +7,9 @@ namespace Stocks.Web.Pages
         public const string SwitchToUpcoming = nameof(SwitchToUpcoming);
         public const string SwitchToGraterThan1 = nameof(SwitchToGraterThan1);
         public const string HasSpecial = nameof(HasSpecial);
+        public const int ZeroDays = 0;
+        public const int TwoWeeks = 14;
+        public const double OnePercent = 0.01;
 
         public static string GetCssForDividendToPrice(double dividendToPriceRatio)
         => dividendToPriceRatio switch

@@ -1,6 +1,6 @@
 ﻿@using Stocks.Core.Models;
 
-@if (Stocks.Any(s => ShouldDisplay(s) == ""))
+@if (_stocksToDisplay.Any())
 {
     <table class="table table-striped">
         <thead>
@@ -19,9 +19,9 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var stock in Stocks)
+            @foreach (var stock in _stocksToDisplay)
             {
-                <tr style="@ShouldDisplay(stock)">
+                <tr>
                     <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
                     <td>@stock.ShortName</td>
                     <td>@stock.Price</td>
@@ -64,46 +64,15 @@
     [Parameter]
     public EventCallback<string> ShortNameFilterChanged { get; set; }
 
+    private IEnumerable<StockDividend> _stocksToDisplay;   
+
+    protected override void OnParametersSet()
+    {
+        var filter = new StockDividendTableStockFilter(ShortNameFilter, VisibilitySwitch);
+        _stocksToDisplay = Stocks.Where(filter.ShouldDisplay);
+    }
+
     private string _displayNone = "display:none";
-
-    public string ShouldDisplay(StockDividend stockDividend)
-    {
-        var functionsToCheck = new Func<StockDividend, bool>[]
-        {
-            FilterByShortName,
-            (sd)=>string.IsNullOrEmpty(VisibilitySwitch)
-            };
-        var functionsToCheck1 = new Func<StockDividend, bool>[]
-        {
-            IsUpcoming,
-            IsRatioGraterThan1,
-            HasSpecial
-            };
-        return functionsToCheck.All(f => f(stockDividend)) || functionsToCheck1.Any(f => f(stockDividend)) ? "" : _displayNone;
-    }
-
-    private int CalculateWhenToBuyToToday(StockDividend stockDividend)
-        => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
-
-    public bool FilterByShortName(StockDividend stockDividend)
-        => string.IsNullOrEmpty(ShortNameFilter)
-            || (!string.IsNullOrEmpty(ShortNameFilter) && stockDividend.ShortName.ToLower().Contains(ShortNameFilter.ToLower()));
-
-    public bool IsUpcoming(StockDividend stockDividend)
-    {
-        var whenToBuyToToday = CalculateWhenToBuyToToday(stockDividend);
-        return VisibilitySwitch == Common.SwitchToUpcoming && (whenToBuyToToday > 0 && whenToBuyToToday <= 14);
-    }
-
-    public bool IsRatioGraterThan1(StockDividend stockDividend)
-        => VisibilitySwitch == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice >= 0.01;
-
-    private bool HasSpecial(StockDividend stockDividend)
-        => VisibilitySwitch == Common.HasSpecial && stockDividend.HasSpecial;
-
-    //private bool DoesEnabledSwitchSatisfyCondition(StockDividend stockDividend, string switchName, Func<StockDividend, bool> func)
-    //    => VisibilitySwitch == stockDividend && func(stockDividend);
-
 
     private string ShouldShowSpecialDates()
     => ShowSpecialDates ? "" : _displayNone;
