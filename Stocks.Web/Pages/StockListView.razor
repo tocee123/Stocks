@@ -7,12 +7,12 @@
 
 <h1>Let's see some stocks</h1>
 
-<button class="btn btn-primary" @onclick="Reload">Reload</button>
-<button id="SwitchToUpcoming" class="btn @SwitchToUpcomingClass" @onclick="SwitchToUpcoming">Show upcoming</button>
-<button id="SwitchToGraterThan1" class="btn @SwitchToGraterThan1Class" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
-<button id="SwitchSpecial" class="btn @SwitchSpecialClass" @onclick="SwitchSpecial">Show with special</button>
-<button id="ShowSpecialDates" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Show extra columns</button>
-<button id="DownloadFile" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
+<button class="btn btn-primary" disabled="@IsDisabled()" @onclick="Reload">Reload</button>
+<button id="SwitchToUpcoming" disabled="@IsDisabled()" class="btn @SwitchToUpcomingClass" @onclick="SwitchToUpcoming">Show upcoming</button>
+<button id="SwitchToGraterThan1" disabled="@IsDisabled()" class="btn @SwitchToGraterThan1Class" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
+<button id="SwitchSpecial" disabled="@IsDisabled()" class="btn @SwitchSpecialClass" @onclick="SwitchSpecial">Show with special</button>
+<button id="ShowSpecialDates" disabled="@IsDisabled()" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Show extra columns</button>
+<button id="DownloadFile" disabled="@IsDisabled()" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
 <br />
 <label>Filter short name: </label>
 <input value="@_shortNameFilter" @oninput="(EventArgs) => {SetShortNameFilter(EventArgs.Value.ToString()); }" />
@@ -165,4 +165,7 @@ else
         _visibilitySwitch = null;
         _shortNameFilter = Value;
     }
+
+    private bool IsDisabled()
+        => _stocks == null;
 }
