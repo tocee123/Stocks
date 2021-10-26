@@ -7,7 +7,7 @@ namespace Stocks.Core.Models
     public class StockDividend
     {
         public string Name { get; set; }
-        public string ShortName { get; set; }
+        public string Ticker { get; set; }
         public double Price { get; set; }
         public IEnumerable<DividendHistory> DividendHistories { get; set; } = new List<DividendHistory>();
         [JsonIgnore]

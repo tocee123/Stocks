@@ -1,4 +1,4 @@
-﻿@page "/stockdetail/{shortname}"
+﻿@page "/stockdetail/{ticker}"
 @using Stocks.Core.Models;
 @using Stocks.Core;
 @using System.Linq;
@@ -7,7 +7,7 @@
 @if (Stock is not null)
 {
     <a href="/">Back</a>
-    <h1>Details for @Stock.Name (@Stock.ShortName)</h1>
+    <h1>Details for @Stock.Name (@Stock.Ticker)</h1>
     <p><em>For more information click on <a href=@CreateLinkToYCharts()>link</a></em></p>
     <h3>Current price: @Stock.Price$</h3>
     <h3 class="text-center">Dividend history</h3>
@@ -43,19 +43,19 @@
 @code
 {
     [Parameter]
-    public string shortname { get; set; }
+    public string ticker { get; set; }
 
     private StockDividend Stock { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         var stocks = await stockRepository.GetStocks();
-        Stock = stocks.Single(x => x.ShortName == shortname);
+        Stock = stocks.Single(x => x.Ticker == ticker);
     }
 
     private string GetTypeBackgroundColor(string type)
         => type == "Special" ? "p-3 mb-2 bg-primary text-white" : "p-3 mb-2 bg-secondary text-white";
 
     private string CreateLinkToYCharts()
-        => $"https://ycharts.com/companies/{Stock.ShortName}/dividend";
+        => $"https://ycharts.com/companies/{Stock.Ticker}/dividend";
 }

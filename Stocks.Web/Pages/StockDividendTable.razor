@@ -6,7 +6,7 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Short name</th>
+                <th>Ticker</th>
                 <th>Price</th>
                 <th>Ex-Date</th>
                 <th style="@ShouldShowSpecialDates()">Record date</th>
@@ -22,8 +22,8 @@
             @foreach (var stock in _stocksToDisplay)
             {
                 <tr>
-                    <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
-                    <td>@stock.ShortName</td>
+                    <td><a href="/stockdetail/@stock.Ticker">@stock.Name</a></td>
+                    <td>@stock.Ticker</td>
                     <td>@stock.Price</td>
                     <td>@stock.LatestDividendHistory.ExDate.ToYyyyMmDd()</td>
                     <td style="@ShouldShowSpecialDates()">@stock.LatestDividendHistory.RecordDate.ToYyyyMmDd()</td>
@@ -59,16 +59,16 @@
     public EventCallback<bool> ShowSpecialDatesChanged { get; set; }
 
     [Parameter]
-    public string ShortNameFilter { get; set; }
+    public string TickerFilter { get; set; }
 
     [Parameter]
-    public EventCallback<string> ShortNameFilterChanged { get; set; }
+    public EventCallback<string> TickerFilterChanged { get; set; }
 
-    private IEnumerable<StockDividend> _stocksToDisplay;   
+    private IEnumerable<StockDividend> _stocksToDisplay;
 
     protected override void OnParametersSet()
     {
-        var filter = new StockDividendTableStockFilter(ShortNameFilter, VisibilitySwitch);
+        var filter = new StockDividendTableStockFilter(TickerFilter, VisibilitySwitch);
         _stocksToDisplay = Stocks.Where(filter.ShouldDisplay);
     }
 

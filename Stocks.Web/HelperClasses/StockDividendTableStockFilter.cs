@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace Stocks.Web.Pages
 {
-    public record StockDividendTableStockFilter(string ShortNameFilter, string VisibilitySwitch)
+    public record StockDividendTableStockFilter(string TickerFilter, string VisibilitySwitch)
     {
         public bool ShouldDisplay(StockDividend stockDividend)
         {
             var functionsToCheck = new Func<StockDividend, bool>[]
             {
-                FilterByShortName,
+                FilterByTicker,
                 (sd)=>string.IsNullOrEmpty(VisibilitySwitch)
             };
             var functionsToCheck1 = new Func<StockDividend, bool>[]
@@ -22,9 +22,9 @@ namespace Stocks.Web.Pages
             return functionsToCheck.All(f => f(stockDividend)) || functionsToCheck1.Any(f => f(stockDividend));
         }
 
-        internal bool FilterByShortName(StockDividend stockDividend)
-        => string.IsNullOrEmpty(ShortNameFilter)
-            || (!string.IsNullOrEmpty(ShortNameFilter) && stockDividend.ShortName.ToLower().Contains(ShortNameFilter.ToLower()));
+        internal bool FilterByTicker(StockDividend stockDividend)
+        => string.IsNullOrEmpty(TickerFilter)
+            || (!string.IsNullOrEmpty(TickerFilter) && stockDividend.Ticker.ToLower().Contains(TickerFilter.ToLower()));
 
         internal bool IsUpcoming(StockDividend stockDividend)
         {

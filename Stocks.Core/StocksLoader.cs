@@ -14,9 +14,9 @@ namespace Stocks.Core
             _stockDividendHistoryLoader = stockDividendHistoryLoader;
         }
 
-        public async Task<IEnumerable<StockDividend>> GetStockDividendsAsync(string[] stockShortNames)
+        public async Task<IEnumerable<StockDividend>> GetStockDividendsAsync(string[] tickers)
         {
-            var stocksToCheck = stockShortNames.Distinct()
+            var stocksToCheck = tickers.Distinct()
             .Select(_stockDividendHistoryLoader.DownloadStockHistoryAsync);
             var stocks = await Task.WhenAll(stocksToCheck);
             var orderedStocks = stocks.Where(s => s.IsCorrectlyDownloaded && s.LatestDividendHistory is not null).OrderByDescending(s => s.LatestDividendHistory.ExDate);

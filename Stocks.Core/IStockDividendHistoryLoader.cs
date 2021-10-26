@@ -5,6 +5,6 @@ namespace Stocks.Core
 {
     public interface IStockDividendHistoryLoader
     {
-        Task<StockDividend> DownloadStockHistoryAsync(string stockShortName);
+        Task<StockDividend> DownloadStockHistoryAsync(string ticker);
     }
 }

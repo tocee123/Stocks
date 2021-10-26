@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Stocks.Core;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,24 +18,43 @@ namespace WebDownloading.Test
         }
 
         [Test]
-        public async Task DownloadStockHistoryAsync_WhenCorrectStockShortNameIsGiven_ReturnsNotemptyClass()
+        public async Task DownloadStockHistoryAsync_WhenCorrectStockTickerIsGiven_ReturnsNotemptyClass()
         {
-            var stockShortName = "MPLX";
-            var result = await _target.DownloadStockHistoryAsync(stockShortName);
+            var ticker = "MPLX";
+            var result = await _target.DownloadStockHistoryAsync(ticker);
             Assert.IsNotNull(result);
             Assert.IsTrue(result.IsCorrectlyDownloaded);
-            Assert.AreEqual(stockShortName, result.ShortName);
+            Assert.AreEqual(ticker, result.Ticker);
             Assert.IsTrue(result.DividendHistories.Any());
             Assert.IsNotNull(result.LatestDividendHistory);
         }
 
-        [Test]
-        public async Task DownloadStockHistoryAsync_WhenIncorrectStockShortNameIsGiven_IsCorrectlyDownloadedFalse()
+        [TestCase("TAEF")]
+        [TestCase("123asd")]
+        public async Task DownloadStockHistoryAsync_WhenIncorrectStockTickerIsGiven_IsCorrectlyDownloadedFalse(string ticker)
         {
-            var stockShortName = "123asd";
-            var result = await _target.DownloadStockHistoryAsync(stockShortName);
+            var result = await _target.DownloadStockHistoryAsync(ticker);
             Assert.IsNotNull(result);
             Assert.IsFalse(result.IsCorrectlyDownloaded);
+        }
+
+        [TestCase("abc", false)]
+        [TestCase("www.google.com", true)]
+        [TestCase("http://google.com", true)]
+        public async Task DoesPageExist_WhenPageDoesNotExist_ReturnsFalse(string url, bool expected)
+        {
+            var (pageExists, resultUrl) = await StockDividendHistoryLoader.DoesPageExist(url);
+            Assert.AreEqual(expected, pageExists);
+            Console.WriteLine(resultUrl);
+        }
+
+        [TestCase("abc", false)]
+        [TestCase("www.google.com", true)]
+        [TestCase("http://google.com", true)]
+        public void IsCorrectUrl_WhenUrlIsGiven_ReturnsResultAccordingly(string url, bool expected)
+        {
+            var result = StockDividendHistoryLoader.IsCorrectUrl(url, out var reusltUri);
+            Assert.AreEqual(expected, result);
         }
     }
 }

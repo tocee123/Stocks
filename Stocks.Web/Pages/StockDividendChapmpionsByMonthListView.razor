@@ -19,7 +19,7 @@ else
             <tr>
                 <th>Month</th>
                 <th>Name</th>
-                <th>Short name</th>
+                <th>Tickers</th>
                 <th>Ex-Date</th>
                 <th>Price $</th>
                 <th>Dividend $</th>
@@ -33,8 +33,8 @@ else
             {
                 <tr>
                     <td>@stock.ExDate.ToString("Y")</td>
-                    <td><a href="/stockdetail/@stock.ShortName">@stock.Name</a></td>
-                    <td>@stock.ShortName</td>
+                    <td><a href="/stockdetail/@stock.Ticker">@stock.Name</a></td>
+                    <td>@stock.Ticker</td>
                     <td>@stock.ExDate.ToYyyyMmDd()</td>
                     <td>@stock.Price</td>
                     <td>@stock.Dividend</td>

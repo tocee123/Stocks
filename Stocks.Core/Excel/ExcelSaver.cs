@@ -18,7 +18,7 @@ namespace Stocks.Core.Excel
             {
                 var column = 1;
                 sheet.Range[row, column++].Text = sd.Name;
-                sheet.Range[row, column++].Text = sd.ShortName;
+                sheet.Range[row, column++].Text = sd.Ticker;
                 sheet.Range[row, column++].NumberValue = sd.Price;
                 sheet.Range[row, column++].DateTimeValue = sd.LatestDividendHistory.ExDate;
                 sheet.Range[row, column++].DateTimeValue = sd.LatestDividendHistory.RecordDate;
@@ -88,6 +88,6 @@ namespace Stocks.Core.Excel
         }
 
         private static string[] GetHeaderColumns()
-            => new[] { nameof(StockDividend.Name), nameof(StockDividend.ShortName), nameof(StockDividend.Price), nameof(DividendHistory.ExDate), nameof(DividendHistory.RecordDate), nameof(DividendHistory.PayDate), nameof(DividendHistory.DeclarationDate), nameof(DividendHistory.WhenToBuy), nameof(DividendHistory.Amount), nameof(StockDividend.DividendToPrice) };
+            => new[] { nameof(StockDividend.Name), nameof(StockDividend.Ticker), nameof(StockDividend.Price), nameof(DividendHistory.ExDate), nameof(DividendHistory.RecordDate), nameof(DividendHistory.PayDate), nameof(DividendHistory.DeclarationDate), nameof(DividendHistory.WhenToBuy), nameof(DividendHistory.Amount), nameof(StockDividend.DividendToPrice) };
     }
 }

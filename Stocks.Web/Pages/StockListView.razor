@@ -14,8 +14,8 @@
 <button id="ShowSpecialDates" disabled="@IsDisabled()" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Show extra columns</button>
 <button id="DownloadFile" disabled="@IsDisabled()" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
 <br />
-<label>Filter short name: </label>
-<input value="@_shortNameFilter" @oninput="(EventArgs) => {SetShortNameFilter(EventArgs.Value.ToString()); }" />
+<label>Filter ticker: </label>
+<input value="@_tickerFilter" @oninput="(EventArgs) => {SetTickerFilter(EventArgs.Value.ToString()); }" />
 
 @if (isDownloading)
 {
@@ -28,9 +28,9 @@
 }
 else
 {
-    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-ShortNameFilter="_shortNameFilter" />
+    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" />
     <h3 class="text-center">Today @DateTime.Today.ToShortDateString()</h3>
-    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-ShortNameFilter="_shortNameFilter" />
+    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" />
 }
 
 @code{
@@ -39,7 +39,7 @@ else
     private IEnumerable<StockDividend> _upComingstocks;
     private IEnumerable<StockDividend> _oldStocks;
 
-    string _shortNameFilter;
+    string _tickerFilter;
     private bool _showSpecialDates = false;
 
     private Dictionary<string, bool> _mySwitch;
@@ -125,7 +125,7 @@ else
     private void ClearFilters()
     {
         _visibilitySwitch = null;
-        _shortNameFilter = null;
+        _tickerFilter = null;
     }
 
     private async Task Reload()
@@ -160,10 +160,10 @@ else
          });
     }
 
-    private void SetShortNameFilter(string Value)
+    private void SetTickerFilter(string Value)
     {
         _visibilitySwitch = null;
-        _shortNameFilter = Value;
+        _tickerFilter = Value;
     }
 
     private bool IsDisabled()

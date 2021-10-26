@@ -61,15 +61,15 @@ namespace WebDownloading.Test
         private static StockDividend CerateStockDividend(double price, double amount)
             => new() { DividendHistories = new[] { new DividendHistory { Amount = amount } }, Price = price };
 
-        [TestCaseSource(nameof(FilterByShortNameStockDividends))]
-        public void FilterByShortName_When(StockDividend sd, string shortName, bool expected)
+        [TestCaseSource(nameof(FilterByTickerStockDividends))]
+        public void FilterByShortName_When(StockDividend sd, string ticker, bool expected)
         {
-            var target = new StockDividendTableStockFilter(shortName, null);
-            var result = target.FilterByShortName(sd);
-            Assert.AreEqual(expected, result, shortName);
+            var target = new StockDividendTableStockFilter(ticker, null);
+            var result = target.FilterByTicker(sd);
+            Assert.AreEqual(expected, result, ticker);
         }
 
-        private static IEnumerable<TestCaseData> FilterByShortNameStockDividends
+        private static IEnumerable<TestCaseData> FilterByTickerStockDividends
         {
             get
             {
@@ -84,8 +84,8 @@ namespace WebDownloading.Test
             }
         }
 
-        private static StockDividend CerateStockDividend(string shortName)
-            => new() { ShortName = shortName };
+        private static StockDividend CerateStockDividend(string ticker)
+            => new() { Ticker = ticker };
 
     }
 }

@@ -1,8 +1,10 @@
 using NUnit.Framework;
 using Stocks.Core;
 using Stocks.Core.Excel;
+using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace WebDownloading.Test
@@ -17,13 +19,19 @@ namespace WebDownloading.Test
         [Test]
         public async Task Test2()
         {
-            var url = "https://www.etoro.com/markets/agnc";
 
-            WebRequest request = WebRequest.Create(url);
-            WebResponse response = request.GetResponse();
-            string result = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            // Using WebClient
-            string result1 = new WebClient().DownloadString(url);
+            async Task<bool> DoesPageExist(string url)
+            {
+                var result = false;
+                using var client = new HttpClient();
+                var response = await client.GetAsync(url);
+                result = response.IsSuccessStatusCode;
+                return result;
+            }
+
+            var url = "https://www.etoro.com/search/tef";
+
+            await DoesPageExist(url);
 
         }
 

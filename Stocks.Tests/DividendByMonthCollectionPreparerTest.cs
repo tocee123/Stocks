@@ -46,7 +46,7 @@ namespace WebDownloading.Test
             foreach (var item in data)
             {
                 item.InvestedInCurrentMonth = investment;
-                Console.WriteLine($"{item.ExDate.ToString("Y")} {item.ShortName} price {item.Price}$, stock volume {item.StockVolume}, dividend/share {item.Dividend}$, \t earned in month: {item.Earnings}");
+                Console.WriteLine($"{item.ExDate.ToString("Y")} {item.Ticker} price {item.Price}$, stock volume {item.StockVolume}, dividend/share {item.Dividend}$, \t earned in month: {item.Earnings}");
             }
 
             var x = investment;
@@ -69,12 +69,12 @@ namespace WebDownloading.Test
         {
             Random random = new();
 
-            string generateShortName() => ((char)('A' + (char)random.Next(0, 25))).ToString();
+            string generateTicker() => ((char)('A' + (char)random.Next(0, 25))).ToString();
             double generateDividend() => random.Next(10, 100) / (double)100;
             double generatePrice() => random.Next(10, 100) / (double)10;
             var fixture = new Fixture();
             fixture.Customize<StockChampionByDividendToPriceRatio>(composer =>
-                composer.With(s => s.ShortName, generateShortName)
+                composer.With(s => s.Ticker, generateTicker)
                     .With(s => s.Dividend, generateDividend)
                     .With(s => s.Price, generatePrice));
             var data = fixture.CreateMany<StockChampionByDividendToPriceRatio>(12).ToList();
@@ -88,7 +88,7 @@ namespace WebDownloading.Test
             foreach (var item in data)
             {
                 item.InvestedInCurrentMonth = investment;
-                Console.WriteLine($"{item.ExDate.ToString("Y")} {item.ShortName} price {item.Price}$, stock volume {item.StockVolume}, dividend/share {item.Dividend}$, \t earned in month: {item.Earnings}");
+                Console.WriteLine($"{item.ExDate.ToString("Y")} {item.Ticker} price {item.Price}$, stock volume {item.StockVolume}, dividend/share {item.Dividend}$, \t earned in month: {item.Earnings}");
             }
         }
 
@@ -111,7 +111,7 @@ namespace WebDownloading.Test
         [Test]
         public async Task SelectTop1DividnedByMonth()
         {
-            var stocks = (await _stockRepository.GetStocks()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.ShortName });
+            var stocks = (await _stockRepository.GetStocks()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.Ticker });
 
             var grouppedByMonth = stocks.GroupBy(s => new { s.ExDate.Month, s.ExDate.Year }).Select(s => new { s.Key, TopDividendPayer = s.OrderByDescending(so => so.DividendToPrice).FirstOrDefault() });
             Console.WriteLine("Monthly best ratios:");
@@ -125,7 +125,7 @@ namespace WebDownloading.Test
             {
                 var amountOfDividend = Math.Round(calculateStockCountFromPrice(item.TopDividendPayer.Price) * item.TopDividendPayer.Amount, 2);
                 sum += amountOfDividend;
-                sb.AppendLine($"In {item.Key.Year}/{item.Key.Month}: {item.TopDividendPayer.Name} '{item.TopDividendPayer.ShortName}' with {item.TopDividendPayer.Price}$, dividend {item.TopDividendPayer.Amount}$ ratio: {item.TopDividendPayer.DividendToPrice:0.00%} you could buy {calculateStockCountFromPrice(item.TopDividendPayer.Price)} stocks and get {amountOfDividend}$ on { item.TopDividendPayer.ExDate.ToShortDateString()}");
+                sb.AppendLine($"In {item.Key.Year}/{item.Key.Month}: {item.TopDividendPayer.Name} '{item.TopDividendPayer.Ticker}' with {item.TopDividendPayer.Price}$, dividend {item.TopDividendPayer.Amount}$ ratio: {item.TopDividendPayer.DividendToPrice:0.00%} you could buy {calculateStockCountFromPrice(item.TopDividendPayer.Price)} stocks and get {amountOfDividend}$ on { item.TopDividendPayer.ExDate.ToShortDateString()}");
             }
             sb.AppendLine($"{sum}$");
             File.WriteAllText(@"c:\temp\test111.txt", sb.ToString());
