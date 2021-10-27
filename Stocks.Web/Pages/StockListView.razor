@@ -151,6 +151,7 @@ else
 
     async Task DownloadSeparated()
     {
+        await Task.Delay(200);
         await JSRuntime.InvokeVoidAsync(
          "downloadFromByteArray",
          new
