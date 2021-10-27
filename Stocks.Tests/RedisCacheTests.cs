@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using NUnit.Framework;
-using Stocks.Core;
+using Stocks.Core.Cache;
 using Stocks.Core.Models;
 using System;
 using System.Collections.Generic;

@@ -8,6 +8,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Stocks.Core.Cache;
 
 namespace WebDownloading.Test
 {

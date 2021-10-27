@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Stocks.Core
+namespace Stocks.Core.Cache
 {
     public class RedisOfflineCache : IRedisCache
     {
@@ -21,7 +21,7 @@ namespace Stocks.Core
         public T ReadFromCache<T>(string key)
         {
             var value = ReadFromCache(key);
-            return value is null ? default(T)
+            return value is null ? default
                : JsonConvert.DeserializeObject<T>(value);
         }
 
