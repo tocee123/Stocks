@@ -4,7 +4,7 @@
     {
         public static string[] Stocks { get => StocksOfInterestEtoro; }
 
-        private static string[] StocksOfInterestEtoro = new[] { "WMB", "MPLX", "EPD", "ET", "AGNC", "NLY", "LUMN", "MFA", "TWO", "PSEC", "TSN", "KMI", "MO", "IRM", "NYMT", "TEF", "ADT", "AEG", "PBCT", "HBAN", "ABR", "ISBC", "O", "LTC", "STAG", "MAIN", "PSEC", "ADC", "PBA", "SLG", "DXC", "PG", "KO", "XOM", "ABR", "ISBC", "HPE", "FFNW", "RVSB", "SHBI", "ASRV", "WVFC", "SBFG", "CBAN", "MWA", "SIRI",
+        private static string[] StocksOfInterestEtoro = new[] { "WMB", "MPLX", "EPD", "ET", "AGNC", "NLY", "LUMN", "MFA", "TWO", "PSEC", "TSN", "KMI", "MO", "IRM", "NYMT", "TEF", "ADT", "AEG", "PBCT", "HBAN", "ABR", "ISBC", "O", "LTC", "STAG", "MAIN", "PSEC", "ADC", "PBA", "SLG", "DXC", "PG", "KO", "XOM", "ABR", "ISBC", "HPE", "FFNW", "RVSB", "SHBI", "ASRV", "WVFC", "SBFG", "CBAN", "MWA", "SIRI","LYB","PNW","SAFT","NWE","OKE","EIX","GILD","PFG","OMC","AEP","SRE","REG","LAMR","SJM",
             //champions
             "PBCT", "TDS", "ORI", "T", "BEN", "MDU", "ENB", "HRL", "NNN", "LEG", "ABM", "WBA", "UVV", "CAH", "XOM", "AFL", "KO", "BRO", "ADM", "SEIC", "SON", "DCI", "O", "AOS", "ED", "CL", "SYY", "RPM", "RTX", "CHD","NEE", "CVX", "ATO", "EMR", "BMI", "NUE", "PII", "CNI", "CINF", "FRT", "EXPD", "GPC", "MDT",  "LECO", "IBM", "KMB", "PG", "WMT", "RNR", "PPG", "PEP", "CLX", "JNJ", "DOV", "JKHY", "CB", "SWK", "MMM", "GD", "LOW", "ADP", "CAT", "TROW", "ECL", "ITW", "MCD", "ALB", "TGT", "BDX", "APD", "SYK", "PH", "SHW", "LIN", "ESS", "CTAS", "GWW", "SPGI", "WST", "ROP"
             };
