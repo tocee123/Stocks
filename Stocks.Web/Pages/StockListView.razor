@@ -12,6 +12,7 @@
 <button id="SwitchToGraterThan1" disabled="@IsDisabled()" class="btn @SwitchToGraterThan1Class" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
 <button id="SwitchSpecial" disabled="@IsDisabled()" class="btn @SwitchSpecialClass" @onclick="SwitchSpecial">Show with special</button>
 <button id="ShowSpecialDates" disabled="@IsDisabled()" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Show extra columns</button>
+<button id="ShowOnlyTheHighestRatioPerDay" disabled="@IsDisabled()" class="btn @ShowOnlyTheHighestRatioPerDayClass" @onclick="ShowOnlyTheHighestRatioPerDay">Show only highest ratio per day</button>
 <button id="DownloadFile" disabled="@IsDisabled()" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
 <br />
 <label>Filter ticker: </label>
@@ -58,6 +59,7 @@ else
     private string SwitchSpecialClass;
     private string ShowSpecialDatesClass = _infoButtonClass;
     private string DownloadFileClass = _infoButtonClass;
+    private string ShowOnlyTheHighestRatioPerDayClass = _infoButtonClass;
 
     private void ClearButtonClass()
     {
@@ -103,7 +105,10 @@ else
     private async Task UpdateStocks()
     {
         _stocks = await stockRepository.GetStocks();
-        _stocks = _stocks.GroupBy(s => s.LatestDividendHistory.WhenToBuy).Select(s => s.OrderByDescending(s1 => s1.DividendToPrice).First());
+        if (_showOnlyTheHighestRatioPerDay)
+        {
+            _stocks = _stocks.GroupBy(s => s.LatestDividendHistory.WhenToBuy).Select(s => s.OrderByDescending(s1 => s1.DividendToPrice).First());
+        }
         _upComingstocks = FilterWhenToBuyComparedToToday(days => days >= 0);
         _oldStocks = FilterWhenToBuyComparedToToday(days => days < 0);
     }
@@ -170,4 +175,13 @@ else
 
     private bool IsDisabled()
         => _stocks == null;
+
+    private bool _showOnlyTheHighestRatioPerDay;
+
+    private async Task ShowOnlyTheHighestRatioPerDay()
+    {
+        _showOnlyTheHighestRatioPerDay = !_showOnlyTheHighestRatioPerDay;
+        ShowOnlyTheHighestRatioPerDayClass = GetButtonClass(_showOnlyTheHighestRatioPerDay);
+        await UpdateStocks();
+    }
 }
