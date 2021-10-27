@@ -103,6 +103,7 @@ else
     private async Task UpdateStocks()
     {
         _stocks = await stockRepository.GetStocks();
+        _stocks = _stocks.GroupBy(s => s.LatestDividendHistory.WhenToBuy).Select(s => s.OrderByDescending(s1 => s1.DividendToPrice).First());
         _upComingstocks = FilterWhenToBuyComparedToToday(days => days >= 0);
         _oldStocks = FilterWhenToBuyComparedToToday(days => days < 0);
     }

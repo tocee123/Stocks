@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Stocks.Core;
 using Stocks.Core.Cache;
+using Stocks.Web.Pages;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -27,6 +28,19 @@ namespace WebDownloading.Test
             Console.WriteLine(sw.ElapsedMilliseconds);
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Any());
+        }
+
+        [Test]
+        public async Task GetStocks_()
+        {
+            var result = await _target.GetStocks();
+            Console.WriteLine(result.Count());
+            var grouopped = result.GroupBy(s => s.LatestDividendHistory.WhenToBuy).Select(s => s.OrderByDescending(s1 => s1.DividendToPrice).First());
+            result = result.Where(s => s.LatestDividendHistory.WhenToBuy == DateTime.Parse("2021-10-27")).OrderByDescending(s => s.DividendToPrice);
+            foreach (var s in grouopped)
+            {
+                Console.WriteLine($"{s.LatestDividendHistory.WhenToBuy}-> {s.Ticker}, {s.DividendToPrice.ToPercentageDisplay()}");
+            }
         }
     }
 }
