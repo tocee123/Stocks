@@ -66,7 +66,6 @@ namespace Stocks.Core.Excel
                 sheet.Range[1, i].Style.VerticalAlignment = VerticalAlignType.Top;
                 if (false)
                 {
-
                     //TODO fix the duplication in header
                     SetFontToRichText(1, i, sheet, fontBold);
                 }

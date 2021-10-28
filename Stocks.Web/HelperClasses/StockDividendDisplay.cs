@@ -1,9 +1,10 @@
-﻿using Stocks.Core.Models;
+﻿using Stocks.Core;
+using Stocks.Core.Models;
 using System;
 
 namespace Stocks.Web.Pages
 {
-    public record StockDividendDisplay(string Name, string Ticker, double Price, string LatestExdate, string LatestRecordDate, string LatestPayDate, string LatestDeclarationDate, DateTime LatestWhenToBuy, string LatestWhenToBuyDisplay, double Amount, double DividendToPrice, string DividendToPriceDisplay, bool HasSpecial)
+    public record StockDividendDisplay(string Name, string Ticker, double Price, string Exdate, string RecordDate, string PayDate, string DeclarationDate, DateTime WhenToBuy, string WhenToBuyDisplay, DateTime WhenToSell, string WhenToSellDisplay, double Amount, double DividendToPrice, string DividendToPriceDisplay, bool HasSpecial)
     {
         public static StockDividendDisplay Map(StockDividend sd)
         => new StockDividendDisplay(
@@ -14,8 +15,10 @@ namespace Stocks.Web.Pages
             sd.LatestDividendHistory.RecordDate.ToYyyyMmDd(),
             sd.LatestDividendHistory.PayDate.ToYyyyMmDd(),
             sd.LatestDividendHistory.DeclarationDate.ToYyyyMmDd(),
-            sd.LatestDividendHistory.WhenToBuy,
-            sd.LatestDividendHistory.WhenToBuy.ToYyyyMmDd(),
+            DateCalculator.CalculateWhenToBuy(sd.LatestDividendHistory.ExDate),
+            DateCalculator.CalculateWhenToBuy(sd.LatestDividendHistory.ExDate).ToYyyyMmDd(),
+            DateCalculator.CalculateWhenToSell(sd.LatestDividendHistory.RecordDate),
+            DateCalculator.CalculateWhenToSell(sd.LatestDividendHistory.RecordDate).ToYyyyMmDd(),
             sd.LatestDividendHistory.Amount,
             sd.DividendToPrice,
             sd.DividendToPrice.ToPercentageDisplay(),
