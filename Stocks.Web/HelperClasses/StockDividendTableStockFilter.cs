@@ -4,14 +4,23 @@ using System.Linq;
 
 namespace Stocks.Web.Pages
 {
-    public record StockDividendTableStockFilter(string TickerFilter, string VisibilitySwitch)
+    public class StockDividendTableStockFilter
     {
+        private readonly string _tickerFilter;
+        private readonly string _visibilitySwitch;
+
+        public StockDividendTableStockFilter(string tickerFilter, string visibilitySwitch)
+        {
+            this._tickerFilter = tickerFilter;
+            this._visibilitySwitch = visibilitySwitch;
+        }
+
         public bool ShouldDisplay(StockDividend stockDividend)
         {
             var functionsToCheck = new Func<StockDividend, bool>[]
             {
                 FilterByTicker,
-                (sd)=>string.IsNullOrEmpty(VisibilitySwitch)
+                (sd)=>string.IsNullOrEmpty(_visibilitySwitch)
             };
             var functionsToCheck1 = new Func<StockDividend, bool>[]
             {
@@ -23,21 +32,21 @@ namespace Stocks.Web.Pages
         }
 
         internal bool FilterByTicker(StockDividend stockDividend)
-        => string.IsNullOrEmpty(TickerFilter)
-            || (!string.IsNullOrEmpty(TickerFilter) && stockDividend.Ticker.ToLower().Contains(TickerFilter.ToLower()));
+        => string.IsNullOrEmpty(_tickerFilter)
+            || (!string.IsNullOrEmpty(_tickerFilter) && stockDividend.Ticker.ToLower().Contains(_tickerFilter.ToLower()));
 
         internal bool IsUpcoming(StockDividend stockDividend)
         {
             var whenToBuyToToday = CalculateWhenToBuyToToday(stockDividend);
-            return VisibilitySwitch == Common.SwitchToUpcoming && (whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks);
+            return _visibilitySwitch == Common.SwitchToUpcoming && (whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks);
         }
         private static int CalculateWhenToBuyToToday(StockDividend stockDividend)
             => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
 
         internal bool IsRatioGraterThan1(StockDividend stockDividend)
-            => VisibilitySwitch == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice >= Common.OnePercent;
+            => _visibilitySwitch == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice >= Common.OnePercent;
 
         internal bool HasSpecial(StockDividend stockDividend)
-            => VisibilitySwitch == Common.HasSpecial && stockDividend.HasSpecial;
+            => _visibilitySwitch == Common.HasSpecial && stockDividend.HasSpecial;
     }
 }
