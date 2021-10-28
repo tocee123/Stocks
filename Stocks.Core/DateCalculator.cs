@@ -16,10 +16,18 @@ namespace Stocks.Core
 
         private static DateTime MoveDayOutFromWeekend(DateTime date, int daysToMove)
         {
-            DateTime result = date.AddDays(daysToMove);
-            while (IsWeekend(result))
-                result = result.AddDays(daysToMove);
-            return result;
+            try
+            {
+                DateTime result = date.AddDays(daysToMove);
+                while (IsWeekend(result))
+                    result = result.AddDays(daysToMove);
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(date.ToShortDateString(), ex);
+            }            
         }
 
         readonly static DayOfWeek[] _weekendDays = new[] { DayOfWeek.Sunday, DayOfWeek.Saturday };
