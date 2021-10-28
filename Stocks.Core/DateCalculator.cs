@@ -5,8 +5,8 @@ namespace Stocks.Core
 {
     public class DateCalculator
     {
-        private static int _yesterday = -1;
-        private static int _tomorrow = 1;
+        private static readonly int _yesterday = -1;
+        private static readonly int _tomorrow = 1;
 
         public static DateTime CalculateWhenToBuy(DateTime date)
         => MoveDayOutFromWeekend(date, _yesterday);
