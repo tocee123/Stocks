@@ -23,7 +23,7 @@ namespace Stocks.Core.Cache
             var stocksOfInterest = await getStocksOfInterest();
             if (!stocksOfInterest.AnyWhenNull())
             {
-                await _cachedRepository.WriteToCacheAsync(key, StocksOfInterest.Stocks);
+                await _cachedRepository.WriteToCacheAsync(key, StocksOfInterest.Stocks, -1);
             }
             return await getStocksOfInterest();
         }

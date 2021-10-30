@@ -33,11 +33,15 @@ namespace Stocks.Core.Cache
 
         public async Task WriteToCacheAsync<T>(string key, T value, int? expiration = null)
         {
-            var expiry = TimeSpan.FromSeconds(expiration ?? 3600);
+            var expiry = GetExpiration(expiration);
             var convertedValue = JsonConvert.SerializeObject(value);
             using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
             var db = cm.GetDatabase();
             await db.StringSetAsync(key, convertedValue, expiry);
         }
+
+        private TimeSpan? GetExpiration(int? expiration)
+        => expiration == -1 ? null
+            : TimeSpan.FromSeconds(expiration ?? 3600);
     }
 }
