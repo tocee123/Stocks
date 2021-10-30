@@ -1,26 +1,36 @@
-﻿using NUnit.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
 using Stocks.Core.Cache;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Stocks.Test.Cache
 {
     [TestFixture]
     public class CachedRepositoryManagerTests
     {
-        private CachedRepositoryManager _target;
+        private ICachedRepositoryManager _target;
+        ICachedRepository _cachedRepositorySubstitute;
 
         [SetUp]
         public void Setup()
         {
-            _target = new CachedRepositoryManager();
+            _cachedRepositorySubstitute = Substitute.For<ICachedRepository>();
+            _target = new CachedRepositoryManager(_cachedRepositorySubstitute);
         }
-        
+
         [Test]
-        public void GetStocksOfInterest_WhenStocksOfInterestIsEmpty_CallMethodToFillIt()
+        public async Task GetStocksOfInterest_WhenStocksOfInterestIsEmpty_CallMethodToFillIt()
         {
-            var stocksOfInterest = _target.GetStocksOfInterest();
+            var key = StocksOfInterest.Key;
+            _cachedRepositorySubstitute.ReadFromCacheAsync<IEnumerable<string>>(key).Returns(null, new string[] { "test" });
+
+            var stocksOfInterest = await _target.GetStocksOfInterestAsync();
+
             Assert.IsNotNull(stocksOfInterest);
             Assert.IsTrue(stocksOfInterest.Any());
+            await _cachedRepositorySubstitute.Received().WriteToCacheAsync(key, Arg.Any<string>());
         }
     }
 }

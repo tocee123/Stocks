@@ -32,7 +32,7 @@ namespace Stocks.Core.Cache
 
         public async Task<string> ReadStringFromCacheAsync(string key)
         {
-            return ReadFromCache(key);
+            return await Task.Run(() => ReadFromCache(key));
         }
 
         public async Task WriteToCacheAsync<T>(string key, T value, int? expiration = null)

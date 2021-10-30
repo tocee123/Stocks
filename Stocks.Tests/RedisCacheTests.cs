@@ -37,12 +37,5 @@ namespace WebDownloading.Test
             var result = await _target.ReadStringFromCacheAsync(key);
             Assert.IsNotNull(result);
         }
-
-        [Test]
-        public async Task WriteStocksOfInterestAsync()
-        {
-            var target = new RedisCachedRepository();
-            await target.WriteStocksOfInterestAsync();
-        }
     }
 }

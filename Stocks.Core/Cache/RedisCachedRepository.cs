@@ -39,13 +39,5 @@ namespace Stocks.Core.Cache
             var db = cm.GetDatabase();
             await db.StringSetAsync(key, convertedValue, expiry);
         }
-
-        public async Task WriteStocksOfInterestAsync()
-        {
-            var convertedValue = JsonConvert.SerializeObject(StocksOfInterest.Stocks);
-            using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
-            var db = cm.GetDatabase();
-            await db.StringSetAsync(nameof(StocksOfInterest), convertedValue);
-        }
     }
 }
