@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Stocks.Core.Extensions;
 using Stocks.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
@@ -22,7 +21,7 @@ namespace Stocks.Core.Cache
             async Task<string[]> getStocksOfInterest() => await _cachedRepository.ReadFromCacheAsync<string[]>(key);
 
             var stocksOfInterest = await getStocksOfInterest();
-            if (stocksOfInterest?.Any() ?? false == false)
+            if (!stocksOfInterest.AnyWhenNull())
             {
                 await _cachedRepository.WriteToCacheAsync(key, StocksOfInterest.Stocks);
             }
@@ -32,6 +31,9 @@ namespace Stocks.Core.Cache
         public async Task<IEnumerable<StockDividend>> GetStockDividendsAsync()
         => await _cachedRepository.ReadFromCacheAsync<IEnumerable<StockDividend>>(CreateKey());
 
-        private string CreateKey() => $"{DateTime.Now:yyyy-MM-dd}_GetStocks";
+        public async Task SaveStockDividendsAsync(IEnumerable<StockDividend> stockDividends)
+        => await _cachedRepository.WriteToCacheAsync(CreateKey(), stockDividends);
+
+        private static string CreateKey() => $"{DateTime.Now:yyyy-MM-dd}_GetStocks";
     }
 }

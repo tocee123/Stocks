@@ -1,8 +1,7 @@
 ﻿using Stocks.Core.Cache;
+using Stocks.Core.Extensions;
 using Stocks.Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Stocks.Core
@@ -21,10 +20,11 @@ namespace Stocks.Core
         public async Task<IEnumerable<StockDividend>> GetStocks()
         {
             var stockDividends = await _cachedRepositoryManager.GetStockDividendsAsync();
-            if (!stockDividends?.Any() ?? false == false)
+            if (!stockDividends.AnyWhenNull())
             {
                 var stockOfInterestTickers = await _cachedRepositoryManager.GetStocksOfInterestAsync();
                 stockDividends = await _stocksLoader.GetStockDividendsAsync(stockOfInterestTickers);
+                await _cachedRepositoryManager.SaveStockDividendsAsync(stockDividends);
             }
             return stockDividends;
         }

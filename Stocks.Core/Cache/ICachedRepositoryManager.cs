@@ -8,5 +8,6 @@ namespace Stocks.Core.Cache
     {
         Task<IEnumerable<string>> GetStocksOfInterestAsync();
         Task<IEnumerable<StockDividend>> GetStockDividendsAsync();
+        Task SaveStockDividendsAsync(IEnumerable<StockDividend> stockDividends);
     }
 }
