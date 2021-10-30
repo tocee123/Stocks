@@ -18,13 +18,13 @@ namespace WebDownloading.Test
     {
         private IDividendByMonthCollectionPreparer _target;
         private StocksRepository _stockRepository;
-        private RedisCache _redisCache;
+        private CachedRepositoryManager _cachedRepositoryManager;
 
         [SetUp]
         public void Setup()
         {
-            _redisCache = new RedisCache();
-            _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), _redisCache);
+            _cachedRepositoryManager = new CachedRepositoryManager(new RedisCachedRepository());
+            _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), _cachedRepositoryManager);
             _target = new DividendByMonthCollectionPreparer(_stockRepository);
         }
 
@@ -91,13 +91,6 @@ namespace WebDownloading.Test
                 item.InvestedInCurrentMonth = investment;
                 Console.WriteLine($"{item.ExDate.ToString("Y")} {item.Ticker} price {item.Price}$, stock volume {item.StockVolume}, dividend/share {item.Dividend}$, \t earned in month: {item.Earnings}");
             }
-        }
-
-        [Test]
-        public async Task WriteGetMonthlyBestStocksByYearToCache()
-        {
-            var result = await _target.GetMonthlyBestStocksByYear(DateTime.Today.Year);
-            _redisCache.WriteToCacheAsync(nameof(WriteGetMonthlyBestStocksByYearToCache), result);
         }
 
         [Test]

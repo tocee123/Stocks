@@ -14,7 +14,7 @@ namespace Stocks.Core
             _stockDividendHistoryLoader = stockDividendHistoryLoader;
         }
 
-        public async Task<IEnumerable<StockDividend>> GetStockDividendsAsync(string[] tickers)
+        public async Task<IEnumerable<StockDividend>> GetStockDividendsAsync(IEnumerable<string> tickers)
         {
             var stocksToCheck = tickers.Distinct()
             .Select(_stockDividendHistoryLoader.DownloadStockHistoryAsync);

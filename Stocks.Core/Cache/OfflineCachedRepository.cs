@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {
-    public class RedisOfflineCache : IRedisCache
+    public class OfflineCachedRepository : ICachedRepository
     {
         string folderPath = @"c:\temp\";
         private string CreateFileName(string key) => $"{folderPath}{key}.json";
@@ -32,7 +32,7 @@ namespace Stocks.Core.Cache
 
         public async Task<string> ReadStringFromCacheAsync(string key)
         {
-            return ReadFromCache(key);
+            return await Task.Run(() => ReadFromCache(key));
         }
 
         public async Task WriteToCacheAsync<T>(string key, T value, int? expiration = null)

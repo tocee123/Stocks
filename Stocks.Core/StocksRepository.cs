@@ -1,6 +1,6 @@
 ﻿using Stocks.Core.Cache;
+using Stocks.Core.Extensions;
 using Stocks.Core.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,23 +9,22 @@ namespace Stocks.Core
     public class StocksRepository : IStocksRepository
     {
         private readonly IStocksLoader _stocksLoader;
-        private readonly IRedisCache _redisCache;
+        private readonly ICachedRepositoryManager _cachedRepositoryManager;
 
-        public StocksRepository(IStocksLoader stocksLoader, IRedisCache redisCache)
+        public StocksRepository(IStocksLoader stocksLoader, ICachedRepositoryManager cachedRepositoryManager)
         {
             _stocksLoader = stocksLoader;
-            _redisCache = redisCache;
+            _cachedRepositoryManager = cachedRepositoryManager;
         }
 
         public async Task<IEnumerable<StockDividend>> GetStocks()
         {
-            var key = $"{DateTime.Now:yyyy-MM-dd}_{nameof(GetStocks)}";
-            var stockDividends = _redisCache.ReadFromCache<IEnumerable<StockDividend>>(key);
-            if (stockDividends is null)
+            var stockDividends = await _cachedRepositoryManager.GetStockDividendsAsync();
+            if (!stockDividends.AnyWhenNull())
             {
-                var stocks = await _redisCache.ReadFromCacheAsync<string[]>("StocksOfInterest");
-                stockDividends = await _stocksLoader.GetStockDividendsAsync(stocks);
-                await _redisCache.WriteToCacheAsync(key, stockDividends);
+                var stockOfInterestTickers = await _cachedRepositoryManager.GetStocksOfInterestAsync();
+                stockDividends = await _stocksLoader.GetStockDividendsAsync(stockOfInterestTickers);
+                await _cachedRepositoryManager.SaveStockDividendsAsync(stockDividends);
             }
             return stockDividends;
         }

@@ -11,11 +11,11 @@ namespace WebDownloading.Test
     [TestFixture]
     public class RedisCacheTests
     {
-        private RedisCache _target;
+        private RedisCachedRepository _target;
         [SetUp]
         public void Setup()
         {
-            _target = new RedisCache();
+            _target = new RedisCachedRepository();
         }
 
         [Test]
@@ -36,13 +36,6 @@ namespace WebDownloading.Test
             var key = "123";
             var result = await _target.ReadStringFromCacheAsync(key);
             Assert.IsNotNull(result);
-        }
-
-        [Test]
-        public async Task WriteStocksOfInterestAsync()
-        {
-            var target = new RedisCache();
-            await target.WriteStocksOfInterestAsync();
         }
     }
 }
