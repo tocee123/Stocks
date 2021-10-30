@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Stocks.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,5 +29,10 @@ namespace Stocks.Core.Cache
             }
             return await getStocksOfInterest();
         }
+
+        public async Task<IEnumerable<StockDividend>> GetStockDividendsAsync()
+        => await _cachedRepository.ReadFromCacheAsync<IEnumerable<StockDividend>>(CreateKey());
+
+        private string CreateKey() => $"{DateTime.Now:yyyy-MM-dd}_GetStocks";
     }
 }

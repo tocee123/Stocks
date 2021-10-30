@@ -95,7 +95,7 @@ namespace WebDownloading.Test
             var redis = new OfflineCachedRepository();
             await redis.WriteToCacheAsync(nameof(StocksOfInterest), StocksOfInterest);
 
-            var excelWriter = new StockExcelWriter(new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new OfflineCachedRepository()), new ExcelSaver());
+            var excelWriter = new StockExcelWriter(new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new CachedRepositoryManager(new OfflineCachedRepository())), new ExcelSaver());
             var bytes = await excelWriter.WriteToExcelAsync();
             await File.WriteAllBytesAsync(@"C:\temp\test1.xlsx", bytes);
         }

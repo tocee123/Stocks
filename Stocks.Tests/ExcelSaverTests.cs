@@ -36,7 +36,7 @@ namespace WebDownloading.Test
         [Test]
         public async Task SaveReal()
         {
-            var sr = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new RedisCachedRepository());
+            var sr = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new CachedRepositoryManager(new RedisCachedRepository()));
             var bytes = _target.SaveToExcel(await sr.GetStocks());
             var fileName = @"C:\temp\test1.xlsx";
             File.WriteAllBytes(fileName, bytes);

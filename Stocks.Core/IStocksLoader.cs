@@ -6,6 +6,6 @@ namespace Stocks.Core
 {
     public interface IStocksLoader
     {
-        Task<IEnumerable<StockDividend>> GetStockDividendsAsync(string[] tickers);
+        Task<IEnumerable<StockDividend>> GetStockDividendsAsync(IEnumerable<string> tickers);
     }
 }

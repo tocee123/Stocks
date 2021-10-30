@@ -16,7 +16,7 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new RedisCachedRepository());
+            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new CachedRepositoryManager(new RedisCachedRepository()));
         }
 
         [Test]
