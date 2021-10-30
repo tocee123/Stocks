@@ -18,12 +18,12 @@ namespace WebDownloading.Test
     {
         private IDividendByMonthCollectionPreparer _target;
         private StocksRepository _stockRepository;
-        private RedisCache _redisCache;
+        private RedisCachedRepository _redisCache;
 
         [SetUp]
         public void Setup()
         {
-            _redisCache = new RedisCache();
+            _redisCache = new RedisCachedRepository();
             _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), _redisCache);
             _target = new DividendByMonthCollectionPreparer(_stockRepository);
         }

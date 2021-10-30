@@ -9,9 +9,9 @@ namespace Stocks.Core
     public class StocksRepository : IStocksRepository
     {
         private readonly IStocksLoader _stocksLoader;
-        private readonly IRedisCache _redisCache;
+        private readonly ICachedRepository _redisCache;
 
-        public StocksRepository(IStocksLoader stocksLoader, IRedisCache redisCache)
+        public StocksRepository(IStocksLoader stocksLoader, ICachedRepository redisCache)
         {
             _stocksLoader = stocksLoader;
             _redisCache = redisCache;

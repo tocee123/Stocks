@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {
-    public class RedisCache : IRedisCache
+    public class RedisCachedRepository : ICachedRepository
     {
         const string _redisConnectionString = "stockredis.redis.cache.windows.net:6380,password=jxQt8QqLPu7ezjjBjANAhmVx2v3hftB5YhFwZXqhOHk=,ssl=True,abortConnect=False";
         public T ReadFromCache<T>(string key)

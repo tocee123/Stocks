@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {
-    public class RedisOfflineCache : IRedisCache
+    public class OfflineCachedRepository : ICachedRepository
     {
         string folderPath = @"c:\temp\";
         private string CreateFileName(string key) => $"{folderPath}{key}.json";

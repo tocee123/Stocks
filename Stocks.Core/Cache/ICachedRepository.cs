@@ -2,7 +2,7 @@
 
 namespace Stocks.Core.Cache
 {
-    public interface IRedisCache
+    public interface ICachedRepository
     {
         Task<T> ReadFromCacheAsync<T>(string key);
         Task<string> ReadStringFromCacheAsync(string key);
