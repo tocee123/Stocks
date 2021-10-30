@@ -33,6 +33,7 @@ namespace Stocks.Web
             services.AddTransient<IStockExcelWriter, StockExcelWriter>();
             services.AddTransient<IExcelSaver, ExcelSaver>();
             services.AddTransient<IDividendByMonthCollectionPreparer, DividendByMonthCollectionPreparer>();
+            services.AddTransient<ICachedRepositoryManager, CachedRepositoryManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

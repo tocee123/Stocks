@@ -21,7 +21,7 @@ namespace Stocks.Core
         public async Task<IEnumerable<StockDividend>> GetStocks()
         {
             var stockDividends = await _cachedRepositoryManager.GetStockDividendsAsync();
-            if (!stockDividends.Any())
+            if (!stockDividends?.Any() ?? false == false)
             {
                 var stockOfInterestTickers = await _cachedRepositoryManager.GetStocksOfInterestAsync();
                 stockDividends = await _stocksLoader.GetStockDividendsAsync(stockOfInterestTickers);

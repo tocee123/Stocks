@@ -19,13 +19,12 @@ namespace Stocks.Core.Cache
         public async Task<IEnumerable<string>> GetStocksOfInterestAsync()
         {
             var key = StocksOfInterest.Key;
-            async Task<IEnumerable<string>> getStocksOfInterest() => await _cachedRepository.ReadFromCacheAsync<IEnumerable<string>>(key);
+            async Task<string[]> getStocksOfInterest() => await _cachedRepository.ReadFromCacheAsync<string[]>(key);
 
             var stocksOfInterest = await getStocksOfInterest();
             if (stocksOfInterest?.Any() ?? false == false)
             {
-                var stockOfInterestJson = JsonConvert.SerializeObject(StocksOfInterest.Stocks);
-                await _cachedRepository.WriteToCacheAsync(key, stockOfInterestJson);
+                await _cachedRepository.WriteToCacheAsync(key, StocksOfInterest.Stocks);
             }
             return await getStocksOfInterest();
         }
