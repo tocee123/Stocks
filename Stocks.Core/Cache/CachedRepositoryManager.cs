@@ -1,4 +1,5 @@
-﻿using Stocks.Core.Extensions;
+﻿using Stocks.Core.Enums;
+using Stocks.Core.Extensions;
 using Stocks.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace Stocks.Core.Cache
 {
     public class CachedRepositoryManager : ICachedRepositoryManager
     {
-        private ICachedRepository _cachedRepository;
+        private readonly ICachedRepository _cachedRepository;
 
         public CachedRepositoryManager(ICachedRepository cachedRepository)
         {
@@ -23,7 +24,7 @@ namespace Stocks.Core.Cache
             var stocksOfInterest = await getStocksOfInterest();
             if (!stocksOfInterest.AnyWhenNull())
             {
-                await _cachedRepository.WriteToCacheAsync(key, StocksOfInterest.Stocks, -1);
+                await _cachedRepository.WriteToCacheAsync(key, StocksOfInterest.Stocks, CacheDuration.Unlimited);
             }
             return await getStocksOfInterest();
         }

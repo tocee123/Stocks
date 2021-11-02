@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Stocks.Core.Enums;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -35,9 +36,9 @@ namespace Stocks.Core.Cache
             return await Task.Run(() => ReadFromCache(key));
         }
 
-        public async Task WriteToCacheAsync<T>(string key, T value, int? expiration = null)
+        public async Task WriteToCacheAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
         {
-            File.WriteAllText(CreateFileName(key), JsonConvert.SerializeObject(value));
+            await File.WriteAllTextAsync(CreateFileName(key), JsonConvert.SerializeObject(value));
         }
     }
 }

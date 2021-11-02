@@ -1,4 +1,6 @@
 ﻿using AutoFixture;
+using Microsoft.Extensions.Configuration;
+using NSubstitute;
 using NUnit.Framework;
 using Stocks.Core;
 using Stocks.Core.Cache;
@@ -23,7 +25,8 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _cachedRepositoryManager = new CachedRepositoryManager(new RedisCachedRepository());
+            var configurationSub = Substitute.For<IConfiguration>();
+            _cachedRepositoryManager = new CachedRepositoryManager(new RedisCachedRepository(configurationSub));
             _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), _cachedRepositoryManager);
             _target = new DividendByMonthCollectionPreparer(_stockRepository);
         }

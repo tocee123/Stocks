@@ -1,7 +1,9 @@
 ﻿using AutoFixture;
 using NUnit.Framework;
 using Stocks.Core.Cache;
+using Stocks.Core.Enums;
 using Stocks.Core.Models;
+using Stocks.Test;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +17,7 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _target = new RedisCachedRepository();
+            _target = new RedisCachedRepository(ConfigurationBuilderBuilder.Build());
         }
 
         [Test]
@@ -24,7 +26,7 @@ namespace WebDownloading.Test
             var fixture = new Fixture();
             var stockDividends = fixture.Create<IEnumerable<StockDividend>>();
             var key = $"{DateTime.Now.ToString("yyyy-MM-dd")}_{nameof(WriteToCache_WritesObjectInJsonFormat)}";
-            await _target.WriteToCacheAsync(key, stockDividends, 60);
+            await _target.WriteToCacheAsync(key, stockDividends, CacheDuration.OneMinute);
             var result = await _target.ReadFromCacheAsync<IEnumerable<StockDividend>>(key);
 
             Assert.IsNotNull(result);

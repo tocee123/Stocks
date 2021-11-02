@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using StackExchange.Redis;
+using Stocks.Core.Enums;
 using System;
 using System.Threading.Tasks;
 
@@ -7,7 +9,13 @@ namespace Stocks.Core.Cache
 {
     public class RedisCachedRepository : ICachedRepository
     {
-        const string _redisConnectionString = "stockredis.redis.cache.windows.net:6380,password=jxQt8QqLPu7ezjjBjANAhmVx2v3hftB5YhFwZXqhOHk=,ssl=True,abortConnect=False";
+        readonly string _redisConnectionString;
+
+        public RedisCachedRepository(IConfiguration configuration)
+        {
+            _redisConnectionString = configuration.GetConnectionString("Redis");
+        }
+
         public T ReadFromCache<T>(string key)
         {
             using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
@@ -31,17 +39,25 @@ namespace Stocks.Core.Cache
             return await db.StringGetAsync(key);
         }
 
-        public async Task WriteToCacheAsync<T>(string key, T value, int? expiration = null)
+        public async Task WriteToCacheAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
         {
-            var expiry = GetExpiration(expiration);
+            var expiry = GetExpiration(cacheDuration);
             var convertedValue = JsonConvert.SerializeObject(value);
             using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
             var db = cm.GetDatabase();
             await db.StringSetAsync(key, convertedValue, expiry);
         }
 
-        private TimeSpan? GetExpiration(int? expiration)
-        => expiration == -1 ? null
-            : TimeSpan.FromSeconds(expiration ?? 3600);
+        private static TimeSpan? GetExpiration(CacheDuration cacheDuration)
+        => cacheDuration switch
+        {
+            CacheDuration.Default or CacheDuration.OneHour => CreateTimespanFromSeconds(3600),
+            CacheDuration.OneMinute => CreateTimespanFromSeconds(60),
+            CacheDuration.Unlimited => null,
+            _ => throw new NotImplementedException()
+        };
+
+        private static TimeSpan CreateTimespanFromSeconds(int seconds)
+            => TimeSpan.FromSeconds(seconds);
     }
 }

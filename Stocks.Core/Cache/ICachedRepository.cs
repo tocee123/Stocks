@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Stocks.Core.Enums;
+using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {
@@ -6,7 +7,7 @@ namespace Stocks.Core.Cache
     {
         Task<T> ReadFromCacheAsync<T>(string key);
         Task<string> ReadStringFromCacheAsync(string key);
-        Task WriteToCacheAsync<T>(string key, T value, int? expiration = null);
+        Task WriteToCacheAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour);
         T ReadFromCache<T>(string key);
     }
 }

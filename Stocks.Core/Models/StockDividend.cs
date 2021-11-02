@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
 
 namespace Stocks.Core.Models
 {
+    [DebuggerDisplay("{Name} {Ticker}")]
     public class StockDividend
     {
         public string Name { get; set; }

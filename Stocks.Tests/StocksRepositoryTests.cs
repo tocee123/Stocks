@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.Configuration;
+using NSubstitute;
+using NUnit.Framework;
 using Stocks.Core;
 using Stocks.Core.Cache;
 using Stocks.Web.Pages;
@@ -16,7 +18,8 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new CachedRepositoryManager(new RedisCachedRepository()));
+            var configurationSub = Substitute.For<IConfiguration>();
+            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new CachedRepositoryManager(new RedisCachedRepository(configurationSub)));
         }
 
         [Test]
@@ -35,9 +38,9 @@ namespace WebDownloading.Test
         {
             var result = await _target.GetStocks();
             Console.WriteLine(result.Count());
-            var grouopped = result.GroupBy(s => s.LatestDividendHistory.WhenToBuy).Select(s => s.OrderByDescending(s1 => s1.DividendToPrice).First());
+            var groupped = result.GroupBy(s => s.LatestDividendHistory.WhenToBuy).Select(s => s.OrderByDescending(s1 => s1.DividendToPrice).First());
             result = result.Where(s => s.LatestDividendHistory.WhenToBuy == DateTime.Parse("2021-10-27")).OrderByDescending(s => s.DividendToPrice);
-            foreach (var s in grouopped)
+            foreach (var s in groupped)
             {
                 Console.WriteLine($"{s.LatestDividendHistory.WhenToBuy}-> {s.Ticker}, {s.DividendToPrice.ToPercentageDisplay()}");
             }
