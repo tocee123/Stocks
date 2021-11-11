@@ -10,7 +10,7 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         public StockDividendTableStockFilter(string tickerFilter, string visibilitySwitch, int maxPrice)
         {
             _filters = new IStockDividendFilter[] {
-                new StockDividendFilterByTicket(tickerFilter),
+                new StockDividendFilterByTicker(tickerFilter),
                 new StockDividendFilterByVisibilitySwitch(visibilitySwitch),
                 new StockDividendFilterByMaxPrice(maxPrice)
             };

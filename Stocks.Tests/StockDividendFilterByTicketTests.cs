@@ -12,7 +12,7 @@ namespace WebDownloading.Test
         [Test]
         public void GetFilterArray_ReturnsNotEmptyList()
         {
-            var target = new StockDividendFilterByTicket();
+            var target = new StockDividendFilterByTicker();
             var result = target.GetFilterArray();
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Any());
@@ -24,7 +24,7 @@ namespace WebDownloading.Test
         public void GetFilterArray_ReturnsNotEmptyList(string ticker, bool expected)
         {
             var sd = CerateStockDividendWithTicker("test");
-            var target = new StockDividendFilterByTicket(ticker);
+            var target = new StockDividendFilterByTicker(ticker);
             var result = target.GetFilterArray();
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Any());
@@ -35,7 +35,7 @@ namespace WebDownloading.Test
         public void FilterByShortName_WhenSearchIsGiven_ReturnsExpected(string ticker, bool expected)
         {
             var sd = CerateStockDividendWithTicker("test");
-            var target = new StockDividendFilterByTicket(ticker);
+            var target = new StockDividendFilterByTicker(ticker);
             var result = target.FilterByTicker(sd);
             Assert.AreEqual(expected, result, ticker);
         }

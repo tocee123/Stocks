@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
-    public class StockDividendFilterByTicket : IStockDividendFilter
+    public class StockDividendFilterByTicker : IStockDividendFilter
     {
         private readonly string _tickerFilter;
 
-        public StockDividendFilterByTicket(string tickerFilter = null)
+        public StockDividendFilterByTicker(string tickerFilter = null)
         {
             _tickerFilter = tickerFilter;
         }
