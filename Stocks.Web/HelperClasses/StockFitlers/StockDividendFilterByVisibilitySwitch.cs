@@ -25,15 +25,15 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         internal bool IsUpcoming(StockDividend stockDividend)
         {
             var whenToBuyToToday = CalculateWhenToBuyToToday(stockDividend);
-            return _visibilitySwitch == Common.SwitchToUpcoming && whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks;
+            return whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks;
         }
         private static int CalculateWhenToBuyToToday(StockDividend stockDividend)
             => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
 
         internal bool IsRatioGraterThan1(StockDividend stockDividend)
-            => _visibilitySwitch == Common.SwitchToGraterThan1 && stockDividend.DividendToPrice >= Common.OnePercent;
+            =>  stockDividend.DividendToPrice >= Common.OnePercent;
 
         internal bool HasSpecial(StockDividend stockDividend)
-            => _visibilitySwitch == Common.HasSpecial && stockDividend.HasSpecial;
+            => stockDividend.HasSpecial;
     }
 }
