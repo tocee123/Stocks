@@ -15,8 +15,11 @@
 <button id="ShowOnlyTheHighestRatioPerDay" disabled="@IsDisabled()" class="btn @ShowOnlyTheHighestRatioPerDayClass" @onclick="ShowOnlyTheHighestRatioPerDay">Show only highest ratio per day</button>
 <button id="DownloadFile" disabled="@IsDisabled()" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
 <br />
+<button class="btn btn-primary" disabled="@IsDisabled()" @onclick="ClearFilters">Clear</button>
 <label>Filter ticker: </label>
 <input value="@_tickerFilter" @oninput="(EventArgs) => {SetTickerFilter(EventArgs.Value.ToString()); }" />
+<label>Max price: </label>
+<input type="number" value="@_maxPrice" @oninput="(EventArgs) => {SetMaxPrice(EventArgs.Value.ToString()); }" />
 
 @if (isDownloading)
 {
@@ -29,9 +32,9 @@
 }
 else
 {
-    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" />
+    <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" @bind-MaxPrice="_maxPrice" />
     <h3 class="text-center">Today @DateTime.Today.ToShortDateString()</h3>
-    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" />
+    <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" @bind-MaxPrice="_maxPrice" />
 }
 
 @code{
@@ -41,6 +44,7 @@ else
     private IEnumerable<StockDividend> _oldStocks;
 
     string _tickerFilter;
+    int _maxPrice;
     private bool _showSpecialDates = false;
 
     private Dictionary<string, bool> _mySwitch;
@@ -132,6 +136,7 @@ else
     {
         _visibilitySwitch = null;
         _tickerFilter = null;
+        _maxPrice = 0;
     }
 
     private async Task Reload()
@@ -173,8 +178,14 @@ else
         _tickerFilter = Value;
     }
 
+    private void SetMaxPrice(string Value)
+    {
+        _visibilitySwitch = null;
+        int.TryParse(Value, out _maxPrice);
+    }
+
     private bool IsDisabled()
-        => _stocks == null;
+    => _stocks == null;
 
     private bool _showOnlyTheHighestRatioPerDay;
 

@@ -66,11 +66,17 @@
     [Parameter]
     public EventCallback<string> TickerFilterChanged { get; set; }
 
+    [Parameter]
+    public int MaxPrice { get; set; }
+
+    [Parameter]
+    public EventCallback<int> MaxPriceChanged { get; set; }
+
     private IEnumerable<StockDividendDisplay> _stocksToDisplay;
 
     protected override void OnParametersSet()
     {
-        var filter = new StockDividendTableStockFilter(TickerFilter, VisibilitySwitch);
+        var filter = new StockDividendTableStockFilter(TickerFilter, VisibilitySwitch, MaxPrice);
         _stocksToDisplay = Stocks.Where(filter.ShouldDisplay)
             .Select(StockDividendDisplay.Map);
     }

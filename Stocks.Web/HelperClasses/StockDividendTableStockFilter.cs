@@ -1,5 +1,6 @@
 ﻿using Stocks.Core.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Stocks.Web.Pages
@@ -8,32 +9,52 @@ namespace Stocks.Web.Pages
     {
         private readonly string _tickerFilter;
         private readonly string _visibilitySwitch;
+        private readonly int _maxPrice;
 
-        public StockDividendTableStockFilter(string tickerFilter, string visibilitySwitch)
+        public StockDividendTableStockFilter(string tickerFilter, string visibilitySwitch, int maxPrice)
         {
-            this._tickerFilter = tickerFilter;
-            this._visibilitySwitch = visibilitySwitch;
+            _tickerFilter = tickerFilter;
+            _visibilitySwitch = visibilitySwitch;
+            _maxPrice = maxPrice;
         }
 
         public bool ShouldDisplay(StockDividend stockDividend)
         {
-            var functionsToCheck = new Func<StockDividend, bool>[]
-            {
-                FilterByTicker,
-                (sd)=>string.IsNullOrEmpty(_visibilitySwitch)
-            };
-            var functionsToCheck1 = new Func<StockDividend, bool>[]
-            {
-                IsUpcoming,
-                IsRatioGraterThan1,
-                HasSpecial
-            };
-            return functionsToCheck.All(f => f(stockDividend)) || functionsToCheck1.Any(f => f(stockDividend));
+            var functionsToCheck = new List<Func<StockDividend, bool>>();
+
+            if (!string.IsNullOrEmpty(_tickerFilter))
+                functionsToCheck.AddRange(new Func<StockDividend, bool>[]
+                {
+                    FilterByTicker
+                });
+
+            if (_maxPrice > 0)
+                functionsToCheck.AddRange(new Func<StockDividend, bool>[]
+                {
+                    FilterByMaxPrice
+                });
+
+            if (!string.IsNullOrEmpty(_visibilitySwitch))
+                functionsToCheck.AddRange(new Func<StockDividend, bool>[]
+                {
+                    IsUpcoming,
+                    IsRatioGraterThan1,
+                    HasSpecial
+                });
+
+            if (!functionsToCheck.Any())
+                functionsToCheck.Add(st => true);
+
+            return functionsToCheck.Any(f => f(stockDividend));
         }
 
         internal bool FilterByTicker(StockDividend stockDividend)
         => string.IsNullOrEmpty(_tickerFilter)
             || (!string.IsNullOrEmpty(_tickerFilter) && stockDividend.Ticker.ToLower().Contains(_tickerFilter.ToLower()));
+
+        internal bool FilterByMaxPrice(StockDividend stockDividend)
+        => _maxPrice == 0
+            || (_maxPrice > 0 && stockDividend.Price <= _maxPrice);
 
         internal bool IsUpcoming(StockDividend stockDividend)
         {
