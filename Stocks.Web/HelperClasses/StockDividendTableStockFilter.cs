@@ -21,13 +21,28 @@ namespace Stocks.Web.Pages
         public bool ShouldDisplay(StockDividend stockDividend)
         {
             var functionsToCheck = new List<Func<StockDividend, bool>>();
+            AddTicketFilter(functionsToCheck);
+            AddMaxPriceFilter(functionsToCheck);
+            AddFilterByVisibility(functionsToCheck);
+            AddDefaultFilter(functionsToCheck);
 
+            return functionsToCheck.Any(f => f(stockDividend));
+        }
+
+        private void AddTicketFilter(List<Func<StockDividend, bool>> functionsToCheck)
+        {
             if (!string.IsNullOrEmpty(_tickerFilter))
                 functionsToCheck.Add(FilterByTicker);
+        }
 
+        private void AddMaxPriceFilter(List<Func<StockDividend, bool>> functionsToCheck)
+        {
             if (_maxPrice > 0)
                 functionsToCheck.Add(FilterByMaxPrice);
+        }
 
+        private void AddFilterByVisibility(List<Func<StockDividend, bool>> functionsToCheck)
+        {
             if (!string.IsNullOrEmpty(_visibilitySwitch))
                 functionsToCheck.AddRange(new Func<StockDividend, bool>[]
                 {
@@ -35,11 +50,12 @@ namespace Stocks.Web.Pages
                     IsRatioGraterThan1,
                     HasSpecial
                 });
+        }
 
+        private static void AddDefaultFilter(List<Func<StockDividend, bool>> functionsToCheck)
+        {
             if (!functionsToCheck.Any())
                 functionsToCheck.Add(st => true);
-
-            return functionsToCheck.Any(f => f(stockDividend));
         }
 
         internal bool FilterByTicker(StockDividend stockDividend)
