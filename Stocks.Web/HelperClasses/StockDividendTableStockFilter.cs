@@ -23,16 +23,10 @@ namespace Stocks.Web.Pages
             var functionsToCheck = new List<Func<StockDividend, bool>>();
 
             if (!string.IsNullOrEmpty(_tickerFilter))
-                functionsToCheck.AddRange(new Func<StockDividend, bool>[]
-                {
-                    FilterByTicker
-                });
+                functionsToCheck.Add(FilterByTicker);
 
             if (_maxPrice > 0)
-                functionsToCheck.AddRange(new Func<StockDividend, bool>[]
-                {
-                    FilterByMaxPrice
-                });
+                functionsToCheck.Add(FilterByMaxPrice);
 
             if (!string.IsNullOrEmpty(_visibilitySwitch))
                 functionsToCheck.AddRange(new Func<StockDividend, bool>[]
@@ -49,12 +43,10 @@ namespace Stocks.Web.Pages
         }
 
         internal bool FilterByTicker(StockDividend stockDividend)
-        => string.IsNullOrEmpty(_tickerFilter)
-            || (!string.IsNullOrEmpty(_tickerFilter) && stockDividend.Ticker.ToLower().Contains(_tickerFilter.ToLower()));
+        => stockDividend.Ticker.ToLower().Contains(_tickerFilter?.ToLower()??"");
 
         internal bool FilterByMaxPrice(StockDividend stockDividend)
-        => _maxPrice == 0
-            || (_maxPrice > 0 && stockDividend.Price <= _maxPrice);
+        => _maxPrice == 0 || stockDividend.Price <= _maxPrice;
 
         internal bool IsUpcoming(StockDividend stockDividend)
         {

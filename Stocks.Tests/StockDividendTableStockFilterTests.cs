@@ -3,21 +3,15 @@ using Stocks.Core.Models;
 using Stocks.Web.Pages;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WebDownloading.Test
 {
     public class StockDividendTableStockFilterTests
     {
-        [SetUp]
-        public void Setup()
-        {
-
-        }
-
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
-        public void IsUpcoming_When(StockDividend sd, bool expected)
+        public void IsUpcoming_When(int daysToAdd, bool expected)
         {
+            var sd = CerateStockDividendWithExDate(daysToAdd);
             var target = new StockDividendTableStockFilter("", Common.SwitchToUpcoming, 0);
 
             var result = target.IsUpcoming(sd);
@@ -28,21 +22,28 @@ namespace WebDownloading.Test
         {
             get
             {
-                yield return new TestCaseData(CerateStockDividend(1), false);
-                yield return new TestCaseData(CerateStockDividend(13), true);
-                yield return new TestCaseData(CerateStockDividend(14), true);
-                yield return new TestCaseData(CerateStockDividend(0), false);
-                yield return new TestCaseData(CerateStockDividend(16), false);
+                var input = new (int daysToAdd, bool expected)[] {
+                (1,false),
+                (13, true),
+                (14, true),
+                (0, false),
+                (16, false)
+                };
+                foreach (var (daysToAdd, expected) in input)
+                {
+                    yield return new TestCaseData(daysToAdd, expected);
+                }
             }
         }
 
-        private static StockDividend CerateStockDividend(int daysToAdd)
+        private static StockDividend CerateStockDividendWithExDate(int daysToAdd)
             => new() { DividendHistories = new[] { new DividendHistory { ExDate = DateTime.Today.AddDays(daysToAdd) } } };
 
 
         [TestCaseSource(nameof(IsRatioGraterThan1StockDividends))]
-        public void IsRatioGraterThan1_When(StockDividend sd, bool expected)
+        public void IsRatioGraterThan1_When(double price, double amount, bool expected)
         {
+            var sd = CerateStockDividendWithPriceAndAmount(price, amount);
             var target = new StockDividendTableStockFilter("", Common.SwitchToGraterThan1, 0);
 
             var result = target.IsRatioGraterThan1(sd);
@@ -53,18 +54,26 @@ namespace WebDownloading.Test
         {
             get
             {
-                yield return new TestCaseData(CerateStockDividend(100, 1), true);
-                yield return new TestCaseData(CerateStockDividend(110, 1), false);
-                yield return new TestCaseData(CerateStockDividend(90, 1), true);
+                var input = new (double price, double amount, bool expected)[]
+                   {
+                       (100,1, true),
+                       (110,1, false),
+                       (90,1,true)
+                   };
+                foreach (var (price, amount, expected) in input)
+                {
+                    yield return new TestCaseData(price, amount, expected);
+                }
             }
         }
 
-        private static StockDividend CerateStockDividend(double price, double amount)
+        private static StockDividend CerateStockDividendWithPriceAndAmount(double price, double amount)
             => new() { DividendHistories = new[] { new DividendHistory { Amount = amount } }, Price = price };
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]
-        public void FilterByShortName_When(StockDividend sd, string ticker, bool expected)
+        public void FilterByShortName_When(string ticker, bool expected)
         {
+            var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendTableStockFilter(ticker, null, 0);
             var result = target.FilterByTicker(sd);
             Assert.AreEqual(expected, result, ticker);
@@ -86,26 +95,28 @@ namespace WebDownloading.Test
                    (null, true)
                 };
 
-                foreach (var item in input)
+                foreach (var (search, expected) in input)
                 {
-                    yield return new TestCaseData(CerateStockDividendWithTicker("test"), item.search, item.expected);
+                    yield return new TestCaseData(search, expected);
                 }
             }
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void ShouldDisplay_WhenPriceIsSet_FiltersAccordingly(StockDividend sd, int maxPrice, bool expected)
+        public void ShouldDisplay_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
         {
+            var stockDividend = CerateStockDividendWithPrie(price);
             var target = new StockDividendTableStockFilter(null, null, maxPrice);
-            var result = target.ShouldDisplay(sd);
+            var result = target.ShouldDisplay(stockDividend);
             Assert.AreEqual(expected, result, nameof(maxPrice));
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void FilterByMaxPrice_WhenPriceIsSet_FiltersAccordingly(StockDividend sd, int maxPrice, bool expected)
+        public void FilterByMaxPrice_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
         {
+            var stockDividend = CerateStockDividendWithPrie(price);
             var target = new StockDividendTableStockFilter(null, null, maxPrice);
-            var result = target.FilterByMaxPrice(sd);
+            var result = target.FilterByMaxPrice(stockDividend);
             Assert.AreEqual(expected, result, nameof(maxPrice));
         }
 
@@ -113,7 +124,7 @@ namespace WebDownloading.Test
         {
             get
             {
-                var input = new (int price, int max, bool expected)[] 
+                var input = new (int price, int max, bool expected)[]
                 {
                     (10, 10, true),
                     (10, 5, false),
@@ -122,9 +133,9 @@ namespace WebDownloading.Test
                     (0,0, true)
                 };
 
-                foreach (var item in input)
+                foreach (var (price, max, expected) in input)
                 {
-                    yield return new TestCaseData(CerateStockDividendWithPrie(item.price), item.max, item.expected);
+                    yield return new TestCaseData(price, max, expected);
                 }
             }
         }
