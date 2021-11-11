@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Stocks.Web.Pages
+namespace Stocks.Web.HelperClasses.StockFitlers
 {
     public interface IStockDividendFilter
     {

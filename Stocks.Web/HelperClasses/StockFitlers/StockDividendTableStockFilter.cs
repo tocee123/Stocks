@@ -1,11 +1,11 @@
 ﻿using Stocks.Core.Models;
+using Stocks.Web.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Stocks.Web.Pages
+namespace Stocks.Web.HelperClasses.StockFitlers
 {
-
     public class StockDividendTableStockFilter
     {
         private readonly string _tickerFilter;
@@ -68,7 +68,7 @@ namespace Stocks.Web.Pages
         internal bool IsUpcoming(StockDividend stockDividend)
         {
             var whenToBuyToToday = CalculateWhenToBuyToToday(stockDividend);
-            return _visibilitySwitch == Common.SwitchToUpcoming && (whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks);
+            return _visibilitySwitch == Common.SwitchToUpcoming && whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks;
         }
         private static int CalculateWhenToBuyToToday(StockDividend stockDividend)
             => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;

@@ -12,8 +12,4 @@
     <ProjectReference Include="..\Stocks.Core\Stocks.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="HelperClasses\StockFitlers\" />
-  </ItemGroup>
-
 </Project>
