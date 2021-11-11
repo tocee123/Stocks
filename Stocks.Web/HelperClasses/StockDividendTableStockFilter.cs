@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Stocks.Web.Pages
 {
+
     public class StockDividendTableStockFilter
     {
         private readonly string _tickerFilter;
@@ -59,7 +60,7 @@ namespace Stocks.Web.Pages
         }
 
         internal bool FilterByTicker(StockDividend stockDividend)
-        => stockDividend.Ticker.ToLower().Contains(_tickerFilter?.ToLower()??"");
+        => stockDividend.Ticker.ToLower().Contains(_tickerFilter?.ToLower() ?? "");
 
         internal bool FilterByMaxPrice(StockDividend stockDividend)
         => _maxPrice == 0 || stockDividend.Price <= _maxPrice;
