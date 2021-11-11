@@ -15,7 +15,7 @@ namespace WebDownloading.Test
             var sd = CerateStockDividendWithExDate(daysToAdd);
             var target = new StockDividendTableStockFilter("", Common.SwitchToUpcoming, 0);
 
-            var result = target.IsUpcoming(sd);
+            var result = target.ShouldDisplay(sd);
             Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
         }
 
@@ -47,7 +47,7 @@ namespace WebDownloading.Test
             var sd = CerateStockDividendWithPriceAndAmount(price, amount);
             var target = new StockDividendTableStockFilter("", Common.SwitchToGraterThan1, 0);
 
-            var result = target.IsRatioGraterThan1(sd);
+            var result = target.ShouldDisplay(sd);
             Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
         }
 
@@ -76,7 +76,7 @@ namespace WebDownloading.Test
         {
             var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendTableStockFilter(ticker, null, 0);
-            var result = target.FilterByTicker(sd);
+            var result = target.ShouldDisplay(sd);
             Assert.AreEqual(expected, result, ticker);
         }
 
@@ -117,7 +117,7 @@ namespace WebDownloading.Test
         {
             var stockDividend = CerateStockDividendWithPrie(price);
             var target = new StockDividendTableStockFilter(null, null, maxPrice);
-            var result = target.FilterByMaxPrice(stockDividend);
+            var result = target.ShouldDisplay(stockDividend);
             Assert.AreEqual(expected, result, nameof(maxPrice));
         }
 

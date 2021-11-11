@@ -1,4 +1,5 @@
 ﻿@using Stocks.Core.Models;
+@using Stocks.Web.HelperClasses.StockFitlers;
 
 @if (_stocksToDisplay.Any())
 {
@@ -22,20 +23,20 @@
         <tbody>
             @foreach (var stock in _stocksToDisplay)
             {
-            <tr>
-                <td><a href="/stockdetail/@stock.Ticker">@stock.Name</a></td>
-                <td>@stock.Ticker</td>
-                <td>@stock.Price</td>
-                <td>@stock.Exdate</td>
-                <td style="@ShouldShowSpecialDates()">@stock.RecordDate</td>
-                <td style="@ShouldShowSpecialDates()">@stock.PayDate</td>
-                <td style="@ShouldShowSpecialDates()">@stock.DeclarationDate</td>
-                <td class="@Common.GetCssForWhenToBuy(stock.WhenToBuy)">@stock.WhenToBuyDisplay</td>
-                <td class="@Common.GetCssForWhenToBuy(stock.WhenToSell)">@stock.WhenToSellDisplay</td>
-                <td>@stock.Amount</td>
-                <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@stock.DividendToPriceDisplay</td>
-                <td>@stock.HasSpecial</td>
-            </tr>
+                <tr>
+                    <td><a href="/stockdetail/@stock.Ticker">@stock.Name</a></td>
+                    <td>@stock.Ticker</td>
+                    <td>@stock.Price</td>
+                    <td>@stock.Exdate</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.RecordDate</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.PayDate</td>
+                    <td style="@ShouldShowSpecialDates()">@stock.DeclarationDate</td>
+                    <td class="@Common.GetCssForWhenToBuy(stock.WhenToBuy)">@stock.WhenToBuyDisplay</td>
+                    <td class="@Common.GetCssForWhenToBuy(stock.WhenToSell)">@stock.WhenToSellDisplay</td>
+                    <td>@stock.Amount</td>
+                    <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@stock.DividendToPriceDisplay</td>
+                    <td>@stock.HasSpecial</td>
+                </tr>
             }
         </tbody>
     </table>

@@ -16,7 +16,7 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         public IEnumerable<Func<StockDividend, bool>> GetFilterArray()
         => new Func<StockDividend, bool>[]
         {
-            _tickerFilter == null ? st => true : FilterByTicker
+            string.IsNullOrEmpty(_tickerFilter) ? st => true : FilterByTicker
         };
 
         internal bool FilterByTicker(StockDividend sd)
