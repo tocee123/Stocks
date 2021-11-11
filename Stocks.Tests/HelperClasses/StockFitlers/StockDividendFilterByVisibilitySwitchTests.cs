@@ -4,9 +4,8 @@ using Stocks.Web.HelperClasses.StockFitlers;
 using Stocks.Web.Pages;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.HelperClasses.StockFitlers
 {
     [TestFixture]
     public class StockDividendFilterByVisibilitySwitchTests

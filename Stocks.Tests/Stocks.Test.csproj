@@ -37,8 +37,4 @@
     <ProjectReference Include="..\Stocks.Web\Stocks.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="HelperClasses\StockFitlers\" />
-  </ItemGroup>
-
 </Project>

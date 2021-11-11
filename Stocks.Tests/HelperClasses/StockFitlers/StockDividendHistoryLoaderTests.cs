@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.HelperClasses.StockFitlers
 {
     [TestFixture]
     public class StockDividendHistoryLoaderTests

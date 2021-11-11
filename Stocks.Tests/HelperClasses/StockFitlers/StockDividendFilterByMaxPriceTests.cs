@@ -3,7 +3,7 @@ using Stocks.Core.Models;
 using Stocks.Web.HelperClasses.StockFitlers;
 using System.Collections.Generic;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.HelperClasses.StockFitlers
 {
     [TestFixture]
     public class StockDividendFilterByMaxPriceTests

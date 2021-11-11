@@ -5,7 +5,7 @@ using Stocks.Web.Pages;
 using System;
 using System.Collections.Generic;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.HelperClasses.StockFitlers
 {
     public class StockDividendTableStockFilterTests
     {
