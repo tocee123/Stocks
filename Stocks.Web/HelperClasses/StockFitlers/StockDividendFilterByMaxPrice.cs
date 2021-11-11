@@ -1,6 +1,4 @@
 ﻿using Stocks.Core.Models;
-using System;
-using System.Collections.Generic;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
@@ -13,11 +11,8 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             _maxPrice = maxPrice;
         }
 
-        public IEnumerable<Func<StockDividend, bool>> GetFilterArray()
-        => new Func<StockDividend, bool>[]
-        {
-            _maxPrice == 0 ? st => true : FilterByMaxPrice
-        };
+        public bool Filter(StockDividend sd)
+        => _maxPrice == 0 || FilterByMaxPrice(sd);
 
         internal bool FilterByMaxPrice(StockDividend sd)
          => _maxPrice == 0 || sd.Price <= _maxPrice;

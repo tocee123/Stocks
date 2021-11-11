@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
 using Stocks.Core.Models;
 using Stocks.Web.HelperClasses.StockFitlers;
-using Stocks.Web.Pages;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WebDownloading.Test
 {
@@ -14,11 +12,8 @@ namespace WebDownloading.Test
         public void GetFilterArray_ReturnsNotEmptyList()
         {
             var target = new StockDividendFilterByMaxPrice();
-            var result = target.GetFilterArray();
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(f => f(null)));
-            Assert.IsTrue(result.All(f => f(new())));
+            Assert.IsTrue(target.Filter(null));
+            Assert.IsTrue(target.Filter(new()));
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
@@ -26,10 +21,9 @@ namespace WebDownloading.Test
         {
             var sd = CerateStockDividendWithPrice(price);
             var target = new StockDividendFilterByMaxPrice(maxPrice);
-            var result = target.GetFilterArray();
+            var result = target.Filter(sd);
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
-            Assert.AreEqual(expected, result.Any(f => f(sd)));
+            Assert.AreEqual(expected, result);
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
@@ -37,8 +31,8 @@ namespace WebDownloading.Test
         {
             var sd = CerateStockDividendWithPrice(price);
             var target = new StockDividendFilterByMaxPrice(maxPrice);
-            var result = target.GetFilterArray();
-            Assert.AreEqual(expected, result.Any(f => f(sd)));
+            var result = target.Filter(sd);
+            Assert.AreEqual(expected, result);
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]

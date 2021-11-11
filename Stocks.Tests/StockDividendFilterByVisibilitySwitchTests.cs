@@ -15,11 +15,8 @@ namespace WebDownloading.Test
         public void GetFilterArray_ReturnsNotEmptyList()
         {
             var target = new StockDividendFilterByVisibilitySwitch();
-            var result = target.GetFilterArray();
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(f => f(null)));
-            Assert.IsTrue(result.All(f => f(new())));
+            Assert.IsTrue(target.Filter(null));
+            Assert.IsTrue(target.Filter(new()));
         }
 
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
@@ -38,9 +35,9 @@ namespace WebDownloading.Test
             var sd = CerateStockDividendWithExDate(daysToAdd);
             var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToUpcoming);
 
-            var result = target.GetFilterArray();
+            var result = target.Filter(sd);
 
-            Assert.AreEqual(expected, result.All(f => f(sd)), $"ExDate: {sd.LatestDividendHistory.ExDate}");
+            Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
         }
 
         private static IEnumerable<TestCaseData> IsUpcomingStockDividends
@@ -81,9 +78,9 @@ namespace WebDownloading.Test
             var sd = CerateStockDividendWithPriceAndAmount(price, amount);
             var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToGraterThan1);
 
-            var result = target.GetFilterArray();
+            var result = target.Filter(sd);
 
-            Assert.AreEqual(expected, result.All(f => f(sd)), $"DividendToPrice: {sd.DividendToPrice}");
+            Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
         }
 
         private static IEnumerable<TestCaseData> IsRatioGraterThan1StockDividends
@@ -112,9 +109,9 @@ namespace WebDownloading.Test
             var sd = CerateStockDividendSpecial(isSpecial);
             var target = new StockDividendFilterByVisibilitySwitch(Common.HasSpecial);
 
-            var result = target.GetFilterArray();
+            var result = target.Filter(sd);
 
-            Assert.AreEqual(expected, result.All(f => f(sd)), $"Special: {sd.HasSpecial}");
+            Assert.AreEqual(expected, result, $"Special: {sd.HasSpecial}");
         }
 
         private static IEnumerable<TestCaseData> HasSpecialStockDividends

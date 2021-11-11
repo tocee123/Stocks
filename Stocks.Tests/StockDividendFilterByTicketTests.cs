@@ -2,7 +2,6 @@
 using Stocks.Core.Models;
 using Stocks.Web.HelperClasses.StockFitlers;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WebDownloading.Test
 {
@@ -13,11 +12,8 @@ namespace WebDownloading.Test
         public void GetFilterArray_ReturnsNotEmptyList()
         {
             var target = new StockDividendFilterByTicker();
-            var result = target.GetFilterArray();
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(f => f(null)));
-            Assert.IsTrue(result.All(f => f(new())));
+            Assert.IsTrue(target.Filter(null));
+            Assert.IsTrue(target.Filter(new()));
         }
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]
@@ -25,10 +21,9 @@ namespace WebDownloading.Test
         {
             var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendFilterByTicker(ticker);
-            var result = target.GetFilterArray();
+            var result = target.Filter(sd);
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
-            Assert.AreEqual(expected, result.Any(f => f(sd)));
+            Assert.AreEqual(expected, result);
         }
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]

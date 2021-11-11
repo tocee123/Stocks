@@ -1,7 +1,6 @@
 ﻿using Stocks.Core.Models;
 using Stocks.Web.Pages;
 using System;
-using System.Collections.Generic;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
@@ -14,20 +13,14 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             _visibilitySwitch = visibilitySwitch;
         }
 
-        public IEnumerable<Func<StockDividend, bool>> GetFilterArray()
+        public bool Filter(StockDividend sd)
+        => _visibilitySwitch switch
         {
-            var result = new List<Func<StockDividend, bool>>();
-
-            Func<StockDividend, bool> function = _visibilitySwitch switch
-            {
-                var vs when vs == Common.SwitchToUpcoming => IsUpcoming,
-                var vs when vs == Common.SwitchToGraterThan1 => IsRatioGraterThan1,
-                var vs when vs == Common.HasSpecial => HasSpecial,
-                _ => st => true
-            };
-            result.Add(function);
-            return result;
-        }
+            var vs when vs == Common.SwitchToUpcoming => IsUpcoming(sd),
+            var vs when vs == Common.SwitchToGraterThan1 => IsRatioGraterThan1(sd),
+            var vs when vs == Common.HasSpecial => HasSpecial(sd),
+            _ => true
+        };
 
         internal bool IsUpcoming(StockDividend stockDividend)
         {

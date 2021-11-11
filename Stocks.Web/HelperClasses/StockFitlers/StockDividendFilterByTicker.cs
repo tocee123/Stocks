@@ -1,6 +1,4 @@
 ﻿using Stocks.Core.Models;
-using System;
-using System.Collections.Generic;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
@@ -13,11 +11,8 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             _tickerFilter = tickerFilter;
         }
 
-        public IEnumerable<Func<StockDividend, bool>> GetFilterArray()
-        => new Func<StockDividend, bool>[]
-        {
-            string.IsNullOrEmpty(_tickerFilter) ? st => true : FilterByTicker
-        };
+        public bool Filter(StockDividend sd)
+        => string.IsNullOrEmpty(_tickerFilter) || FilterByTicker(sd);
 
         internal bool FilterByTicker(StockDividend sd)
         => sd.Ticker.ToLower().Contains(_tickerFilter?.ToLower() ?? "");
