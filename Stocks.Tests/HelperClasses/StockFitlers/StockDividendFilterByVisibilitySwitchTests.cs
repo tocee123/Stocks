@@ -11,7 +11,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
     public class StockDividendFilterByVisibilitySwitchTests
     {
         [Test]
-        public void GetFilterArray_ReturnsNotEmptyList()
+        public void Filter_ReturnsNotEmptyList()
         {
             var target = new StockDividendFilterByVisibilitySwitch();
             Assert.IsTrue(target.Filter(null));
@@ -22,14 +22,12 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void IsUpcoming_WhenTheDateIsBetweenTheRange_ReturnsTrue(int daysToAdd, bool expected)
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
-            var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToUpcoming);
-
-            var result = target.IsUpcoming(sd);
+            var result = StockDividendFilterByVisibilitySwitch.IsUpcoming(sd);
             Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
         }
 
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
-        public void GetFilterArray_WhenTheDateIsBetweenTheRange_ReturnsTrue(int daysToAdd, bool expected)
+        public void Filter_WhenTheDateIsBetweenTheRange_ReturnsTrue(int daysToAdd, bool expected)
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
             var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToUpcoming);
@@ -65,14 +63,12 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void IsRatioGraterThan1_WhenRatioisBetweenThreshold_ReturnTrue(double price, double amount, bool expected)
         {
             var sd = CerateStockDividendWithPriceAndAmount(price, amount);
-            var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToGraterThan1);
-
-            var result = target.IsRatioGraterThan1(sd);
+            var result = StockDividendFilterByVisibilitySwitch.IsRatioGraterThan1(sd);
             Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
         }
 
         [TestCaseSource(nameof(IsRatioGraterThan1StockDividends))]
-        public void GetFilterArray_WhenRatioisBetweenThreshold_ReturnTrue(double price, double amount, bool expected)
+        public void Filter_WhenRatioisBetweenThreshold_ReturnTrue(double price, double amount, bool expected)
         {
             var sd = CerateStockDividendWithPriceAndAmount(price, amount);
             var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToGraterThan1);
@@ -103,7 +99,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
             => new() { DividendHistories = new[] { new DividendHistory { Amount = amount } }, Price = price };
 
         [TestCaseSource(nameof(HasSpecialStockDividends))]
-        public void GetFilterArray_WhenHasSpecial_ReturnTrue(bool isSpecial, bool expected)
+        public void Filter_WhenHasSpecial_ReturnTrue(bool isSpecial, bool expected)
         {
             var sd = CerateStockDividendSpecial(isSpecial);
             var target = new StockDividendFilterByVisibilitySwitch(Common.HasSpecial);

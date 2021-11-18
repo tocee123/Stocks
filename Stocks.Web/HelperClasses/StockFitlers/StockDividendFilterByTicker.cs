@@ -2,7 +2,7 @@
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
-    public class StockDividendFilterByTicker : IStockDividendFilter
+    public class StockDividendFilterByTicker : StockDividendFilterBase
     {
         private readonly string _tickerFilter;
 
@@ -11,10 +11,10 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             _tickerFilter = tickerFilter;
         }
 
-        public bool Filter(StockDividend sd)
-        => string.IsNullOrEmpty(_tickerFilter) || FilterByTicker(sd);
-
-        internal bool FilterByTicker(StockDividend sd)
+        internal override bool ShouldFilter(StockDividend sd)
         => sd.Ticker.ToLower().Contains(_tickerFilter?.ToLower() ?? "");
+
+        internal override bool ShouldSkip()
+        => string.IsNullOrEmpty(_tickerFilter);        
     }
 }

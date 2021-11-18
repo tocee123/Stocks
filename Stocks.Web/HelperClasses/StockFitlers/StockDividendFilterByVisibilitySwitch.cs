@@ -4,7 +4,7 @@ using System;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
-    public class StockDividendFilterByVisibilitySwitch : IStockDividendFilter
+    public class StockDividendFilterByVisibilitySwitch : StockDividendFilterBase
     {
         private readonly string _visibilitySwitch;
 
@@ -12,8 +12,10 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         {
             _visibilitySwitch = visibilitySwitch;
         }
+        internal override bool ShouldSkip()
+        => string.IsNullOrEmpty(_visibilitySwitch);
 
-        public bool Filter(StockDividend sd)
+        internal override bool ShouldFilter(StockDividend sd)
         => _visibilitySwitch switch
         {
             var vs when vs == Common.SwitchToUpcoming => IsUpcoming(sd),
@@ -22,7 +24,7 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             _ => true
         };
 
-        internal bool IsUpcoming(StockDividend stockDividend)
+        internal static bool IsUpcoming(StockDividend stockDividend)
         {
             var whenToBuyToToday = CalculateWhenToBuyToToday(stockDividend);
             return whenToBuyToToday > Common.ZeroDays && whenToBuyToToday <= Common.TwoWeeks;
@@ -30,10 +32,10 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         private static int CalculateWhenToBuyToToday(StockDividend stockDividend)
             => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
 
-        internal bool IsRatioGraterThan1(StockDividend stockDividend)
+        internal static bool IsRatioGraterThan1(StockDividend stockDividend)
             =>  stockDividend.DividendToPrice >= Common.OnePercent;
 
-        internal bool HasSpecial(StockDividend stockDividend)
+        internal static bool HasSpecial(StockDividend stockDividend)
             => stockDividend.HasSpecial;
     }
 }

@@ -9,7 +9,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
     public class StockDividendFilterByMaxPriceTests
     {
         [Test]
-        public void GetFilterArray_ReturnsNotEmptyList()
+        public void Filter_ReturnsNotEmptyList()
         {
             var target = new StockDividendFilterByMaxPrice();
             Assert.IsTrue(target.Filter(null));
@@ -17,31 +17,12 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void GetFilterArray_ReturnsNotEmptyList(int price, int maxPrice, bool expected)
-        {
-            var sd = CerateStockDividendWithPrice(price);
-            var target = new StockDividendFilterByMaxPrice(maxPrice);
-            var result = target.Filter(sd);
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expected, result);
-        }
-
-        [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void ShouldDisplay_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
+        public void Filter_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
         {
             var sd = CerateStockDividendWithPrice(price);
             var target = new StockDividendFilterByMaxPrice(maxPrice);
             var result = target.Filter(sd);
             Assert.AreEqual(expected, result);
-        }
-
-        [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void FilterByMaxPrice_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
-        {
-            var sd = CerateStockDividendWithPrice(price);
-            var target = new StockDividendFilterByMaxPrice(maxPrice);
-            var result = target.FilterByMaxPrice(sd);
-            Assert.AreEqual(expected, result, nameof(maxPrice));
         }
 
         private static StockDividend CerateStockDividendWithPrice(int price)

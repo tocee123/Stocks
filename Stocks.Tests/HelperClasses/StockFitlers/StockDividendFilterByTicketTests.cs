@@ -9,7 +9,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
     public class StockDividendFilterByTicketTests
     {
         [Test]
-        public void GetFilterArray_ReturnsNotEmptyList()
+        public void Filter_ReturnsNotEmptyList()
         {
             var target = new StockDividendFilterByTicker();
             Assert.IsTrue(target.Filter(null));
@@ -17,7 +17,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         }
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]
-        public void GetFilterArray_ReturnsNotEmptyList(string ticker, bool expected)
+        public void Filter_ReturnsNotEmptyList(string ticker, bool expected)
         {
             var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendFilterByTicker(ticker);
@@ -31,7 +31,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         {
             var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendFilterByTicker(ticker);
-            var result = target.FilterByTicker(sd);
+            var result = target.ShouldFilter(sd);
             Assert.AreEqual(expected, result, ticker);
         }
 

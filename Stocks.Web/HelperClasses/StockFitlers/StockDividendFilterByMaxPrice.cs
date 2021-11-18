@@ -2,7 +2,7 @@
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
-    public class StockDividendFilterByMaxPrice : IStockDividendFilter
+    public class StockDividendFilterByMaxPrice : StockDividendFilterBase
     {
         private readonly int _maxPrice;
 
@@ -11,10 +11,10 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             _maxPrice = maxPrice;
         }
 
-        public bool Filter(StockDividend sd)
-        => _maxPrice == 0 || FilterByMaxPrice(sd);
+        internal override bool ShouldFilter(StockDividend sd)
+        => sd.Price <= _maxPrice;
 
-        internal bool FilterByMaxPrice(StockDividend sd)
-         => _maxPrice == 0 || sd.Price <= _maxPrice;
+        internal override bool ShouldSkip()
+        => _maxPrice == 0;         
     }
 }
