@@ -19,7 +19,7 @@ namespace Stocks.Web.Pages
             DateCalculator.CalculateWhenToBuy(sd.LatestDividendHistory.ExDate).ToYyyyMmDd(),
             DateCalculator.CalculateWhenToSell(sd.LatestDividendHistory.RecordDate),
             DateCalculator.CalculateWhenToSell(sd.LatestDividendHistory.RecordDate).ToYyyyMmDd(),
-            sd.LatestDividendHistory.Amount,
+            Math.Round(sd.LatestDividendHistory.Amount, 2),
             sd.DividendToPrice,
             sd.DividendToPrice.ToPercentageDisplay(),
             sd.HasSpecial);

@@ -3,39 +3,56 @@
 
 @if (_stocksToDisplay.Any())
 {
-    <table class="table table-striped">
+    <table class="table table-striped header-fixed">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Ticker</th>
-                <th>Price</th>
-                <th>Ex-Date</th>
-                <th style="@ShouldShowSpecialDates()">Record date</th>
-                <th style="@ShouldShowSpecialDates()">Pay date</th>
-                <th style="@ShouldShowSpecialDates()">Declaration date</th>
-                <th>When to buy</th>
-                <th>When to sell</th>
-                <th>Dividend amount</th>
+                <th width="40%">Stock</th>
                 <th>Dividend to price ratio</th>
-                <th>Has special dividend</th>
+                <th>Dates</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var stock in _stocksToDisplay)
             {
                 <tr>
-                    <td><a href="/stockdetail/@stock.Ticker">@stock.Name</a></td>
-                    <td>@stock.Ticker</td>
-                    <td>@stock.Price</td>
-                    <td>@stock.Exdate</td>
-                    <td style="@ShouldShowSpecialDates()">@stock.RecordDate</td>
-                    <td style="@ShouldShowSpecialDates()">@stock.PayDate</td>
-                    <td style="@ShouldShowSpecialDates()">@stock.DeclarationDate</td>
-                    <td class="@Common.GetCssForWhenToBuy(stock.WhenToBuy)">@stock.WhenToBuyDisplay</td>
-                    <td class="@Common.GetCssForWhenToBuy(stock.WhenToSell)">@stock.WhenToSellDisplay</td>
-                    <td>@stock.Amount</td>
-                    <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">@stock.DividendToPriceDisplay</td>
-                    <td>@stock.HasSpecial</td>
+                    <td>
+                        <div>
+                            <b>@stock.Ticker</b>
+                            <span></span>
+                            <a href="/stockdetail/@stock.Ticker">@stock.Name</a>
+                            <br />
+                            <b>Price:</b> $@stock.Price<br />
+                            <b>Current dividend:</b> $@stock.Amount<br />
+                            @if (stock.HasSpecial)
+                            {
+                                <span class="oi oi-check"></span><b>Has special dividend</b>
+                            }
+                        </div>
+                    </td>
+                    <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">
+                        <div>
+                            <b>Ratio: @stock.DividendToPriceDisplay </b><br />
+                            <b>Price: </b>$@stock.Price<br />
+                            <b>Current dividend: </b>$@stock.Amount
+                        </div>
+                    </td>
+                    <td class="@Common.GetCssForWhenToBuy(stock.WhenToBuy)">
+                        <div>
+                            <ul>
+                                <li>When to buy: @stock.WhenToBuyDisplay</li>
+                                <li>When to sell: @stock.WhenToSellDisplay</li>
+                            </ul>
+                        </div>
+                        <div style="@ShouldShowSpecialDates()">
+                            <ul>
+                                <li>Ex-date: @stock.Exdate</li>
+                                <li>Record: date @stock.RecordDate</li>
+                                <li>Pay date: @stock.PayDate</li>
+                                <li>Declaration date: @stock.DeclarationDate</li>
+                            </ul>
+
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>

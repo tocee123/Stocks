@@ -33,7 +33,7 @@
 else
 {
     <StockDividendTable @bind-Stocks="_upComingstocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" @bind-MaxPrice="_maxPrice" />
-    <h3 class="text-center">Today @DateTime.Today.ToShortDateString()</h3>
+    <h3>Today @DateTime.Today.ToYyyyMmDd()</h3>
     <StockDividendTable @bind-Stocks="_oldStocks" @bind-VisibilitySwitch="_visibilitySwitch" @bind-ShowSpecialDates="_showSpecialDates" @bind-TickerFilter="_tickerFilter" @bind-MaxPrice="_maxPrice" />
 }
 
@@ -130,6 +130,9 @@ else
             [Common.SwitchToGraterThan1] = false,
             [Common.HasSpecial] = false
         };
+
+        await ShowOnlyTheHighestRatioPerDay();
+        SwitchSelection(Common.SwitchToGraterThan1, ref SwitchToGraterThan1Class);
     }
 
     private void ClearFilters()
