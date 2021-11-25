@@ -123,16 +123,20 @@ else
     protected override async Task OnInitializedAsync()
     {
         ClearButtonClass();
+        SetSwitchesToDefault();
         await UpdateStocks();
+        await ShowOnlyTheHighestRatioPerDay();
+        SwitchSelection(Common.SwitchToGraterThan1, ref SwitchToGraterThan1Class);
+    }
+
+    private void SetSwitchesToDefault()
+    {
         _mySwitch = new Dictionary<string, bool>
         {
             [Common.SwitchToUpcoming] = false,
             [Common.SwitchToGraterThan1] = false,
             [Common.HasSpecial] = false
         };
-
-        await ShowOnlyTheHighestRatioPerDay();
-        SwitchSelection(Common.SwitchToGraterThan1, ref SwitchToGraterThan1Class);
     }
 
     private void ClearFilters()
@@ -147,6 +151,7 @@ else
         _stocks = null;
         ClearButtonClass();
         ClearFilters();
+        SetSwitchesToDefault();
         await UpdateStocks();
     }
 
