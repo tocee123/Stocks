@@ -6,8 +6,8 @@
     <table class="table table-striped header-fixed">
         <thead>
             <tr>
-                <th width="40%">Stock</th>
-                <th>Dividend to price ratio</th>
+                <th width="40%">General information</th>
+                <th>Current dividend to price ratio</th>
                 <th>Dates</th>
             </tr>
         </thead>
@@ -22,7 +22,9 @@
                             <a href="/stockdetail/@stock.Ticker">@stock.Name</a>
                             <br />
                             <b>Price:</b> $@stock.Price<br />
-                            <b>Current dividend:</b> $@stock.Amount<br />
+                            <b>Cumulated dividend:</b> $@stock.CumulatedDividend<br />
+                            <b>Cumulated dividend ratio:</b> @stock.CumulatedDividendRatio<br />
+                            <b>Times dividend payed this year:</b> @stock.TimesPayedDividends<br />
                             @if (stock.HasSpecial)
                             {
                                 <span class="oi oi-check"></span><b>Has special dividend</b>
