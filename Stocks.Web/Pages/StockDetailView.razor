@@ -49,7 +49,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var stocks = await stockRepository.GetStocks();
+        var stocks = await stockRepository.GetStocksAsync();
         Stock = stocks.Single(x => x.Ticker == ticker);
     }
 

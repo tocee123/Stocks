@@ -17,7 +17,7 @@ namespace Stocks.Core
 
         public async Task<IEnumerable<StockChampionByDividendToPriceRatio>> GetMonthlyBestStocksByYear(int year)
         {
-            var stocks = await _stocksRepository.GetStocks();
+            var stocks = await _stocksRepository.GetStocksAsync();
             var flattenStocks = FlattenStocks(stocks)
                 .Where(s => s.ExDate.Year == year);
             var grouppedByMonth = flattenStocks.GroupBy(s => new { s.ExDate.Month, s.ExDate.Year }).Select(s => s.OrderByDescending(so => so.DividendToPrice).FirstOrDefault());

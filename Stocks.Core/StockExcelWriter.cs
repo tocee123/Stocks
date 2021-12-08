@@ -16,7 +16,7 @@ namespace Stocks.Core
 
         public async Task<byte[]> WriteToExcelAsync()
         {
-            var loadedStockDividendHistories = await _stocksRepository.GetStocks();
+            var loadedStockDividendHistories = await _stocksRepository.GetStocksAsync();
             return _excelSaver.SaveToExcel(loadedStockDividendHistories);
         }
     }

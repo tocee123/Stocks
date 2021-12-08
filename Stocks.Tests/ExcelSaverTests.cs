@@ -39,8 +39,8 @@ namespace WebDownloading.Test
         public async Task SaveReal()
         {
             var configurationSub = Substitute.For<IConfiguration>();
-            var sr = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new CachedRepositoryManager(new RedisCachedRepository(configurationSub)));
-            var bytes = _target.SaveToExcel(await sr.GetStocks());
+            var sr = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository());
+            var bytes = _target.SaveToExcel(await sr.GetStocksAsync());
             var fileName = @"C:\temp\test1.xlsx";
             File.WriteAllBytes(fileName, bytes);
             Assert.IsTrue(File.Exists(fileName));

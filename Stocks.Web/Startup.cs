@@ -26,14 +26,19 @@ namespace Stocks.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddTransient<ICachedRepository, RedisCachedRepository>();
+            services.AddSingleton<ICachedRepository, MemoryCashedRepository>();
             services.AddTransient<IStockDividendHistoryLoader, StockDividendHistoryLoader>();
             services.AddTransient<IStocksLoader, StocksLoader>();
-            services.AddTransient<IStocksRepository, StocksRepository>();
+            services.AddTransient<IStocksOfInterestRespository, StocksOfInterestRespository>();
+            services.AddTransient<IStocksRepository>(sp =>
+            {
+                var stocksRepository =  new StocksRepository(sp.GetService<IStocksLoader>(), sp.GetService<IStocksOfInterestRespository>());
+                var stockRepositoryDecorator = new StocksRepositoryCachingDecorator(stocksRepository, sp.GetService<ICachedRepository>());
+                return stockRepositoryDecorator;
+            });
             services.AddTransient<IStockExcelWriter, StockExcelWriter>();
             services.AddTransient<IExcelSaver, ExcelSaver>();
             services.AddTransient<IDividendByMonthCollectionPreparer, DividendByMonthCollectionPreparer>();
-            services.AddTransient<ICachedRepositoryManager, CachedRepositoryManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

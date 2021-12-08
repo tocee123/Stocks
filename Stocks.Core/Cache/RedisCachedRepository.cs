@@ -41,23 +41,11 @@ namespace Stocks.Core.Cache
 
         public async Task WriteToCacheAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
         {
-            var expiry = GetExpiration(cacheDuration);
+            var expiry = cacheDuration.GetExpiration();
             var convertedValue = JsonConvert.SerializeObject(value);
             using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
             var db = cm.GetDatabase();
             await db.StringSetAsync(key, convertedValue, expiry);
         }
-
-        private static TimeSpan? GetExpiration(CacheDuration cacheDuration)
-        => cacheDuration switch
-        {
-            CacheDuration.Default or CacheDuration.OneHour => CreateTimespanFromSeconds(3600),
-            CacheDuration.OneMinute => CreateTimespanFromSeconds(60),
-            CacheDuration.Unlimited => null,
-            _ => throw new NotImplementedException()
-        };
-
-        private static TimeSpan CreateTimespanFromSeconds(int seconds)
-            => TimeSpan.FromSeconds(seconds);
     }
 }

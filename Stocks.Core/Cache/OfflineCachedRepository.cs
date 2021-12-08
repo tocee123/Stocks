@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {
+
     public class OfflineCachedRepository : ICachedRepository
     {
         string folderPath = @"c:\temp\";

@@ -6,6 +6,6 @@ namespace Stocks.Core
 {
     public interface IStocksRepository
     {
-        Task<IEnumerable<StockDividend>> GetStocks();
+        Task<IEnumerable<StockDividend>> GetStocksAsync();
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using NUnit.Framework;
 using Stocks.Core;
-using Stocks.Core.Cache;
 using Stocks.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -20,14 +19,12 @@ namespace WebDownloading.Test
     {
         private IDividendByMonthCollectionPreparer _target;
         private StocksRepository _stockRepository;
-        private CachedRepositoryManager _cachedRepositoryManager;
 
         [SetUp]
         public void Setup()
         {
             var configurationSub = Substitute.For<IConfiguration>();
-            _cachedRepositoryManager = new CachedRepositoryManager(new RedisCachedRepository(configurationSub));
-            _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), _cachedRepositoryManager);
+            _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository());
             _target = new DividendByMonthCollectionPreparer(_stockRepository);
         }
 
@@ -43,7 +40,7 @@ namespace WebDownloading.Test
             foreach (var i in data)
             {
                 ll.AddLast(i);
-            }           
+            }
 
             var investment = 200.0;
 
@@ -108,7 +105,7 @@ namespace WebDownloading.Test
         [Test]
         public async Task SelectTop1DividnedByMonth()
         {
-            var stocks = (await _stockRepository.GetStocks()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.Ticker });
+            var stocks = (await _stockRepository.GetStocksAsync()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.Ticker });
 
             var grouppedByMonth = stocks.GroupBy(s => new { s.ExDate.Month, s.ExDate.Year }).Select(s => new { s.Key, TopDividendPayer = s.OrderByDescending(so => so.DividendToPrice).FirstOrDefault() });
             Console.WriteLine("Monthly best ratios:");

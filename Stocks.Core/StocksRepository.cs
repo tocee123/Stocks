@@ -1,6 +1,4 @@
-﻿using Stocks.Core.Cache;
-using Stocks.Core.Extensions;
-using Stocks.Core.Models;
+﻿using Stocks.Core.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,23 +7,18 @@ namespace Stocks.Core
     public class StocksRepository : IStocksRepository
     {
         private readonly IStocksLoader _stocksLoader;
-        private readonly ICachedRepositoryManager _cachedRepositoryManager;
+        private readonly IStocksOfInterestRespository _stocksOfInterestRespository;
 
-        public StocksRepository(IStocksLoader stocksLoader, ICachedRepositoryManager cachedRepositoryManager)
+        public StocksRepository(IStocksLoader stocksLoader, IStocksOfInterestRespository stocksOfInterestRespository)
         {
             _stocksLoader = stocksLoader;
-            _cachedRepositoryManager = cachedRepositoryManager;
+            _stocksOfInterestRespository = stocksOfInterestRespository;
         }
 
-        public async Task<IEnumerable<StockDividend>> GetStocks()
+        public async Task<IEnumerable<StockDividend>> GetStocksAsync()
         {
-            var stockDividends = await _cachedRepositoryManager.GetStockDividendsAsync();
-            if (!stockDividends.AnyWhenNull())
-            {
-                var stockOfInterestTickers = await _cachedRepositoryManager.GetStocksOfInterestAsync();
-                stockDividends = await _stocksLoader.GetStockDividendsAsync(stockOfInterestTickers);
-                await _cachedRepositoryManager.SaveStockDividendsAsync(stockDividends);
-            }
+            var tickers = _stocksOfInterestRespository.GetTickers();
+            var stockDividends = await _stocksLoader.GetStockDividendsAsync(tickers);
             return stockDividends;
         }
     }

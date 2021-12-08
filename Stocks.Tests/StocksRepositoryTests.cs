@@ -2,7 +2,6 @@
 using NSubstitute;
 using NUnit.Framework;
 using Stocks.Core;
-using Stocks.Core.Cache;
 using Stocks.Web.Pages;
 using System;
 using System.Diagnostics;
@@ -19,14 +18,14 @@ namespace WebDownloading.Test
         public void Setup()
         {
             var configurationSub = Substitute.For<IConfiguration>();
-            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new CachedRepositoryManager(new RedisCachedRepository(configurationSub)));
+            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository());
         }
 
         [Test]
         public async Task GetStocks_ReturnsNotEmptyList()
         {
             var sw = Stopwatch.StartNew();
-            var result = await _target.GetStocks();
+            var result = await _target.GetStocksAsync();
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
             Assert.IsNotNull(result);
@@ -36,7 +35,7 @@ namespace WebDownloading.Test
         [Test]
         public async Task GetStocks_()
         {
-            var result = await _target.GetStocks();
+            var result = await _target.GetStocksAsync();
             Console.WriteLine(result.Count());
             var groupped = result.GroupBy(s => s.LatestDividendHistory.WhenToBuy).Select(s => s.OrderByDescending(s1 => s1.DividendToPrice).First());
             result = result.Where(s => s.LatestDividendHistory.WhenToBuy == DateTime.Parse("2021-10-27")).OrderByDescending(s => s.DividendToPrice);
