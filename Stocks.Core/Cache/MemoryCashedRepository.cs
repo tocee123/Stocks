@@ -13,14 +13,14 @@ namespace Stocks.Core.Cache
             return _memoryCache.Get<T>(key);
         }
 
-        public Task<T> GetAsync<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
-            return Task.Run(() => _memoryCache.Get<T>(key));
+            return await Task.Run(() => _memoryCache.Get<T>(key));
         }
 
-        public Task<string> GetStringAsync(string key)
+        public async Task<string> GetStringAsync(string key)
         {
-            return Task.Run(() => _memoryCache.Get<string>(key));
+            return await Task.Run(() => _memoryCache.Get<string>(key));
         }
 
         public async Task SetAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
