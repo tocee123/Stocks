@@ -8,22 +8,22 @@ namespace Stocks.Core.Cache
     {
         private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
-        public T ReadFromCache<T>(string key)
+        public T Get<T>(string key)
         {
             return _memoryCache.Get<T>(key);
         }
 
-        public Task<T> ReadFromCacheAsync<T>(string key)
+        public Task<T> GetAsync<T>(string key)
         {
             return Task.Run(() => _memoryCache.Get<T>(key));
         }
 
-        public Task<string> ReadStringFromCacheAsync(string key)
+        public Task<string> GetStringAsync(string key)
         {
             return Task.Run(() => _memoryCache.Get<string>(key));
         }
 
-        public async Task WriteToCacheAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
+        public async Task SetAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
         {
             var cacheEntryOption = new MemoryCacheEntryOptions
             {

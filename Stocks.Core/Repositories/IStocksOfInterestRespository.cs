@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Stocks.Core
+namespace Stocks.Core.Repositories
 {
     public interface IStocksOfInterestRespository
     {

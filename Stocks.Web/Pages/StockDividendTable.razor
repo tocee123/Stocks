@@ -1,12 +1,12 @@
-﻿@using Stocks.Core.Models;
+﻿@using Stocks.Domain.Models;
 @using Stocks.Web.HelperClasses.StockFitlers;
 
 @if (_stocksToDisplay.Any())
 {
-    <table class="table table-striped header-fixed">
+    <table class="table header-fixed">
         <thead>
             <tr>
-                <th width="40%">General information</th>
+                <th width="45%">General information</th>
                 <th>Current dividend to price ratio</th>
                 <th>Dates</th>
             </tr>
@@ -16,20 +16,31 @@
             {
                 <tr>
                     <td>
-                        <div>
-                            <b>@stock.Ticker</b>
-                            <span></span>
-                            <a href="/stockdetail/@stock.Ticker">@stock.Name</a>
-                            <br />
-                            <b>Price:</b> $@stock.Price<br />
-                            <b>Cumulated dividend:</b> $@stock.CumulatedDividend<br />
-                            <b>Cumulated dividend ratio:</b> @stock.CumulatedDividendRatio<br />
-                            <b>Times dividend payed this year:</b> @stock.TimesPayedDividends<br />
-                            @if (stock.HasSpecial)
-                            {
-                                <span class="oi oi-check"></span><b>Has special dividend</b>
-                            }
-                        </div>
+                        <table width="100%">
+                            <tr>
+                                <td  width="45%">
+                                    <div>
+                                        <b>@stock.Ticker</b>
+                                        <span></span>
+                                        <a href="/stockdetail/@stock.Ticker">@stock.Name</a>
+                                        <br />
+                                        <b>Price:</b> $@stock.Price<br />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <b>Cumulated dividend:</b> $@stock.CumulatedDividend<br />
+                                        <b>Cumulated dividend ratio:</b> @stock.CumulatedDividendRatio<br />
+                                        <b>Times dividend payed this year:</b> @stock.TimesPayedDividends<br />
+                                        @if (stock.HasSpecial)
+                                        {
+                                            <span class="oi oi-check"></span>
+                                            <b>Has special dividend</b>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td class="@Common.GetCssForDividendToPrice(stock.DividendToPrice)">
                         <div>

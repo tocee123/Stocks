@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using NUnit.Framework;
-using Stocks.Core;
+using Stocks.Core.Loaders;
+using Stocks.Core.Repositories;
 using Stocks.Web.Pages;
 using System;
 using System.Diagnostics;

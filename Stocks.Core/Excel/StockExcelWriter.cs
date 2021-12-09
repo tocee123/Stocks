@@ -1,7 +1,7 @@
-﻿using Stocks.Core.Excel;
+﻿using Stocks.Core.Repositories;
 using System.Threading.Tasks;
 
-namespace Stocks.Core
+namespace Stocks.Core.Excel
 {
     public class StockExcelWriter : IStockExcelWriter
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Stocks.Core
+﻿namespace Stocks.Domain.Helpers
 {
     public class DateCalculator
     {
@@ -27,7 +24,7 @@ namespace Stocks.Core
             {
 
                 throw new Exception(date.ToShortDateString(), ex);
-            }            
+            }
         }
 
         readonly static DayOfWeek[] _weekendDays = new[] { DayOfWeek.Sunday, DayOfWeek.Saturday };

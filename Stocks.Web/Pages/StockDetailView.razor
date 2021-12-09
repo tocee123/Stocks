@@ -1,7 +1,8 @@
 ﻿@page "/stockdetail/{ticker}"
-@using Stocks.Core.Models;
 @using Stocks.Core;
 @using System.Linq;
+@using Stocks.Core.Repositories;
+@using Stocks.Domain.Models;
 @inject IStocksRepository stockRepository;
 
 @if (Stock is not null)

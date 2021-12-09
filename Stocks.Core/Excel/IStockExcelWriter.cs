@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Stocks.Core
+namespace Stocks.Core.Excel
 {
     public interface IStockExcelWriter
     {

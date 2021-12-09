@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using Stocks.Domain.Helpers;
 
-namespace Stocks.Core.Models
+namespace Stocks.Domain.Models
 {
     public record StockDividendForExcel(string Name, string Ticker, double Price, DateTime ExDate, DateTime RecordDate, DateTime DeclarationDate, DateTime PayDate, DateTime WhenToBuy, DateTime WhenToSell, double Amount, double DividendToPrice)
     {
         public static StockDividendForExcel Map(StockDividend sd)
-            => new StockDividendForExcel(
+            => new(
                 sd.Name,
                 sd.Ticker,
                 sd.Price,

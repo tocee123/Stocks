@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using Stocks.Core.Enums;
-using System;
 using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
@@ -16,7 +15,7 @@ namespace Stocks.Core.Cache
             _redisConnectionString = configuration.GetConnectionString("Redis");
         }
 
-        public T ReadFromCache<T>(string key)
+        public T Get<T>(string key)
         {
             using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
             var db = cm.GetDatabase();
@@ -25,21 +24,21 @@ namespace Stocks.Core.Cache
                 : JsonConvert.DeserializeObject<T>(value);
         }
 
-        public async Task<T> ReadFromCacheAsync<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
-            var value = await ReadStringFromCacheAsync(key);
+            var value = await GetStringAsync(key);
             return value is null ? default
                 : JsonConvert.DeserializeObject<T>(value);
         }
 
-        public async Task<string> ReadStringFromCacheAsync(string key)
+        public async Task<string> GetStringAsync(string key)
         {
             using var cm = ConnectionMultiplexer.Connect(_redisConnectionString);
             var db = cm.GetDatabase();
             return await db.StringGetAsync(key);
         }
 
-        public async Task WriteToCacheAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
+        public async Task SetAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour)
         {
             var expiry = cacheDuration.GetExpiration();
             var convertedValue = JsonConvert.SerializeObject(value);

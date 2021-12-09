@@ -1,11 +1,11 @@
 ﻿using Stocks.Core.Cache;
 using Stocks.Core.Enums;
-using Stocks.Core.Models;
+using Stocks.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Stocks.Core
+namespace Stocks.Core.Repositories
 {
     public class StocksRepositoryCachingDecorator : IStocksRepository
     {
@@ -21,10 +21,10 @@ namespace Stocks.Core
         public async Task<IEnumerable<StockDividend>> GetStocksAsync()
         {
             var key = GenerateKey();
-            if (await _cachedRepository.ReadFromCacheAsync<IEnumerable<StockDividend>>(key) is var stocks && stocks is null)
+            if (await _cachedRepository.GetAsync<IEnumerable<StockDividend>>(key) is var stocks && stocks is null)
             {
                 stocks = await _stocksRepository.GetStocksAsync();
-                await _cachedRepository.WriteToCacheAsync(key, stocks, CacheDuration.OneHour);
+                await _cachedRepository.SetAsync(key, stocks, CacheDuration.OneHour);
             }
             return stocks;
         }

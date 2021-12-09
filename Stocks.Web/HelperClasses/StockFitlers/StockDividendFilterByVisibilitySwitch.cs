@@ -1,4 +1,4 @@
-﻿using Stocks.Core.Models;
+﻿using Stocks.Domain.Models;
 using Stocks.Web.Pages;
 using System;
 
@@ -33,7 +33,7 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             => (stockDividend.LatestDividendHistory.WhenToBuy - DateTime.Today).Days;
 
         internal static bool IsRatioGraterThan1(StockDividend stockDividend)
-            =>  stockDividend.DividendToPrice >= Common.OnePercent;
+            => stockDividend.DividendToPrice >= Common.OnePercent;
 
         internal static bool HasSpecial(StockDividend stockDividend)
             => stockDividend.HasSpecial;

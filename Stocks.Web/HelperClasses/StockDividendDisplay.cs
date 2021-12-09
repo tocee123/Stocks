@@ -1,5 +1,5 @@
-﻿using Stocks.Core;
-using Stocks.Core.Models;
+﻿using Stocks.Domain.Helpers;
+using Stocks.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

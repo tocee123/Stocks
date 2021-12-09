@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Stocks.Core.Models
+﻿namespace Stocks.Domain.Models
 {
     public record StockChampionByDividendToPriceRatio(string Name, string Ticker, DateTime ExDate, double DividendToPrice, double Price, double Dividend)
     {

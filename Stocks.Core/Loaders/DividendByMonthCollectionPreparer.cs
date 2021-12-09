@@ -1,10 +1,11 @@
-﻿using Stocks.Core.Models;
+﻿using Stocks.Core.Repositories;
+using Stocks.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stocks.Core
+namespace Stocks.Core.Loaders
 {
     public class DividendByMonthCollectionPreparer : IDividendByMonthCollectionPreparer
     {
@@ -29,5 +30,5 @@ namespace Stocks.Core
         {
             return stocks.SelectMany(s => s.DividendHistories, (s, dh) => new StockChampionByDividendToPriceRatio(s.Name, s.Ticker, dh.ExDate, Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount));
         }
-    }    
+    }
 }

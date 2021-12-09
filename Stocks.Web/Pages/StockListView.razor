@@ -1,6 +1,7 @@
 ﻿@page "/"
-@using Stocks.Core;
-@using Stocks.Core.Models;
+@using Stocks.Core.Repositories;
+@using Stocks.Domain.Models;
+@using Stocks.Core.Excel;
 @inject IJSRuntime JSRuntime
 @inject IStocksRepository stockRepository;
 @inject IStockExcelWriter stockExcelWriter;

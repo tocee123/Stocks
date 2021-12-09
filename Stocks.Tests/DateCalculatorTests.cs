@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Stocks.Core;
+using Stocks.Domain.Helpers;
 using System;
 using System.Collections.Generic;
 

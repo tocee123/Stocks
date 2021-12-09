@@ -1,4 +1,4 @@
-﻿using Stocks.Core.Models;
+﻿using Stocks.Domain.Models;
 using System.Linq;
 
 namespace Stocks.Web.HelperClasses.StockFitlers

@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Stocks.Core;
+using Stocks.Core.Loaders;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

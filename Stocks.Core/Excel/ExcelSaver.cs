@@ -1,5 +1,5 @@
 ﻿using Spire.Xls;
-using Stocks.Core.Models;
+using Stocks.Domain.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

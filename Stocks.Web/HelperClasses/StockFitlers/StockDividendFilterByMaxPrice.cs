@@ -1,4 +1,4 @@
-﻿using Stocks.Core.Models;
+﻿using Stocks.Domain.Models;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
@@ -15,6 +15,6 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         => sd.Price <= _maxPrice;
 
         internal override bool ShouldSkip()
-        => _maxPrice == 0;         
+        => _maxPrice == 0;
     }
 }

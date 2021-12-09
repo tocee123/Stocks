@@ -2,8 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using NUnit.Framework;
-using Stocks.Core;
-using Stocks.Core.Models;
+using Stocks.Core.Loaders;
+using Stocks.Core.Repositories;
+using Stocks.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

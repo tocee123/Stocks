@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 
-namespace Stocks.Core.Models
+namespace Stocks.Domain.Models
 {
     public class DividendHistory
     {

@@ -1,14 +1,15 @@
-using NUnit.Framework;
 using Microsoft.Extensions.Caching.Memory;
-using Stocks.Core;
+using NUnit.Framework;
+using Stocks.Core.Cache;
 using Stocks.Core.Excel;
+using Stocks.Core.Loaders;
+using Stocks.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Stocks.Core.Cache;
 
 namespace WebDownloading.Test
 {
@@ -93,7 +94,7 @@ namespace WebDownloading.Test
             "PBCT", "TDS", "FLIC", "WEYS", "ORI", "T", "BEN", "MDU", "EBTC", "UBSI", "MATW", "SBSI", "AROW", "NJR", "ENB", "ARTN.A", "THFF", "CTBI", "OZK", "HRL", "UGI", "SRCE", "NNN", "LEG", "ABM", "WBA", "UVV", "WTRG", "NWN", "NFG", "CAH", "BRC", "XOM", "AFL", "BANF", "KO", "WABC", "JW.A", "BRO", "UHT", "MCY", "ADM", "SEIC", "CWT", "SON", "DCI", "FUL", "CBSH", "SJW", "MGRC", "BKH", "O", "AOS", "BF.B", "EV", "CBU", "TNC", "ED", "CL", "SYY", "TMP", "MGEE", "RPM", "RTX", "CHD", "FELE", "NEE", "MKC.V", "UMBF", "AWR", "CVX", "ATO", "EMR", "BMI", "RLI", "CFR", "NUE", "SCL", "PII", "TRI", "CNI", "CINF", "FRT", "EXPD", "GPC", "MDT", "ATR", "LECO", "IBM", "KMB", "PG", "WMT", "RNR", "PPG", "PEP", "MSA", "CLX", "JNJ", "DOV", "LANC", "JKHY", "ERIE", "CB", "SWK", "MMM", "GD", "LOW", "ADP", "CAT", "CSL", "TROW", "ECL", "ITW", "MCD", "ALB", "NDSN", "TGT", "BDX", "APD", "SYK", "PH", "SHW", "LIN", "ESS", "CTAS", "GWW", "SPGI", "WST", "ROP" };
 
             var redis = new OfflineCachedRepository();
-            await redis.WriteToCacheAsync(nameof(StocksOfInterest), StocksOfInterest);
+            await redis.SetAsync(nameof(StocksOfInterest), StocksOfInterest);
 
             var excelWriter = new StockExcelWriter(new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository()), new ExcelSaver());
             var bytes = await excelWriter.WriteToExcelAsync();

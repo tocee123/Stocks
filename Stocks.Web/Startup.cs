@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Stocks.Core;
 using Stocks.Core.Cache;
 using Stocks.Core.Excel;
+using Stocks.Core.Loaders;
+using Stocks.Core.Repositories;
 using Stocks.Web.Data;
 
 namespace Stocks.Web

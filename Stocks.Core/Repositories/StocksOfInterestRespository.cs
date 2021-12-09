@@ -1,7 +1,7 @@
 ﻿using Stocks.Core.Cache;
 using System.Collections.Generic;
 
-namespace Stocks.Core
+namespace Stocks.Core.Repositories
 {
     public class StocksOfInterestRespository : IStocksOfInterestRespository
     {

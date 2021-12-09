@@ -1,8 +1,9 @@
-﻿using Stocks.Core.Models;
+﻿using Stocks.Core.Loaders;
+using Stocks.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Stocks.Core
+namespace Stocks.Core.Repositories
 {
     public class StocksRepository : IStocksRepository
     {

@@ -1,5 +1,5 @@
 ﻿using HtmlAgilityPack;
-using Stocks.Core.Models;
+using Stocks.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Stocks.Core
+namespace Stocks.Core.Loaders
 {
     public class StockDividendHistoryLoader : IStockDividendHistoryLoader
     {
@@ -79,15 +79,16 @@ namespace Stocks.Core
                 url = $"http://{url}";
 
             if (Uri.TryCreate(url, UriKind.Absolute, out resultUri))
-                return (resultUri.Scheme == Uri.UriSchemeHttp ||
-                        resultUri.Scheme == Uri.UriSchemeHttps);
+                return resultUri.Scheme == Uri.UriSchemeHttp ||
+                        resultUri.Scheme == Uri.UriSchemeHttps;
 
             return false;
         }
 
         private static DividendHistory ToDividendHistory(IEnumerable<HtmlNode> tdNodes)
         {
-            DateTime parse(string s) {
+            DateTime parse(string s)
+            {
                 DateTime.TryParse(s, out var date);
                 return date;
             };

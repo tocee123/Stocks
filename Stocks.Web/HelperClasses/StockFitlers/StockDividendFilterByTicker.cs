@@ -1,4 +1,4 @@
-﻿using Stocks.Core.Models;
+﻿using Stocks.Domain.Models;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
@@ -15,6 +15,6 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         => sd.Ticker.ToLower().Contains(_tickerFilter?.ToLower() ?? "");
 
         internal override bool ShouldSkip()
-        => string.IsNullOrEmpty(_tickerFilter);        
+        => string.IsNullOrEmpty(_tickerFilter);
     }
 }

@@ -5,9 +5,9 @@ namespace Stocks.Core.Cache
 {
     public interface ICachedRepository
     {
-        Task<T> ReadFromCacheAsync<T>(string key);
-        Task<string> ReadStringFromCacheAsync(string key);
-        Task WriteToCacheAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour);
-        T ReadFromCache<T>(string key);
+        Task<T> GetAsync<T>(string key);
+        Task<string> GetStringAsync(string key);
+        Task SetAsync<T>(string key, T value, CacheDuration cacheDuration = CacheDuration.OneHour);
+        T Get<T>(string key);
     }
 }

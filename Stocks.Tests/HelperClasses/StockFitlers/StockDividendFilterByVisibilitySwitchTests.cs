@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Stocks.Core.Models;
+using Stocks.Domain.Models;
 using Stocks.Web.HelperClasses.StockFitlers;
 using Stocks.Web.Pages;
 using System;

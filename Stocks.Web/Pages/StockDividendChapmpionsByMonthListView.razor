@@ -1,7 +1,8 @@
 ﻿@page "/StockDividendChapmpionsByMonthListView"
 
 @using Stocks.Core;
-@using Stocks.Core.Models;
+@using Stocks.Domain.Models;
+@using Stocks.Core.Loaders;
 @inject IDividendByMonthCollectionPreparer _dividendByMonthCollectionPreparer;
 
 @if (_stocks == null)
