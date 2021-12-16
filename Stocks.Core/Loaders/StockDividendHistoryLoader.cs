@@ -22,7 +22,7 @@ namespace Stocks.Core.Loaders
                 var (pageExists, resultUrl) = await DoesPageExist(url);
                 if (pageExists)
                 {
-                    await FillProperties(stock, client, resultUrl);
+                    await FillProperties(stock, client, resultUrl, ticker);
                 }
                 return stock;
             }
@@ -37,19 +37,19 @@ namespace Stocks.Core.Loaders
         private static string CreateUrlToYCharts(string ticker)
             => $"https://ycharts.com/companies/{ticker}/dividend";
 
-        private static async Task FillProperties(StockDividend stock, WebClient client, Uri resultUri)
+        private static async Task FillProperties(StockDividend stock, WebClient client, Uri resultUri, string ticker)
         {
             string htmlCode = await client.DownloadStringTaskAsync(resultUri);
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(htmlCode);
 
-            var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//h3[@class='securityName']");
-            if (!(nameNode?.HasChildNodes ?? false))
-                return;
-            stock.Name = nameNode.ChildNodes[1].InnerText;
-            stock.Ticker = nameNode.ChildNodes[3].InnerText;
-            stock.Price = double.Parse(htmlDocument.DocumentNode.SelectSingleNode("//span[@class='upDn']").InnerText);
-            stock.DividendHistories = htmlDocument.DocumentNode.SelectSingleNode("//table[@class='histDividendDataTable']")
+            var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//h2[@class='index-name-text']");
+            stock.Name = nameNode.InnerText.Trim();
+            stock.Ticker = ticker;
+            stock.Price = double.Parse(htmlDocument.DocumentNode.SelectSingleNode("//span[@class='index-rank-value']").InnerText);
+            var divParentContent = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='panel-content']");
+
+            stock.DividendHistories = htmlDocument.DocumentNode.SelectSingleNode("//table[@class='table']")
                 .Descendants("tr")
                 .Skip(1)
                 .Where(tr => tr.Elements("td").Count() > 1)
