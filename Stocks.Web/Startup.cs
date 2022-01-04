@@ -31,12 +31,8 @@ namespace Stocks.Web
             services.AddTransient<IStockDividendHistoryLoader, StockDividendHistoryLoader>();
             services.AddTransient<IStocksLoader, StocksLoader>();
             services.AddTransient<IStocksOfInterestRespository, StocksOfInterestRespository>();
-            services.AddTransient<IStocksRepository>(sp =>
-            {
-                var stocksRepository =  new StocksRepository(sp.GetService<IStocksLoader>(), sp.GetService<IStocksOfInterestRespository>());
-                var stockRepositoryDecorator = new StocksRepositoryCachingDecorator(stocksRepository, sp.GetService<ICachedRepository>());
-                return stockRepositoryDecorator;
-            });
+            services.AddTransient<IStocksRepository, StocksRepository>();
+            services.Decorate<IStocksRepository, StocksRepositoryCachingDecorator>();
             services.AddTransient<IStockExcelWriter, StockExcelWriter>();
             services.AddTransient<IExcelSaver, ExcelSaver>();
             services.AddTransient<IDividendByMonthCollectionPreparer, DividendByMonthCollectionPreparer>();
