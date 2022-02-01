@@ -4,9 +4,12 @@
 @using Stocks.Core.Repositories;
 @using Stocks.Domain.Models;
 @inject IStocksRepository stockRepository;
+@inject IJSRuntime JSRuntime;
 
+<PageTitle>"HomeSweetHome</PageTitle>
 @if (Stock is not null)
 {
+
     <a href="/">Back</a>
     <h1>Details for @Stock.Name (@Stock.Ticker)</h1>
     <p><em>For more information click on <a href=@CreateLinkToYCharts()>link</a></em></p>
@@ -54,9 +57,15 @@
         Stock = stocks.Single(x => x.Ticker == ticker);
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("setTitle", $"{ticker}'s detail"); ;
+    }
+
     private string GetTypeBackgroundColor(string type)
         => type == "Special" ? "p-3 mb-2 bg-primary text-white" : "p-3 mb-2 bg-secondary text-white";
 
     private string CreateLinkToYCharts()
         => $"https://ycharts.com/companies/{Stock.Ticker}/dividend";
+
 }
