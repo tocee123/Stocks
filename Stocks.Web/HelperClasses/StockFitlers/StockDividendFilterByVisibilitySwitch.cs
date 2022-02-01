@@ -1,6 +1,7 @@
 ﻿using Stocks.Domain.Models;
 using Stocks.Web.Pages;
 using System;
+using System.Linq;
 
 namespace Stocks.Web.HelperClasses.StockFitlers
 {
@@ -12,6 +13,7 @@ namespace Stocks.Web.HelperClasses.StockFitlers
         {
             _visibilitySwitch = visibilitySwitch;
         }
+
         internal override bool ShouldSkip()
         => string.IsNullOrEmpty(_visibilitySwitch);
 
@@ -21,8 +23,12 @@ namespace Stocks.Web.HelperClasses.StockFitlers
             var vs when vs == Common.SwitchToUpcoming => IsUpcoming(sd),
             var vs when vs == Common.SwitchToGraterThan1 => IsRatioGraterThan1(sd),
             var vs when vs == Common.HasSpecial => HasSpecial(sd),
+            var vs when vs == Common.HighestRatioPerYear => IsHighestRatioPerYear(sd),
             _ => true
         };
+
+        private static bool IsHighestRatioPerYear(StockDividend sd)
+        => sd.CurrentYearsHistory().Sum(x => x.Amount).Round() / sd.Price > 0.08;
 
         internal static bool IsUpcoming(StockDividend stockDividend)
         {

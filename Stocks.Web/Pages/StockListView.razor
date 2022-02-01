@@ -10,10 +10,11 @@
 
 <button class="btn btn-primary" disabled="@IsDisabled()" @onclick="Reload">Reload</button>
 <button id="SwitchToUpcoming" disabled="@IsDisabled()" class="btn @SwitchToUpcomingClass" @onclick="SwitchToUpcoming">Show upcoming</button>
-<button id="SwitchToGraterThan1" disabled="@IsDisabled()" class="btn @SwitchToGraterThan1Class" @onclick="SwitchToGraterThan1">Show dividend to price ratio > 1%</button>
-<button id="SwitchSpecial" disabled="@IsDisabled()" class="btn @SwitchSpecialClass" @onclick="SwitchSpecial">Show with special</button>
-<button id="ShowSpecialDates" disabled="@IsDisabled()" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Show extra columns</button>
-<button id="ShowOnlyTheHighestRatioPerDay" disabled="@IsDisabled()" class="btn @ShowOnlyTheHighestRatioPerDayClass" @onclick="ShowOnlyTheHighestRatioPerDay">Show only highest ratio per day</button>
+<button id="SwitchToGraterThan1" disabled="@IsDisabled()" class="btn @SwitchToGraterThan1Class" @onclick="SwitchToGraterThan1">D/P > 1%</button>
+<button id="SwitchSpecial" disabled="@IsDisabled()" class="btn @SwitchSpecialClass" @onclick="SwitchSpecial">Special</button>
+<button id="ShowSpecialDates" disabled="@IsDisabled()" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Extra info</button>
+<button id="ShowOnlyTheHighestRatioPerDay" disabled="@IsDisabled()" class="btn @ShowOnlyTheHighestRatioPerDayClass" @onclick="ShowOnlyTheHighestRatioPerDay">Highest D/P daily</button>
+<button id="ShowOnlyTheHighestRatioPerYear" disabled="@IsDisabled()" class="btn @ShowOnlyTheHighestRatioPerYearClass" @onclick="SwitchToHighestRatioPerYear">Highest D/P yearly</button>
 <button id="DownloadFile" disabled="@IsDisabled()" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
 <br />
 <button class="btn btn-primary" disabled="@IsDisabled()" @onclick="ClearFilters">Clear</button>
@@ -65,12 +66,14 @@ else
     private string ShowSpecialDatesClass = _infoButtonClass;
     private string DownloadFileClass = _infoButtonClass;
     private string ShowOnlyTheHighestRatioPerDayClass = _infoButtonClass;
+    private string ShowOnlyTheHighestRatioPerYearClass = _infoButtonClass;
 
     private void ClearButtonClass()
     {
         SwitchToUpcomingClass = _infoButtonClass;
         SwitchToGraterThan1Class = _infoButtonClass;
         SwitchSpecialClass = _infoButtonClass;
+        ShowOnlyTheHighestRatioPerYearClass = _infoButtonClass;
     }
 
     private void SwitchToUpcoming()
@@ -82,6 +85,12 @@ else
     {
         SwitchSelection(Common.SwitchToGraterThan1, ref SwitchToGraterThan1Class);
     }
+
+    private void SwitchToHighestRatioPerYear()
+    {
+        SetButtonClassForHighestDaily(false);
+        SwitchSelection(Common.HighestRatioPerYear, ref ShowOnlyTheHighestRatioPerYearClass);
+    }    
 
     private void SwitchSpecial()
     {
@@ -136,7 +145,8 @@ else
         {
             [Common.SwitchToUpcoming] = false,
             [Common.SwitchToGraterThan1] = false,
-            [Common.HasSpecial] = false
+            [Common.HasSpecial] = false,
+            [Common.HighestRatioPerYear] = false
         };
     }
 
@@ -198,10 +208,15 @@ else
 
     private bool _showOnlyTheHighestRatioPerDay;
 
+    private void SetButtonClassForHighestDaily(bool b)
+    {
+        _showOnlyTheHighestRatioPerDay = b;
+        ShowOnlyTheHighestRatioPerDayClass = GetButtonClass(_showOnlyTheHighestRatioPerDay);
+    }
+
     private async Task ShowOnlyTheHighestRatioPerDay()
     {
-        _showOnlyTheHighestRatioPerDay = !_showOnlyTheHighestRatioPerDay;
-        ShowOnlyTheHighestRatioPerDayClass = GetButtonClass(_showOnlyTheHighestRatioPerDay);
+        SetButtonClassForHighestDaily(!_showOnlyTheHighestRatioPerDay);
         await UpdateStocks();
     }
 }
