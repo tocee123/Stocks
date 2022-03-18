@@ -27,7 +27,7 @@ namespace Stocks.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<ICachedRepository, MemoryCashedRepository>();
+            services.AddSingleton<ICachedRepository, RedisCachedRepository>();
             services.AddTransient<IStockDividendHistoryLoader, StockDividendHistoryLoader>();
             services.AddTransient<IStocksLoader, StocksLoader>();
             services.AddTransient<IStocksOfInterestRespository, StocksOfInterestRespository>();
