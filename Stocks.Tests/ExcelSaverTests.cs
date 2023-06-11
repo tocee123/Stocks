@@ -15,13 +15,13 @@ namespace WebDownloading.Test
     [TestFixture]
     public class ExcelSaverTests
     {
-        private IExcelSaver _target;
+        //private IExcelSaver _target;
 
-        [SetUp]
-        public void Setup()
-        {
-            _target = new ExcelSaver();
-        }
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    _target = new ExcelSaver();
+        //}
 
         //TODO
         //[Test]
