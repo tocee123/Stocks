@@ -34,7 +34,6 @@ namespace Stocks.Test
             Console.WriteLine(content);
         }
 
-        //TODO fix the test
         [Test]
         public async Task DownloadStockHistoryAsync_WhenCorrectStockTickerIsGiven_ReturnsNotemptyClass()
         {
@@ -47,8 +46,6 @@ namespace Stocks.Test
             Assert.IsNotNull(result.LatestDividendHistory);
         }
 
-        //TODO
-        [Ignore("something is not working")]
         [TestCase("TAEF")]
         [TestCase("123asd")]
         public async Task DownloadStockHistoryAsync_WhenIncorrectStockTickerIsGiven_IsCorrectlyDownloadedFalse(string ticker)
@@ -58,15 +55,13 @@ namespace Stocks.Test
             Assert.IsFalse(result.IsCorrectlyDownloaded);
         }
 
-        //TODO
-        //[TestCase("abc", false)]
-        //[TestCase("www.google.com", true)]
-        //[TestCase("http://google.com", true)]
+        [TestCase("abc", false)]
+        [TestCase("www.google.com", true)]
+        [TestCase("http://google.com", true)]
         public async Task DoesPageExist_WhenPageDoesNotExist_ReturnsFalse(string url, bool expected)
         {
             var (pageExists, resultUrl) = await StockDividendHistoryLoader.DoesPageExist(url);
             Assert.AreEqual(expected, pageExists);
-            Console.WriteLine(resultUrl);
         }
 
         [TestCase("abc", false)]
