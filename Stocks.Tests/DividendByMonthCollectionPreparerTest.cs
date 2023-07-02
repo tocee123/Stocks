@@ -58,7 +58,7 @@ namespace WebDownloading.Test
             Console.WriteLine($"{sum} vs {data.Sum(d => d.Earnings) + investment}");
         }
 
-        [Test, Ignore("something is failing")]
+        [Test]
         public void CalculateCummulative()
         {
             Random random = new();
@@ -86,8 +86,7 @@ namespace WebDownloading.Test
             }
         }
 
-        //TODO
-        //[Test]
+        [Test]
         public async Task GetMonthlyBestStocksByYear_ReturnsNotNullList()
         {
             var result = await _target.GetMonthlyBestStocksByYear(DateTime.Today.Year);
@@ -96,8 +95,7 @@ namespace WebDownloading.Test
             Assert.AreEqual(12, result.Count());
         }
 
-        //TODO
-        //[Test]
+        [Test]
         public async Task SelectTop1DividnedByMonth()
         {
             var stocks = (await _stockRepository.GetStocksAsync()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.Ticker });
@@ -117,7 +115,8 @@ namespace WebDownloading.Test
                 sb.AppendLine($"In {item.Key.Year}/{item.Key.Month}: {item.TopDividendPayer.Name} '{item.TopDividendPayer.Ticker}' with {item.TopDividendPayer.Price}$, dividend {item.TopDividendPayer.Amount}$ ratio: {item.TopDividendPayer.DividendToPrice:0.00%} you could buy {calculateStockCountFromPrice(item.TopDividendPayer.Price)} stocks and get {amountOfDividend}$ on { item.TopDividendPayer.ExDate.ToShortDateString()}");
             }
             sb.AppendLine($"{sum}$");
-            File.WriteAllText(@"c:\temp\test111.txt", sb.ToString());
+            //Dont write it on the server
+            //File.WriteAllText(@"c:\temp\test111.txt", sb.ToString());
         }
     }
 }
