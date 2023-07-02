@@ -1,4 +1,4 @@
-name: dotnet package
+name: Prepare branch
 
 on: [push]
 
