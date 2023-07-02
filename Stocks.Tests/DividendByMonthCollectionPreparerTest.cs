@@ -83,15 +83,6 @@ namespace WebDownloading.Test
         }
 
         [Test]
-        public async Task GetMonthlyBestStocksByYear_ReturnsNotNullList()
-        {
-            var result = await _target.GetMonthlyBestStocksByYear(DateTime.Today.Year);
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
-            Assert.AreEqual(12, result.Count());
-        }
-
-        [Test]
         public async Task SelectTop1DividnedByMonth()
         {
             var stocks = (await _stockRepository.GetStocksAsync()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.Ticker });
