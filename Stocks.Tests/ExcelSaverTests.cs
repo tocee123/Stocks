@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-
-namespace WebDownloading.Test
+﻿namespace WebDownloading.Test
 {
     [TestFixture]
     public class ExcelSaverTests

@@ -1,10 +1,4 @@
-﻿using NUnit.Framework;
-using Stocks.Core.Loaders;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Stocks.Test
+﻿namespace Stocks.Test
 {
     [TestFixture]
     public class StockDividendHistoryLoaderTests

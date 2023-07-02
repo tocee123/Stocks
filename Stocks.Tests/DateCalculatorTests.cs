@@ -1,7 +1,4 @@
-﻿using NUnit.Framework;
-using Stocks.Domain.Helpers;
-using System;
-using System.Collections.Generic;
+﻿using Stocks.Domain.Helpers;
 
 namespace WebDownloading.Test
 {
