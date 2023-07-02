@@ -35,9 +35,15 @@ jobs:
   deploy:
     needs: build
     runs-on: windows-latest
+    name: Deploy to Azure
     steps:
-      - name: Deploy to Azure
+      - name: Set env.BRANCH
+        run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
+      - name: Is main?
+        if: env.BRANCH == 'main'
+          run: echo "This is 'main' branch"
+      - name: Deploy
         uses: azure/webapps-deploy@v2
         with:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: env.BRANCH == 'main'
