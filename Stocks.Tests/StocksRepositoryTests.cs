@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using NSubstitute;
 using System.Diagnostics;
 
 namespace WebDownloading.Test
