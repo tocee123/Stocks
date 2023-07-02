@@ -8,8 +8,8 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-  strategy:
-    dotnet: '7.0.x'
+    strategy:
+      dotnet: '7.0.x'
   name: Dotnet build $dotnet
     steps:
       - uses: actions/checkout@v3
