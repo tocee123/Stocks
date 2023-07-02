@@ -1,4 +1,12 @@
-﻿namespace Stocks.Test
+﻿using System.IO.Compression;
+using System.IO;
+using System.Net.Http;
+using System.Reflection.Metadata;
+using System.Text;
+using RestSharp;
+using System.Net;
+
+namespace Stocks.Test
 {
     [TestFixture]
     public class StockDividendHistoryLoaderTests
@@ -11,8 +19,28 @@
             _target = new StockDividendHistoryLoader();
         }
 
+        [Test]
+        public async Task TaskTest()
+        {
+            string url = "https://www.nasdaq.com/market-activity/etf/qyld/dividend-history";
+            var handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            using var client = new HttpClient(handler);
+            client.Timeout = TimeSpan.FromSeconds(2);
+            //client.DefaultRequestHeaders.Add("User-Agent", "C# console program");
+            client.DefaultRequestHeaders.Add("Accept", "*/*");
+            client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+
+            var content = await client.GetStringAsync(url);
+
+            Console.WriteLine(content);
+        }
+
         //TODO fix the test
-        //[Test]
+        [Test]
         public async Task DownloadStockHistoryAsync_WhenCorrectStockTickerIsGiven_ReturnsNotemptyClass()
         {
             var ticker = "MPLX";

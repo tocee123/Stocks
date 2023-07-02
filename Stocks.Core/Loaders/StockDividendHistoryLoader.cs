@@ -38,7 +38,7 @@ namespace Stocks.Core.Loaders
         }
 
         private static string CreateUrlToYCharts(string ticker)
-            => $"https://ycharts.com/companies/{ticker}/dividend";
+            => $"https://www.nasdaq.com/market-activity/etf/{ticker.ToLower()}/dividend-history";
 
         private static async Task FillProperties(StockDividend stock, WebClient client, Uri resultUri, string ticker)
         {
@@ -66,7 +66,16 @@ namespace Stocks.Core.Loaders
             var result = false;
             if (IsCorrectUrl(url, out var resultUri))
             {
-                using var client = new HttpClient();
+                var handler = new HttpClientHandler()
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                };
+                using var client = new HttpClient(handler);
+                client.Timeout = TimeSpan.FromSeconds(2);
+                //client.DefaultRequestHeaders.Add("User-Agent", "C# console program");
+                client.DefaultRequestHeaders.Add("Accept", "*/*");
+                client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+                client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
                 var response = await client.GetAsync(resultUri.AbsoluteUri);
                 result = response.IsSuccessStatusCode;
             }
