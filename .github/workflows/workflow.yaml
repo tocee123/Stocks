@@ -4,7 +4,7 @@ on: [push]
 
 env:
   sourceFileLocation: Stocks.sln
-  dotnet-version: '7.0.x'
+  dotnetVersion: '7.0.x'
 
 jobs:
   build:
