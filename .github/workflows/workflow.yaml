@@ -11,10 +11,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK $dotnet-version
+      - name: Setup .NET Core SDK ${{ dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: $dotnet-version
+          dotnet-version: ${{ dotnet-version }}
       - name: Install dependencies
         run: dotnet restore $sourceFileLocation
       - name: Build
@@ -26,8 +26,8 @@ jobs:
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
-          name: dotnet-results-$dotnet-version
-          path: TestResults-$dotnet-version
+          name: dotnet-results-${{ dotnet-version }}
+          path: TestResults-${{ dotnet-version }}
         if: ${{ always() }}
   deploy:
     needs: build
