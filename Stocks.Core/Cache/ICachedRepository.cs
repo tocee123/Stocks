@@ -1,5 +1,4 @@
 ﻿using Stocks.Core.Enums;
-using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {

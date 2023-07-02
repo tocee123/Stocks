@@ -1,7 +1,4 @@
-﻿using Stocks.Domain.Models;
-using System.Collections.Generic;
-
-namespace Stocks.Core.Excel
+﻿namespace Stocks.Core.Excel
 {
     public interface IExcelSaver
     {

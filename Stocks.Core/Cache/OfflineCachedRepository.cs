@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Stocks.Core.Enums;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {

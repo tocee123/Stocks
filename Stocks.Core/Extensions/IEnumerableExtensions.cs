@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Stocks.Core.Extensions
+﻿namespace Stocks.Core.Extensions
 {
     public static class IEnumerableExtensions
     {

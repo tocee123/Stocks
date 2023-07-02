@@ -1,9 +1,4 @@
-﻿using Stocks.Domain.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Stocks.Core.Loaders
+﻿namespace Stocks.Core.Loaders
 {
     public class StocksLoader : IStocksLoader
     {

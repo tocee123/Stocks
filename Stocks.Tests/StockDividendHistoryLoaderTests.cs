@@ -1,8 +1,6 @@
-﻿using NUnit.Framework;
-using Stocks.Core.Loaders;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Net;
+using System.IO;
 
 namespace Stocks.Test
 {
@@ -17,8 +15,27 @@ namespace Stocks.Test
             _target = new StockDividendHistoryLoader();
         }
 
+        [Test]
+        public async Task TaskTest()
+        {
+            string url = "https://dividendhistory.org/payout/QYLD/";
+            var handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            using var client = new HttpClient(handler);
+            client.Timeout = TimeSpan.FromSeconds(2);
+            client.DefaultRequestHeaders.Add("Accept", "*/*");
+            client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+
+            var content = await client.GetStringAsync(url);
+
+            Console.WriteLine(content);
+        }
+
         //TODO fix the test
-        //[Test]
+        [Test]
         public async Task DownloadStockHistoryAsync_WhenCorrectStockTickerIsGiven_ReturnsNotemptyClass()
         {
             var ticker = "MPLX";
@@ -59,6 +76,17 @@ namespace Stocks.Test
         {
             var result = StockDividendHistoryLoader.IsCorrectUrl(url, out var reusltUri);
             Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void FillProperties_tests()
+        {
+            var ticker = "qyld";
+            var fileContent = File.ReadAllText($@"..\..\..\Files\{ticker}.html");
+            Assert.IsNotNull(fileContent);
+            var stock = new StockDividend();
+            StockDividendHistoryLoader.FillProperties(stock, ticker, fileContent);
+            Assert.AreNotEqual(0.0, stock.Price);
         }
     }
 }

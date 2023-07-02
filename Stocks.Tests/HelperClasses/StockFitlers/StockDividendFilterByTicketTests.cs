@@ -1,7 +1,4 @@
-﻿using NUnit.Framework;
-using Stocks.Domain.Models;
-using Stocks.Web.HelperClasses.StockFitlers;
-using System.Collections.Generic;
+﻿using Stocks.Web.HelperClasses.StockFitlers;
 
 namespace Stocks.Test.HelperClasses.StockFitlers
 {

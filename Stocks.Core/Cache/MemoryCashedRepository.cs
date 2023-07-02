@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Stocks.Core.Enums;
-using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {

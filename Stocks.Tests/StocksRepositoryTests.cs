@@ -1,13 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using NSubstitute;
-using NUnit.Framework;
-using Stocks.Core.Loaders;
-using Stocks.Core.Repositories;
 using Stocks.Web.Pages;
-using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebDownloading.Test
 {
@@ -22,8 +16,7 @@ namespace WebDownloading.Test
             _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository());
         }
 
-        //TODO
-        [Test, Ignore("something is failing")]
+        [Test]
         public async Task GetStocks_ReturnsNotEmptyList()
         {
             var sw = Stopwatch.StartNew();

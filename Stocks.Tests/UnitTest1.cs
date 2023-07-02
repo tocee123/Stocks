@@ -1,15 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
-using NUnit.Framework;
-using Stocks.Core.Cache;
-using Stocks.Core.Excel;
-using Stocks.Core.Loaders;
-using Stocks.Core.Repositories;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace WebDownloading.Test
 {

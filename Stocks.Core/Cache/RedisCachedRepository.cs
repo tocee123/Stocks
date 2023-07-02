@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using Stocks.Core.Enums;
-using System.Threading.Tasks;
 
 namespace Stocks.Core.Cache
 {

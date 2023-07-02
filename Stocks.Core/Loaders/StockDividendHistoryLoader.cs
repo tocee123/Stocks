@@ -1,12 +1,7 @@
 ﻿using HtmlAgilityPack;
-using Stocks.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Stocks.Core.Loaders
 {
@@ -25,12 +20,13 @@ namespace Stocks.Core.Loaders
             try
             {
                 var stock = new StockDividend();
-                using var client = new WebClient();
+
                 var url = CreateUrlToYCharts(ticker);
                 var (pageExists, resultUrl) = await DoesPageExist(url);
                 if (pageExists)
                 {
-                    await FillProperties(stock, client, resultUrl, ticker);
+                    var html = await DownloadString(resultUrl);
+                    FillProperties(stock, ticker, html);
                 }
                 return stock;
             }
@@ -42,22 +38,39 @@ namespace Stocks.Core.Loaders
 
         }
 
-        private static string CreateUrlToYCharts(string ticker)
-            => $"https://ycharts.com/companies/{ticker}/dividend";
-
-        private static async Task FillProperties(StockDividend stock, WebClient client, Uri resultUri, string ticker)
+        private static async Task<string> DownloadString(Uri resultUri)
         {
-            string htmlCode = await client.DownloadStringTaskAsync(resultUri);
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(htmlCode);
+            using var client = new WebClient();
+            string html = await client.DownloadStringTaskAsync(resultUri);
+            return html;
+        }
 
-            var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//h2[@class='index-name-text']");
+        private static string CreateUrlToYCharts(string ticker)
+            => $"https://dividendhistory.org/payout/{ticker}/";
+
+        private static string GetStringByPattern(HtmlNodeCollection htmlNodes, string regexPattern)
+        => htmlNodes.Select(p => Regex.Match(p.InnerText, regexPattern))
+                .FirstOrDefault(p => p.Success)
+                ?.Groups[1].Value;
+
+        internal static void FillProperties(StockDividend stock, string ticker, string html)
+        {
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(html);
+
+            var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//div/h4");
+            if (nameNode == null)
+            {
+                return;
+            }
             stock.Name = nameNode.InnerText.Trim();
             stock.Ticker = ticker;
-            stock.Price = double.Parse(htmlDocument.DocumentNode.SelectSingleNode("//span[@class='index-rank-value']").InnerText);
-            var divParentContent = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='panel-content']");
+            var properties = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='col-md-8 col-xs-12 col-sm-12']").ChildNodes;
 
-            stock.DividendHistories = htmlDocument.DocumentNode.SelectSingleNode("//table[@class='table']")
+
+            stock.Price = double.Parse(GetStringByPattern(properties, "Last Close Price: \\$([\\d\\.]+)"));
+
+            stock.DividendHistories = htmlDocument.GetElementbyId("dividend_table")
                 .Descendants("tr")
                 .Skip(1)
                 .Where(tr => tr.Elements("td").Count() > 1)
@@ -71,7 +84,15 @@ namespace Stocks.Core.Loaders
             var result = false;
             if (IsCorrectUrl(url, out var resultUri))
             {
-                using var client = new HttpClient();
+                var handler = new HttpClientHandler()
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                };
+                using var client = new HttpClient(handler);
+                //client.Timeout = TimeSpan.FromSeconds(2);
+                client.DefaultRequestHeaders.Add("Accept", "*/*");
+                client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+                client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
                 var response = await client.GetAsync(resultUri.AbsoluteUri);
                 result = response.IsSuccessStatusCode;
             }
@@ -95,21 +116,26 @@ namespace Stocks.Core.Loaders
 
         private static DividendHistory ToDividendHistory(IEnumerable<HtmlNode> tdNodes)
         {
-            DateTime parse(string s)
+            DateTime parseDate(string s)
             {
                 DateTime.TryParse(s, out var date);
                 return date;
             };
             var tdNodeList = tdNodes.ToList();
             var i = 0;
+
+            var exDate = parseDate(tdNodeList[i++].InnerText);
+            var payDate = parseDate(tdNodeList[i++].InnerText);
+            var amount = double.Parse(Regex.Match(tdNodeList[i++].InnerText, "\\$([\\d\\.]+)").Groups[1].Value);
+            var type = tdNodeList[i].InnerText;
             return new DividendHistory
             {
-                ExDate = parse(tdNodeList[i++].InnerText),
-                RecordDate = parse(tdNodeList[i++].InnerText),
-                PayDate = parse(tdNodeList[i++].InnerText),
-                DeclarationDate = parse(tdNodeList[i++].InnerText),
-                Type = tdNodeList[i++].InnerText,
-                Amount = double.Parse(tdNodeList[i].InnerText)
+                ExDate = exDate,
+                RecordDate = exDate.AddDays(1),
+                PayDate = payDate,
+                DeclarationDate = exDate.AddDays(-10),
+                Type = type,
+                Amount = amount
             };
         }
     }

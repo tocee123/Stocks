@@ -1,8 +1,4 @@
-﻿using Stocks.Domain.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Stocks.Core.Repositories
+﻿namespace Stocks.Core.Repositories
 {
     public interface IStocksRepository
     {

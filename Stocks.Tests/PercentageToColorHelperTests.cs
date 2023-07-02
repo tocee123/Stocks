@@ -1,7 +1,4 @@
-﻿using NUnit.Framework;
-using Stocks.Core.Excel;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace WebDownloading.Test
 {

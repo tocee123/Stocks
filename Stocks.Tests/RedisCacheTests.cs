@@ -1,12 +1,6 @@
 ﻿using AutoFixture;
-using NUnit.Framework;
-using Stocks.Core.Cache;
 using Stocks.Core.Enums;
-using Stocks.Domain.Models;
 using Stocks.Test;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace WebDownloading.Test
 {

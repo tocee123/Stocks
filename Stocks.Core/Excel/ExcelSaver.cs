@@ -1,8 +1,5 @@
 ﻿using Spire.Xls;
-using Stocks.Domain.Models;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Stocks.Core.Excel
 {

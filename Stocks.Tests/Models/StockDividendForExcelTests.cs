@@ -1,9 +1,4 @@
-﻿using NUnit.Framework;
-using Stocks.Domain.Models;
-using System;
-using System.Linq;
-
-[TestFixture]
+﻿[TestFixture]
 public class StockDividendForExcelTests
 {
     [Test]
