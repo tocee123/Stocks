@@ -59,6 +59,10 @@ namespace Stocks.Core.Loaders
             htmlDocument.LoadHtml(html);
 
             var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//div/h4");
+            if (nameNode == null)
+            {
+                return;
+            }
             stock.Name = nameNode.InnerText.Trim();
             stock.Ticker = ticker;
             var properties = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='col-md-8 col-xs-12 col-sm-12']").ChildNodes;
@@ -85,7 +89,7 @@ namespace Stocks.Core.Loaders
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
                 };
                 using var client = new HttpClient(handler);
-                client.Timeout = TimeSpan.FromSeconds(2);
+                //client.Timeout = TimeSpan.FromSeconds(2);
                 client.DefaultRequestHeaders.Add("Accept", "*/*");
                 client.DefaultRequestHeaders.Add("Connection", "keep-alive");
                 client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");

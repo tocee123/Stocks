@@ -16,8 +16,7 @@ namespace WebDownloading.Test
             _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository());
         }
 
-        //TODO
-        [Test, Ignore("something is failing")]
+        [Test]
         public async Task GetStocks_ReturnsNotEmptyList()
         {
             var sw = Stopwatch.StartNew();
