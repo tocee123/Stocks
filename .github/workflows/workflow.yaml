@@ -4,19 +4,19 @@ on: [push]
 
 env:
   sourceFileLocation: Stocks.sln
-  strategy:
-    matrix:
-      dotnet: [ '7.0.x' ]
+
 jobs:
   build:
     runs-on: windows-latest
-  name: Dotnet build ${{ matrix.dotnet }}
+  strategy:
+    dotnet: '7.0.x'
+  name: Dotnet build $dotnet
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK  ${{ matrix.dotnet }}
+      - name: Setup .NET Core SDK  $dotnet
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version:  ${{ matrix.dotnet }}
+          dotnet-version:  $dotnet
       - name: Install dependencies
         run: dotnet restore $sourceFileLocation
       - name: Build
