@@ -1,5 +1,4 @@
 ﻿using Stocks.Core.Repositories;
-using System.Threading.Tasks;
 
 namespace Stocks.Core.Excel
 {

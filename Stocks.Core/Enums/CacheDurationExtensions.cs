@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Stocks.Core.Enums
+﻿namespace Stocks.Core.Enums
 {
     public static class CacheDurationExtensions
     {

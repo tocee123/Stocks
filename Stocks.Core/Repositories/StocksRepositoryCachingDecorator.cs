@@ -1,9 +1,5 @@
 ﻿using Stocks.Core.Cache;
 using Stocks.Core.Enums;
-using Stocks.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Stocks.Core.Repositories
 {
