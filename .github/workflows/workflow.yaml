@@ -11,10 +11,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK ${{ dotnet-version }}
+      - name: Setup .NET Core SDK $dotnetVersion
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ dotnet-version }}
+          dotnetVersion: $dotnetVersion
       - name: Install dependencies
         run: dotnet restore $sourceFileLocation
       - name: Build
@@ -22,12 +22,12 @@ jobs:
       # - name: Test
         # run: dotnet test --no-restore --verbosity normal $sourceFileLocation
       # - name: Test with dotnet
-        # run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" $sourceFileLocation
+        # run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnetVersion }}" $sourceFileLocation
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
-          name: dotnet-results-${{ dotnet-version }}
-          path: TestResults-${{ dotnet-version }}
+          name: dotnet-results-$dotnetVersion
+          path: TestResults-$dotnetVersion
         if: ${{ always() }}
   deploy:
     needs: build
