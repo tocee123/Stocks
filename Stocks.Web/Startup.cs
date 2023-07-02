@@ -43,7 +43,7 @@ namespace Stocks.Web
             services.AddTransient<IStockDividendHistoryLoader, StockDividendHistoryLoader>();
             services.AddTransient<IStocksLoader, StocksLoader>();
             services.AddTransient<IStocksOfInterestRespository, StocksOfInterestRespository>();
-            services.AddTransient<IStocksRepository, StocksRepositoryFake>();
+            services.AddTransient<IStocksRepository, StocksRepository>();
             services.Decorate<IStocksRepository, StocksRepositoryCachingDecorator>();
             services.AddTransient<IStockExcelWriter, StockExcelWriter>();
             services.AddTransient<IExcelSaver, ExcelSaver>();

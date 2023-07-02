@@ -22,10 +22,10 @@ jobs:
         run: dotnet restore $sourceFileLocation
       - name: Build
         run: dotnet build --configuration Release --no-restore $sourceFileLocation
-      # - name: Test
-        # run: dotnet test --no-restore --verbosity normal $sourceFileLocation
-      # - name: Test with dotnet
-        # run: dotnet test --logger trx --results-directory "TestResults- ${{ matrix.dotnet }}" $sourceFileLocation
+      - name: test
+        run: dotnet test --no-restore --verbosity normal $sourcefilelocation
+      - name: test with dotnet
+        run: dotnet test --logger trx --results-directory "testresults- ${{ matrix.dotnet }}" $sourcefilelocation
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
@@ -40,4 +40,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        #if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
