@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       dotnet: '7.0.x'
-  name: Dotnet build $dotnet
+    name: Dotnet build $dotnet
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK  $dotnet
