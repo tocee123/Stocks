@@ -14,7 +14,7 @@ jobs:
       - name: Setup .NET Core SDK $dotnetVersion
         uses: actions/setup-dotnet@v3
         with:
-          dotnetVersion: $dotnetVersion
+          dotnet-version: $dotnetVersion
       - name: Install dependencies
         run: dotnet restore $sourceFileLocation
       - name: Build
