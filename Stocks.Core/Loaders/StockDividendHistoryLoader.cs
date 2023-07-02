@@ -20,12 +20,13 @@ namespace Stocks.Core.Loaders
             try
             {
                 var stock = new StockDividend();
-                using var client = new WebClient();
+
                 var url = CreateUrlToYCharts(ticker);
                 var (pageExists, resultUrl) = await DoesPageExist(url);
                 if (pageExists)
                 {
-                    await FillProperties(stock, client, resultUrl, ticker);
+                    var html = await DownloadString(resultUrl);
+                    FillProperties(stock, ticker, html);
                 }
                 return stock;
             }
@@ -37,14 +38,20 @@ namespace Stocks.Core.Loaders
 
         }
 
+        private static async Task<string> DownloadString(Uri resultUri)
+        {
+            using var client = new WebClient();
+            string html = await client.DownloadStringTaskAsync(resultUri);
+            return html;
+        }
+
         private static string CreateUrlToYCharts(string ticker)
             => $"https://dividendhistory.org/payout/{ticker}/";
 
-        private static async Task FillProperties(StockDividend stock, WebClient client, Uri resultUri, string ticker)
+        internal static void FillProperties(StockDividend stock, string ticker, string html)
         {
-            string htmlCode = await client.DownloadStringTaskAsync(resultUri);
             var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(htmlCode);
+            htmlDocument.LoadHtml(html);
 
             var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//div/h4");
             stock.Name = nameNode.InnerText.Trim();

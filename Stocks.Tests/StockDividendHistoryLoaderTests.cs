@@ -1,5 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using System.IO;
 
 namespace Stocks.Test
 {
@@ -75,6 +77,16 @@ namespace Stocks.Test
         {
             var result = StockDividendHistoryLoader.IsCorrectUrl(url, out var reusltUri);
             Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void FillProperties_tests()
+        {
+            var ticker = "qyld";
+            var fileContent = File.ReadAllText($@"..\..\..\Files\{ticker}.html");
+            Assert.IsNotNull(fileContent);
+            var stock = new StockDividend();
+            StockDividendHistoryLoader.FillProperties(stock, ticker, fileContent);
         }
     }
 }
