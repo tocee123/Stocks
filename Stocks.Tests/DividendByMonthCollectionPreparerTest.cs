@@ -1,7 +1,4 @@
-﻿using AutoFixture;
-using Microsoft.Extensions.Configuration;
-using NSubstitute;
-using System.Text;
+﻿using System.Text;
 
 namespace WebDownloading.Test
 {
@@ -15,7 +12,6 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            var configurationSub = Substitute.For<IConfiguration>();
             _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository());
             _target = new DividendByMonthCollectionPreparer(_stockRepository);
         }
@@ -87,15 +83,6 @@ namespace WebDownloading.Test
         }
 
         [Test]
-        public async Task GetMonthlyBestStocksByYear_ReturnsNotNullList()
-        {
-            var result = await _target.GetMonthlyBestStocksByYear(DateTime.Today.Year);
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
-            Assert.AreEqual(12, result.Count());
-        }
-
-        [Test]
         public async Task SelectTop1DividnedByMonth()
         {
             var stocks = (await _stockRepository.GetStocksAsync()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.Ticker });
@@ -112,11 +99,36 @@ namespace WebDownloading.Test
             {
                 var amountOfDividend = Math.Round(calculateStockCountFromPrice(item.TopDividendPayer.Price) * item.TopDividendPayer.Amount, 2);
                 sum += amountOfDividend;
-                sb.AppendLine($"In {item.Key.Year}/{item.Key.Month}: {item.TopDividendPayer.Name} '{item.TopDividendPayer.Ticker}' with {item.TopDividendPayer.Price}$, dividend {item.TopDividendPayer.Amount}$ ratio: {item.TopDividendPayer.DividendToPrice:0.00%} you could buy {calculateStockCountFromPrice(item.TopDividendPayer.Price)} stocks and get {amountOfDividend}$ on { item.TopDividendPayer.ExDate.ToShortDateString()}");
+                sb.AppendLine($"In {item.Key.Year}/{item.Key.Month}: {item.TopDividendPayer.Name} '{item.TopDividendPayer.Ticker}' with {item.TopDividendPayer.Price}$, dividend {item.TopDividendPayer.Amount}$ ratio: {item.TopDividendPayer.DividendToPrice:0.00%} you could buy {calculateStockCountFromPrice(item.TopDividendPayer.Price)} stocks and get {amountOfDividend}$ on {item.TopDividendPayer.ExDate.ToShortDateString()}");
             }
             sb.AppendLine($"{sum}$");
             //Dont write it on the server
             //File.WriteAllText(@"c:\temp\test111.txt", sb.ToString());
+        }
+
+        [Test]
+        public async Task GetMonthlyBestStocksByYear_CalculateYield()
+        {
+            var stockRepository = Substitute.For<IStocksRepository>();
+            var target = new DividendByMonthCollectionPreparer(stockRepository);
+
+            var thisYear = DateTime.Today.Year;
+            var fixture = new Fixture();
+            fixture.Customizations.Add(new RandomDateTimeSequenceGenerator(
+                minDate: new DateTime(thisYear,1,1),
+                maxDate: new DateTime(thisYear+1, 1, 1).AddDays(-1)
+                ));
+
+            //fixture.Build<DividendHistory>().With(dh=>dh)
+            var stock = fixture.Create<StockDividend>();
+
+            stockRepository.GetStocksAsync().Returns(new[] {stock});
+
+            var result = await target.GetMonthlyBestStocksByYear(thisYear);
+
+            var yield = stock.DividendHistories.Sum(dh => dh.Amount) / stock.Price;
+
+            result.First().Yield.Should().Be(yield);
         }
     }
 }

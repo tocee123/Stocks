@@ -5,5 +5,6 @@
         public double InvestedInCurrentMonth { get; set; }
         public int StockVolume { get => (int)(InvestedInCurrentMonth / Price); }
         public double Earnings { get => StockVolume * Dividend; }
+        public double Yield{ get; set; }
     }
 }

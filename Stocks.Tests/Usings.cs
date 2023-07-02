@@ -1,4 +1,7 @@
-﻿global using NUnit.Framework;
+﻿global using AutoFixture;
+global using FluentAssertions;
+global using NSubstitute;
+global using NUnit.Framework;
 global using Stocks.Core.Cache;
 global using Stocks.Core.Excel;
 global using Stocks.Core.Loaders;
