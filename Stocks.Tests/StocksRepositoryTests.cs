@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using NSubstitute;
-using Stocks.Web.Pages;
 using System.Diagnostics;
 
 namespace WebDownloading.Test

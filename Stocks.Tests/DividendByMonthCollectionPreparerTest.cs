@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
-using System.IO;
 using System.Text;
 
 namespace WebDownloading.Test
