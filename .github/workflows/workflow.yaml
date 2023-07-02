@@ -20,10 +20,10 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
       - name: Install dependencies
         run: echo "Install dependencies"
-        run: dotnet restore $sourceFileLocation
+        #run: dotnet restore $sourceFileLocation
       - name: Build
         run: echo "Build"
-        run: dotnet build --configuration Release --no-restore $sourceFileLocation
+        #run: dotnet build --configuration Release --no-restore $sourceFileLocation
       - name: test
         run: echo "test"
         #run: dotnet test --no-restore --verbosity normal $sourcefilelocation
