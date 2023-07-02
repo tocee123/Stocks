@@ -11,7 +11,6 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
-
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
@@ -23,23 +22,24 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore $sourceFileLocation
   tests:
-      runs-on: windows-latest
-      strategy:
-        matrix:
-          dotnet-version: [ '7.0.x' ]
-
-      steps:
-        - name: Test
-          run: dotnet test --no-restore --verbosity normal $sourceFileLocation
-        - name: Test with dotnet
-          run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" $sourceFileLocation
-        - name: Upload dotnet test results
-          uses: actions/upload-artifact@v3
-          with:
-              name: dotnet-results-${{ matrix.dotnet-version }}
-              path: TestResults-${{ matrix.dotnet-version }}
-          if: ${{ always() }}
+    needs: build
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '7.0.x' ]
+    steps:
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal $sourceFileLocation
+      - name: Test with dotnet
+        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" $sourceFileLocation
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-results-${{ matrix.dotnet-version }}
+          path: TestResults-${{ matrix.dotnet-version }}
+        if: ${{ always() }}
   deploy:
+    needs: [build, tests]
     runs-on: windows-latest
     steps:
       - name: Deploy to Azure
