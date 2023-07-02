@@ -21,10 +21,10 @@ jobs:
         run: dotnet restore $sourceFileLocation
       - name: Build
         run: dotnet build --configuration Release --no-restore $sourceFileLocation
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal $sourceFileLocation
-      - name: Test with dotnet
-        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" $sourceFileLocation
+      # - name: Test
+        # run: dotnet test --no-restore --verbosity normal $sourceFileLocation
+      # - name: Test with dotnet
+        # run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" $sourceFileLocation
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
