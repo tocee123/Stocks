@@ -26,8 +26,7 @@ namespace WebDownloading.Test
             Assert.IsNotNull(result);
         }
 
-        //TODO
-        //[Test]
+        [Test, Ignore("Needs a way to delete the cache")]
         public async Task ReadStringFromCache_WhenKeyExists_ReturnsString()
         {
             var key = "123";
