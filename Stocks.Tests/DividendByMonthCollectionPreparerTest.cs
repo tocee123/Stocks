@@ -1,6 +1,4 @@
-﻿using AutoFixture;
-using NSubstitute;
-using System.Text;
+﻿using System.Text;
 
 namespace WebDownloading.Test
 {

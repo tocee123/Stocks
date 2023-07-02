@@ -1,4 +1,5 @@
 ﻿using Stocks.Core.Repositories;
+using System.Linq;
 
 namespace Stocks.Core.Loaders
 {
@@ -22,6 +23,10 @@ namespace Stocks.Core.Loaders
         }
 
         private static IEnumerable<StockChampionByDividendToPriceRatio> FlattenStocks(IEnumerable<StockDividend> stocks)
-        => stocks.SelectMany(s => s.DividendHistories, (s, dh) => new StockChampionByDividendToPriceRatio(s.Name, s.Ticker, dh.ExDate, Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount));
+        => stocks.SelectMany(s => s.DividendHistories, (s, dh) => new StockChampionByDividendToPriceRatio(s.Name, s.Ticker, dh.ExDate, Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, CalculateYiel(s.DividendHistories, s, dh.ExDate.Year)));
+
+        private static double CalculateYiel(IEnumerable<DividendHistory> dividendHistories, StockDividend stock, int year)
+            => dividendHistories.Where(dh => dh.ExDate.Year == year)
+            .Sum(dh => dh.Amount) / stock.Price;
     }
 }
