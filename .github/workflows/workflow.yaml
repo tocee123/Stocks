@@ -44,7 +44,7 @@ jobs:
       - name: Set env.BRANCH
         run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
       - name: Is main?
-        run: echo "This is 'main' branch"
+        run: echo env.BRANCH
       - name: Deploy
         uses: azure/webapps-deploy@v2
         with:
