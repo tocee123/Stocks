@@ -36,7 +36,7 @@ jobs:
     needs: build
     runs-on: windows-latest
     name: Deploy to Azure
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Deploy
         uses: azure/webapps-deploy@v2
