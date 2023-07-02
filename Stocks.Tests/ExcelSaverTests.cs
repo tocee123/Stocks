@@ -1,14 +1,4 @@
-﻿using AutoFixture;
-using Microsoft.Extensions.Configuration;
-using NSubstitute;
-using NUnit.Framework;
-using Stocks.Core.Excel;
-using Stocks.Core.Loaders;
-using Stocks.Core.Repositories;
-using Stocks.Domain.Models;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
 
 namespace WebDownloading.Test
 {
