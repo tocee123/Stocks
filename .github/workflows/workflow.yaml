@@ -4,18 +4,19 @@ on: [push]
 
 env:
   sourceFileLocation: Stocks.sln
-  
+  strategy:
+    matrix:
+      dotnet: [ '7.0.x' ]
 jobs:
-  env:
-    dotnetVersion: 7.0.x
   build:
     runs-on: windows-latest
+  name: Dotnet build ${{ matrix.dotnet }}
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK $dotnetVersion
+      - name: Setup .NET Core SDK  ${{ matrix.dotnet }}
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: $dotnetVersion
+          dotnet-version:  ${{ matrix.dotnet }}
       - name: Install dependencies
         run: dotnet restore $sourceFileLocation
       - name: Build
@@ -23,12 +24,12 @@ jobs:
       # - name: Test
         # run: dotnet test --no-restore --verbosity normal $sourceFileLocation
       # - name: Test with dotnet
-        # run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnetVersion }}" $sourceFileLocation
+        # run: dotnet test --logger trx --results-directory "TestResults- ${{ matrix.dotnet }}" $sourceFileLocation
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
-          name: dotnet-results-$dotnetVersion
-          path: TestResults-$dotnetVersion
+          name: dotnet-results- ${{ matrix.dotnet }}
+          path: TestResults- ${{ matrix.dotnet }}
         if: ${{ always() }}
   deploy:
     needs: build
