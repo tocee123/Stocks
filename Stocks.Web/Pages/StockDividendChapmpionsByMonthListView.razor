@@ -41,7 +41,7 @@ else
                     <td>@stock.Price</td>
                     <td>@stock.Dividend</td>
                     <td>@stock.DividendToPrice.ToPercentageDisplay()</td>
-                    <td>@stock..ToPercentageDisplay()</td>
+                    <td>@stock.Yield.ToPercentageDisplay()</td>
                     <td style="@ShouldShowWhenInvestedIsGraterThan0()">@ClaculateStockVolume(stock)</td>
                     <td style="@ShouldShowWhenInvestedIsGraterThan0()">@CalculeateEraning(stock)</td>
                 </tr>
