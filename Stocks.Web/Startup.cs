@@ -7,10 +7,22 @@ using Stocks.Core.Cache;
 using Stocks.Core.Excel;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
+using Stocks.Domain.Models;
 using Stocks.Web.Data;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Stocks.Web
 {
+    public class StocksRepositoryFake : IStocksRepository
+    {
+        public async Task<IEnumerable<StockDividend>> GetStocksAsync()
+        {
+            return Array.Empty<StockDividend>();
+        }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -31,7 +43,7 @@ namespace Stocks.Web
             services.AddTransient<IStockDividendHistoryLoader, StockDividendHistoryLoader>();
             services.AddTransient<IStocksLoader, StocksLoader>();
             services.AddTransient<IStocksOfInterestRespository, StocksOfInterestRespository>();
-            services.AddTransient<IStocksRepository, StocksRepository>();
+            services.AddTransient<IStocksRepository, StocksRepositoryFake>();
             services.Decorate<IStocksRepository, StocksRepositoryCachingDecorator>();
             services.AddTransient<IStockExcelWriter, StockExcelWriter>();
             services.AddTransient<IExcelSaver, ExcelSaver>();
