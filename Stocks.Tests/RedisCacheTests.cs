@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using Stocks.Core.Enums;
+﻿using Stocks.Core.Enums;
 using Stocks.Test;
 
 namespace WebDownloading.Test
