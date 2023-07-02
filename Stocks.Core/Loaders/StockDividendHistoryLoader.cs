@@ -46,9 +46,10 @@ namespace Stocks.Core.Loaders
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(htmlCode);
 
-            var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//h2[@class='index-name-text']");
+            var nameNode = htmlDocument.DocumentNode.SelectSingleNode("//div/h4");
             stock.Name = nameNode.InnerText.Trim();
             stock.Ticker = ticker;
+            var properties = htmlDocument.DocumentNode.SelectSingleNode("////div[@class='panel-content']");
             stock.Price = double.Parse(htmlDocument.DocumentNode.SelectSingleNode("//span[@class='index-rank-value']").InnerText);
             var divParentContent = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='panel-content']");
 
