@@ -25,6 +25,7 @@ else
                 <th>Price $</th>
                 <th>Dividend $</th>
                 <th>Dividend to price %</th>
+                <th>Yield</th>
                 <th style="@ShouldShowWhenInvestedIsGraterThan0()">Stock volume</th>
                 <th style="@ShouldShowWhenInvestedIsGraterThan0()">Earn on dividend $</th>
             </tr>
@@ -40,6 +41,7 @@ else
                     <td>@stock.Price</td>
                     <td>@stock.Dividend</td>
                     <td>@stock.DividendToPrice.ToPercentageDisplay()</td>
+                    <td>@stock.Yield.ToPercentageDisplay()</td>
                     <td style="@ShouldShowWhenInvestedIsGraterThan0()">@ClaculateStockVolume(stock)</td>
                     <td style="@ShouldShowWhenInvestedIsGraterThan0()">@CalculeateEraning(stock)</td>
                 </tr>
@@ -72,6 +74,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         _stocks = await _dividendByMonthCollectionPreparer.GetMonthlyBestStocksByYear(_year);
+        _stocks = _stocks.OrderBy(s => s.ExDate.Month);
     }
 
     private void Clear()
