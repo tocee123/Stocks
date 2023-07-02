@@ -17,14 +17,13 @@ namespace Stocks.Test
         [Test]
         public async Task TaskTest()
         {
-            string url = "https://www.nasdaq.com/market-activity/etf/qyld/dividend-history";
+            string url = "https://dividendhistory.org/payout/QYLD/";
             var handler = new HttpClientHandler()
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
             using var client = new HttpClient(handler);
             client.Timeout = TimeSpan.FromSeconds(2);
-            //client.DefaultRequestHeaders.Add("User-Agent", "C# console program");
             client.DefaultRequestHeaders.Add("Accept", "*/*");
             client.DefaultRequestHeaders.Add("Connection", "keep-alive");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");

@@ -38,7 +38,7 @@ namespace Stocks.Core.Loaders
         }
 
         private static string CreateUrlToYCharts(string ticker)
-            => $"https://www.nasdaq.com/market-activity/etf/{ticker.ToLower()}/dividend-history";
+            => $"https://dividendhistory.org/payout/{ticker}/";
 
         private static async Task FillProperties(StockDividend stock, WebClient client, Uri resultUri, string ticker)
         {
@@ -72,7 +72,6 @@ namespace Stocks.Core.Loaders
                 };
                 using var client = new HttpClient(handler);
                 client.Timeout = TimeSpan.FromSeconds(2);
-                //client.DefaultRequestHeaders.Add("User-Agent", "C# console program");
                 client.DefaultRequestHeaders.Add("Accept", "*/*");
                 client.DefaultRequestHeaders.Add("Connection", "keep-alive");
                 client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
