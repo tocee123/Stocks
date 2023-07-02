@@ -135,7 +135,7 @@ namespace WebDownloading.Test
 
             var result = await target.GetMonthlyBestStocksByYear(thisYear);
 
-            var yield = stock.DividendHistories.Sum(dh => dh.Amount);
+            var yield = stock.DividendHistories.Sum(dh => dh.Amount) / stock.Price;
 
             result.First().Yield.Should().Be(yield);
         }
