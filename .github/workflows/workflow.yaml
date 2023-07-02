@@ -13,11 +13,11 @@ jobs:
         dotnet: [ '7.0.x' ]
     name: Dotnet build ${{ matrix.dotnet }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK  ${{ matrix.dotnet }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet }}
+      #- uses: actions/checkout@v3
+      #- name: Setup .NET Core SDK  ${{ matrix.dotnet }}
+      #  uses: actions/setup-dotnet@v3
+      #  with:
+      #    dotnet-version: ${{ matrix.dotnet }}
       - name: Install dependencies
         run: echo "Install dependencies"
         #run: dotnet restore $sourceFileLocation
@@ -44,7 +44,7 @@ jobs:
       - name: Set env.BRANCH
         run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
       - name: Is main?
-        run: echo env.BRANCH
+        run: echo BRANCH
       - name: Deploy
         uses: azure/webapps-deploy@v2
         with:
