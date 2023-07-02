@@ -13,23 +13,19 @@ jobs:
         dotnet: [ '7.0.x' ]
     name: Dotnet build ${{ matrix.dotnet }}
     steps:
-      #- uses: actions/checkout@v3
-      #- name: Setup .NET Core SDK  ${{ matrix.dotnet }}
-      #  uses: actions/setup-dotnet@v3
-      #  with:
-      #    dotnet-version: ${{ matrix.dotnet }}
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK  ${{ matrix.dotnet }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
       - name: Install dependencies
-        run: echo "Install dependencies"
-        #run: dotnet restore $sourceFileLocation
+        run: dotnet restore $sourceFileLocation
       - name: Build
-        run: echo "Build"
-        #run: dotnet build --configuration Release --no-restore $sourceFileLocation
+        run: dotnet build --configuration Release --no-restore $sourceFileLocation
       - name: test
-        run: echo "test"
-        #run: dotnet test --no-restore --verbosity normal $sourcefilelocation
+        run: dotnet test --no-restore --verbosity normal $sourcefilelocation
       - name: test with dotnet
-        run: echo "test"
-        #run: dotnet test --logger trx --results-directory "testresults- ${{ matrix.dotnet }}" $sourcefilelocation
+        run: dotnet test --logger trx --results-directory "testresults-${{ matrix.dotnet }}" $sourcefilelocation
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
@@ -42,10 +38,7 @@ jobs:
     name: Deploy to Azure
     if: github.ref == 'refs/heads/master'
     steps:
-      - name: Write out something
-        run: echo "Something"
       - name: Deploy
         uses: azure/webapps-deploy@v2
         with:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        if: env.BRANCH == 'main'
