@@ -21,13 +21,6 @@ jobs:
         run: dotnet restore $sourceFileLocation
       - name: Build
         run: dotnet build --configuration Release --no-restore $sourceFileLocation
-  tests:
-    needs: build
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        dotnet-version: [ '7.0.x' ]
-    steps:
       - name: Test
         run: dotnet test --no-restore --verbosity normal $sourceFileLocation
       - name: Test with dotnet
@@ -39,7 +32,7 @@ jobs:
           path: TestResults-${{ matrix.dotnet-version }}
         if: ${{ always() }}
   deploy:
-    needs: [build, tests]
+    needs: build
     runs-on: windows-latest
     steps:
       - name: Deploy to Azure
