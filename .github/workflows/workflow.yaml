@@ -40,11 +40,10 @@ jobs:
     needs: build
     runs-on: windows-latest
     name: Deploy to Azure
+    if: github.ref == 'refs/heads/11-change-source-from-ycharts-to-nasdaq'
     steps:
-      - name: Set env.BRANCH
-        run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
-      - name: Is main?
-        run: echo BRANCH
+      - name: Write out something
+        run: echo "Something"
       - name: Deploy
         uses: azure/webapps-deploy@v2
         with:
