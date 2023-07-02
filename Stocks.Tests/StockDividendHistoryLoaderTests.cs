@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Net;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using System.IO;
 
 namespace Stocks.Test
@@ -87,6 +86,7 @@ namespace Stocks.Test
             Assert.IsNotNull(fileContent);
             var stock = new StockDividend();
             StockDividendHistoryLoader.FillProperties(stock, ticker, fileContent);
+            Assert.AreNotEqual(0.0, stock.Price);
         }
     }
 }
