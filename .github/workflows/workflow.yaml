@@ -4,9 +4,10 @@ on: [push]
 
 env:
   sourceFileLocation: Stocks.sln
-  dotnetVersion: 7.0.x
-
+  
 jobs:
+  env:
+    dotnetVersion: 7.0.x
   build:
     runs-on: windows-latest
     steps:
