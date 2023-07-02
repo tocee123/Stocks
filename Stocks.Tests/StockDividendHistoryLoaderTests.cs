@@ -1,9 +1,4 @@
-﻿using System.IO.Compression;
-using System.IO;
-using System.Net.Http;
-using System.Reflection.Metadata;
-using System.Text;
-using RestSharp;
+﻿using System.Net.Http;
 using System.Net;
 
 namespace Stocks.Test
