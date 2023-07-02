@@ -9,14 +9,15 @@ jobs:
   build:
     runs-on: windows-latest
     strategy:
-      dotnet: '7.0.x'
-    name: Dotnet build $dotnet
+      matrix:
+        dotnet: [ '7.0.x' ]
+    name: Dotnet build ${{ matrix.dotnet }}
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK  $dotnet
+      - name: Setup .NET Core SDK  ${{ matrix.dotnet }}
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version:  $dotnet
+          dotnet-version: ${{ matrix.dotnet }}
       - name: Install dependencies
         run: dotnet restore $sourceFileLocation
       - name: Build
