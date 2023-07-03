@@ -1,0 +1,28 @@
+﻿@page "/dividendEventDisplay"
+
+@if (_week != null)
+{
+    foreach (var day in _week)
+    {
+        <div class="card">
+            <div class="header">
+                <h1>1</h1>
+            </div>
+            <div class="container">
+                <p>@day.ToShortDateString()</p>
+            </div>
+        </div>
+    }    
+}
+
+
+
+@code {
+    IEnumerable<DateTime> _week;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var today = DateTime.Today;
+        _week = Enumerable.Range(0, 7).Select(i => today.AddDays(i));
+    }
+}
