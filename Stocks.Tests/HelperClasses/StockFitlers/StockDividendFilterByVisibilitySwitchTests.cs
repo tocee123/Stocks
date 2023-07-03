@@ -1,6 +1,5 @@
 ﻿using Stocks.Web.HelperClasses.StockFitlers;
-using Stocks.Web.Pages;
-
+using WebPagesCommon = Stocks.Web.Pages.Common;
 namespace Stocks.Test.HelperClasses.StockFitlers
 {
     [TestFixture]
@@ -26,7 +25,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void Filter_WhenTheDateIsBetweenTheRange_ReturnsTrue(int daysToAdd, bool expected)
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
-            var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToUpcoming);
+            var target = new StockDividendFilterByVisibilitySwitch(WebPagesCommon.SwitchToUpcoming);
 
             var result = target.Filter(sd);
 
@@ -67,7 +66,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void Filter_WhenRatioisBetweenThreshold_ReturnTrue(double price, double amount, bool expected)
         {
             var sd = CerateStockDividendWithPriceAndAmount(price, amount);
-            var target = new StockDividendFilterByVisibilitySwitch(Common.SwitchToGraterThan1);
+            var target = new StockDividendFilterByVisibilitySwitch(WebPagesCommon.SwitchToGraterThan1);
 
             var result = target.Filter(sd);
 
@@ -98,7 +97,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void Filter_WhenHasSpecial_ReturnTrue(bool isSpecial, bool expected)
         {
             var sd = CerateStockDividendSpecial(isSpecial);
-            var target = new StockDividendFilterByVisibilitySwitch(Common.HasSpecial);
+            var target = new StockDividendFilterByVisibilitySwitch(WebPagesCommon.HasSpecial);
 
             var result = target.Filter(sd);
 
