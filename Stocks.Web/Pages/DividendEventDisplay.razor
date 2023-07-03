@@ -2,9 +2,9 @@
 
 <h1>@DateTime.Today.ToString("y")</h1>
 
-@if (_week != null)
+@if (_month != null)
 {
-    foreach (var day in _week)
+    foreach (var day in _month)
     {
         <div class="@GetClassForCard(day)">
             <div class="@GetClassForHeader(day)">
@@ -21,7 +21,7 @@
 
 @code {
 
-    IEnumerable<DateTime> _week;
+    IEnumerable<DateTime> _month;
 
     private static IEnumerable<DayOfWeek> _weekend = new[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
 
@@ -37,6 +37,6 @@
     protected override async Task OnInitializedAsync()
     {
         var today = DateTime.Today;
-        _week = Enumerable.Range(0, 7).Select(i => today.AddDays(i));
+        _month = Enumerable.Range(0, DateTime.DaysInMonth(today.Year,today.Month)).Select(i => today.AddDays(i));
     }
 }
