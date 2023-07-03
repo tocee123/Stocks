@@ -1,7 +1,8 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 #header {
-    padding-left:20px;
+    padding: 10px;
+    margin-bottom: 10px;
     width: 270px;
     position: sticky;
     top: 0;
