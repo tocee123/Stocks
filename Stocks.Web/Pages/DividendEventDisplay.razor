@@ -30,6 +30,7 @@
 
     private static string GetClassForHeader(DateTime date) => date switch
     {
+        { } when date == DateTime.Today => "headerToday",
         { } when date.Month != CurrentMonth => "headerOtherMonth",
         { } when IsWeekend(date) => "headerWeekend",
         _ => "header",
