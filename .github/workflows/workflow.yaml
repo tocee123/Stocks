@@ -1,18 +1,13 @@
-name: Prepare branch
+name: Run tests
 
 on:
   push:
     branches:
-      - '*'
-      - '!main'
-  pull_request:
-    branches:
-      - '*'
       - '!main'
 
 env:
-    DOTNET_VERSION: '7.0.x'
-    SOURCE_FILE_LOCATION: Stocks.sln
+  DOTNET_VERSION: '7.0.x'
+  SOURCE_FILE_LOCATION: Stocks.sln
 
 jobs:
   build:
