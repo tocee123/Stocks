@@ -15,6 +15,6 @@ public class DividendDisplayTests
 
         var result = target.GenerateMonth();
         result.Should().NotBeNullOrEmpty();
-        result.Count().Should().BeGreaterThanOrEqualTo(DateTime.DaysInMonth(today.Year, today.Month));
+        result.Sum(x=>x.Count()).Should().BeGreaterThanOrEqualTo(DateTime.DaysInMonth(today.Year, today.Month));
     }
 }

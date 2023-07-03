@@ -1,12 +1,14 @@
 ﻿namespace Stocks.Core.DividendDisplay;
 public class CalendarGenerator : ICalendarGenerator
 {
-    IDateProvider _dateTimeProvider;
+    readonly IDateProvider _dateTimeProvider;
 
     public CalendarGenerator(IDateProvider dateTimeProvider)
     {
         _dateTimeProvider = dateTimeProvider;
     }
+
+    public DateTime Today => _dateTimeProvider.GetToday();
 
     public IEnumerable<IEnumerable<DisplayDay>> GenerateMonth()
     {
@@ -27,8 +29,23 @@ public class CalendarGenerator : ICalendarGenerator
 
         var mondays = wholeMonth.Where(d => d.DayOfWeek == startDay);
 
-        var month = mondays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i)));
+        var month = mondays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i))
+        .Select(d => new DisplayDay(d.Day, GetDisplayDateOfWeek(d), GetClassForCard(d), GetClassForHeader(d))));
 
         return month;
     }
+
+    private static string GetDisplayDateOfWeek(DateTime day)
+        => day.DayOfWeek.ToString()[..3];
+
+    private string GetClassForHeader(DateTime date) => date switch
+    {
+        { } when date == _dateTimeProvider.GetToday() => "headerToday",
+        { } when date.Month != _dateTimeProvider.GetToday().Month => "headerOtherMonth",
+        { } when _dateTimeProvider.IsWeekend(date) => "headerWeekend",
+        _ => "header",
+    };
+
+    private string GetClassForCard(DateTime date)
+    => _dateTimeProvider.IsWeekend(date) ? "cardWeekend" : "card";
 }

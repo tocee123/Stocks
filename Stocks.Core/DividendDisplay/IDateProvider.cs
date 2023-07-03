@@ -3,5 +3,6 @@
     public interface IDateProvider
     {
         DateTime GetToday();
+        bool IsWeekend(DateTime date);
     }
 }
