@@ -33,6 +33,12 @@ jobs:
           name: dotnet-results-${{ env.DOTNET_VERSION }}
           path: TestResults-${{ env.DOTNET_VERSION }}
         if: ${{ always() }}
+      - name: Dotnet build and publish
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         if: github.ref == 'refs/heads/main'
         uses: azure/webapps-deploy@v2
