@@ -2,6 +2,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - '*'
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
@@ -15,13 +18,27 @@ jobs:
 
     steps:
       - name: Check out branch
-        uses: actions/checkout@main
-      
+        uses: actions/checkout@main      
       - name: Setup .NET Core ${{ env.DOTNET_VERSION }} 
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }} 
-      
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal $sourcefilelocation
+      - name: Logging tests
+        run: dotnet test --logger trx --results-directory "testresults-${{ env.DOTNET_VERSION }}" $SOURCE_FILE_LOCATION
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-results-${{ env.DOTNET_VERSION }}
+          path: TestResults-${{ env.DOTNET_VERSION }}
+        if: ${{ always() }}
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    name: Deploy to Azure
+    if: github.ref == 'refs/heads/main'
+    steps:
       - name: Dotnet build and publish
         run: |
           dotnet restore
