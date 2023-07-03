@@ -1,4 +1,8 @@
 ﻿namespace Stocks.Core.DividendDisplay;
-internal class CalendarGenerator
+public class CalendarGenerator
 {
+    public IEnumerable<IEnumerable<DisplayDay>> GenerateMonth()
+    {
+        return null;
+    }
 }
