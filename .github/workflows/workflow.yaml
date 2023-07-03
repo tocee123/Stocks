@@ -1,6 +1,10 @@
 name: Run tests
 
-on: [push]
+on:
+  push:
+    branches:
+      - '!main'
+      - '*'
 
 env:
   DOTNET_VERSION: '7.0.x'
