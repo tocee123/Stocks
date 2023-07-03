@@ -3,7 +3,8 @@
 
 @inject ICalendarGenerator CalendarGenerator
 <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
-
+<h5><span class="exDate"></span> Ex dividend</h5>
+<h5><span class="payDate"></span> Pay date</h5>
 @if (_month != null)
 {
     <table width="100%">        
@@ -21,6 +22,7 @@
                         @foreach (var item in day.DisplayDividendHistories)
                         {
                             <tr>
+                                <td><span class="@item.Css"></span></td>
                                 <td><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
                                 <td>@item.Amount.ToDollarDisplay()</td>
                             </tr>
