@@ -1,5 +1,8 @@
 name: Deploy to Azure
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
@@ -30,7 +33,6 @@ jobs:
           path: TestResults-${{ env.DOTNET_VERSION }}
         if: ${{ always() }}
   deploy:
-    if: github.ref == 'refs/heads/main'
     needs: build
     name: Deploy to Azure
     runs-on: windows-latest
