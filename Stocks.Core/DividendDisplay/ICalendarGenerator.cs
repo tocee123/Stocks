@@ -2,7 +2,7 @@
 {
     public interface ICalendarGenerator
     {
-        IEnumerable<IEnumerable<DisplayDay>> GenerateMonth();
+        Task<IEnumerable<IEnumerable<DisplayDay>>> GenerateMonthAsync();
         DateTime Today { get; }
     }
 }

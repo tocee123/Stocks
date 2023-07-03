@@ -1,7 +1,10 @@
-﻿namespace Stocks.Core.DividendDisplay;
+﻿using Stocks.Core.Repositories;
+
+namespace Stocks.Core.DividendDisplay;
 public class CalendarGenerator : ICalendarGenerator
 {
     readonly IDateProvider _dateTimeProvider;
+    readonly IStocksRepository _stocksRepository;
 
     public CalendarGenerator(IDateProvider dateTimeProvider)
     {
@@ -10,7 +13,7 @@ public class CalendarGenerator : ICalendarGenerator
 
     public DateTime Today => _dateTimeProvider.GetToday();
 
-    public IEnumerable<IEnumerable<DisplayDay>> GenerateMonth()
+    public async Task<IEnumerable<IEnumerable<DisplayDay>>> GenerateMonthAsync()
     {
         var today = _dateTimeProvider.GetToday();
 
@@ -25,7 +28,13 @@ public class CalendarGenerator : ICalendarGenerator
             dayAdjustment = (int)displayCalendarsFirstMonday.DayOfWeek;
             displayCalendarsFirstMonday = displayCalendarsFirstMonday.AddDays(-dayAdjustment);
         }
+
         var wholeMonth = Enumerable.Range(0, DateTime.DaysInMonth(monthsFirstDay.Year, monthsFirstDay.Month) + dayAdjustment).Select(i => displayCalendarsFirstMonday.AddDays(i));
+
+        var stockDividends = await _stocksRepository.GetStocksAsync();
+
+        var dividendHistories = stockDividends.SelectMany(sd => sd.DividendHistories, (sd, dh) => new { sd.Ticker, DividendHistory = dh })
+            .Where(x => IsDvividendHistoryInCurrentMonth(x.DividendHistory));
 
         var mondays = wholeMonth.Where(d => d.DayOfWeek == startDay);
 
@@ -34,6 +43,12 @@ public class CalendarGenerator : ICalendarGenerator
 
         return month;
     }
+
+    private bool IsDvividendHistoryInCurrentMonth(DividendHistory dividendHistory)
+        => dividendHistory.ExDate >= _dateTimeProvider.GetFirstDayOfCurrentMonth()
+        || dividendHistory.ExDate <= _dateTimeProvider.GetLastDayOfCurrentMonth()
+        || dividendHistory.PayDate >= _dateTimeProvider.GetFirstDayOfCurrentMonth()
+        || dividendHistory.PayDate <= _dateTimeProvider.GetLastDayOfCurrentMonth();
 
     private static string GetDisplayDateOfWeek(DateTime day)
         => day.DayOfWeek.ToString()[..3];

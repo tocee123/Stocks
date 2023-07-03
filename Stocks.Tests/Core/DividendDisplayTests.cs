@@ -13,7 +13,7 @@ public class DividendDisplayTests
 
         dateProvider.GetToday().Returns(today);
 
-        var result = target.GenerateMonth();
+        var result = target.GenerateMonthAsync();
         result.Should().NotBeNullOrEmpty();
         result.Sum(x=>x.Count()).Should().BeGreaterThanOrEqualTo(DateTime.DaysInMonth(today.Year, today.Month));
     }
