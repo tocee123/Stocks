@@ -34,7 +34,9 @@ namespace Stocks.Web.Pages
         };
 
         public static string ToPercentageDisplay(this double value)
-       => $"{value:0.00%}";
+        => $"{value:0.00%}";
+        public static string ToDollarDisplay(this double value)
+        => $"${value:0.00}";
 
         public static string ToYyyyMmDd(this DateTime dt)
             => dt.ToString("yyyy-MM-dd");

@@ -113,16 +113,12 @@ namespace WebDownloading.Test
             var target = new DividendByMonthCollectionPreparer(stockRepository);
 
             var thisYear = DateTime.Today.Year;
-            var fixture = new Fixture();
-            fixture.Customizations.Add(new RandomDateTimeSequenceGenerator(
-                minDate: new DateTime(thisYear,1,1),
-                maxDate: new DateTime(thisYear+1, 1, 1).AddDays(-1)
-                ));
+            var fixture = new Fixture().SetupFixtureToGenerateDateInCurrentYear();
 
             //fixture.Build<DividendHistory>().With(dh=>dh)
             var stock = fixture.Create<StockDividend>();
 
-            stockRepository.GetStocksAsync().Returns(new[] {stock});
+            stockRepository.GetStocksAsync().Returns(new[] { stock });
 
             var result = await target.GetMonthlyBestStocksByYear(thisYear);
 

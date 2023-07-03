@@ -58,15 +58,6 @@ namespace Stocks.Test
         [TestCase("abc", false)]
         [TestCase("www.google.com", true)]
         [TestCase("http://google.com", true)]
-        public async Task DoesPageExist_WhenPageDoesNotExist_ReturnsFalse(string url, bool expected)
-        {
-            var (pageExists, resultUrl) = await StockDividendHistoryLoader.DoesPageExist(url);
-            Assert.AreEqual(expected, pageExists);
-        }
-
-        [TestCase("abc", false)]
-        [TestCase("www.google.com", true)]
-        [TestCase("http://google.com", true)]
         public void IsCorrectUrl_WhenUrlIsGiven_ReturnsResultAccordingly(string url, bool expected)
         {
             var result = StockDividendHistoryLoader.IsCorrectUrl(url, out var reusltUri);

@@ -1,5 +1,74 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+#header {
+    padding-left:20px;
+    width: 270px;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    background-color: white;
+    background: rgba(255,255,255,0.75);
+    border-radius: 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.exDate, .payDate {
+    vertical-align: middle;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: #91d2ff;
+}
+
+.payDate {
+    background-color: #0fb122;
+}
+
+h1.header {
+    font-family: Georgia;
+    font-weight: 800;
+}
+
+div.card, div.cardWeekend {
+    height: 500px;
+    width: 15%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+    overflow: hidden;
+    float: left; /* add this */
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border-radius: 25px;
+}
+
+div.cardWeekend {
+   height: 245px;
+}
+
+div.header, div.headerWeekend, div.headerOtherMonth, div.headerToday {
+    background-color: #29a32d;
+    color: white;
+    padding: 10px;
+    font-size: 2.5rem;
+}
+
+div.headerWeekend {
+    background-color: #a6d8a8;
+}
+
+div.headerOtherMonth {
+    background-color: #bababa;
+}
+
+div.headerToday {
+    background-color: #0098b0;
+}
+
+div.container {
+    padding: 20px;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
