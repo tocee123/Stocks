@@ -43,7 +43,7 @@ public class CalendarGenerator : ICalendarGenerator
         var mondays = wholeMonth.Where(d => d.DayOfWeek == startDay);
 
         var month = mondays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i))
-        .Select(d => new DisplayDay(d.Day, GetDisplayDateOfWeek(d), GetClassForCard(d), GetClassForHeader(d), dividendHistories.GetValueOrDefault(d))));
+        .Select(d => new DisplayDay(d.Day, GetDisplayDateOfWeek(d), GetClassForCard(d), GetClassForHeader(d), dividendHistories.GetValueOrDefault(d, new List<DisplayDividendHistory>()))));
 
         return month;
     }

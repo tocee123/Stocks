@@ -17,6 +17,15 @@
                         <h4>@day.DayOfWeek</h4><p>@day.Day</p>
                     </div>
                     <div class="container">
+                        <table class="table table-accordion" style="width:100%">
+                        @foreach (var item in day.DisplayDividendHistories)
+                        {
+                                <tr>
+                                <td>@item.Ticker</td>
+                                <td>@item.Amount.ToDollarDisplay()</td>
+                                </tr>
+                        }
+                        </table>
                     </div>
                 </div>
             }
