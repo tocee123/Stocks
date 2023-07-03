@@ -1,5 +1,5 @@
 ﻿using Stocks.Web.HelperClasses.StockFitlers;
-using Stocks.Web.Pages;
+using WebPagesCommon = Stocks.Web.Pages.Common;
 
 namespace Stocks.Test.HelperClasses.StockFitlers
 {
@@ -9,7 +9,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void IsUpcoming_When(int daysToAdd, bool expected)
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
-            var target = new StockDividendTableStockFilter("", Common.SwitchToUpcoming, 0);
+            var target = new StockDividendTableStockFilter("", WebPagesCommon.SwitchToUpcoming, 0);
 
             var result = target.ShouldDisplay(sd);
             Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
@@ -41,7 +41,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void IsRatioGraterThan1_When(double price, double amount, bool expected)
         {
             var sd = CerateStockDividendWithPriceAndAmount(price, amount);
-            var target = new StockDividendTableStockFilter("", Common.SwitchToGraterThan1, 0);
+            var target = new StockDividendTableStockFilter("", WebPagesCommon.SwitchToGraterThan1, 0);
 
             var result = target.ShouldDisplay(sd);
             Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");

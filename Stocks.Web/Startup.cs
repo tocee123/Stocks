@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Stocks.Core.Cache;
+using Stocks.Core.DividendDisplay;
 using Stocks.Core.Excel;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
@@ -36,6 +37,8 @@ namespace Stocks.Web
             services.AddTransient<IStockExcelWriter, StockExcelWriter>();
             services.AddTransient<IExcelSaver, ExcelSaver>();
             services.AddTransient<IDividendByMonthCollectionPreparer, DividendByMonthCollectionPreparer>();
+            services.AddTransient<ICalendarGenerator, CalendarGenerator>();
+            services.AddTransient<IDateProvider, DateProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
