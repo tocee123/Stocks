@@ -4,9 +4,8 @@ on:
       - main
 
 env:
-  AZURE_WEBAPP_NAME: StockDividend    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '7.0.x'           # set this to the dot net version to use
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: '7.0.x'
   SOURCE_FILE_LOCATION: Stocks.sln
 
 jobs:
@@ -32,6 +31,5 @@ jobs:
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v2
         with: 
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} 
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
