@@ -2,7 +2,7 @@
 @using Stocks.Core.DividendDisplay;
 
 @inject ICalendarGenerator CalendarGenerator
-<h1>@CalendarGenerator.Today.ToString("y")</h1>
+<h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
 
 @if (_month != null)
 {
