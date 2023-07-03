@@ -44,6 +44,13 @@ public class CalendarGenerator : ICalendarGenerator
         return month;
     }
 
+    private string GetCss(DividendHistory dividendHistory, DateTime day)
+    => day switch
+    {
+        { } when dividendHistory.ExDate == day => "exDate",
+        { } when dividendHistory.PayDate == day => "payDate",
+    };
+
     private bool IsDvividendHistoryInCurrentMonth(DividendHistory dividendHistory)
         => dividendHistory.ExDate >= _dateTimeProvider.GetFirstDayOfCurrentMonth()
         || dividendHistory.ExDate <= _dateTimeProvider.GetLastDayOfCurrentMonth()
