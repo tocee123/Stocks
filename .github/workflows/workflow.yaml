@@ -7,32 +7,30 @@ on:
       - '!main'
 
 env:
-  sourceFileLocation: Stocks.sln
+    DOTNET_VERSION: '7.0.x'
+    SOURCE_FILE_LOCATION: Stocks.sln
 
 jobs:
   build:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        dotnet: [ '7.0.x' ]
-    name: Dotnet build ${{ matrix.dotnet }}
+    name: Dotnet build ${{ env.DOTNET_VERSION }}
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK  ${{ matrix.dotnet }}
+      - name: Setup .NET Core SDK ${{ env.DOTNET_VERSION }}
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Install dependencies
-        run: dotnet restore $sourceFileLocation
+        run: dotnet restore $SOURCE_FILE_LOCATION
       - name: Build
-        run: dotnet build --configuration Release --no-restore $sourceFileLocation
+        run: dotnet build --configuration Release --no-restore $SOURCE_FILE_LOCATION
       - name: test
         run: dotnet test --no-restore --verbosity normal $sourcefilelocation
       - name: test with dotnet
-        run: dotnet test --logger trx --results-directory "testresults-${{ matrix.dotnet }}" $sourcefilelocation
+        run: dotnet test --logger trx --results-directory "testresults-${{ matrix.dotnet }}" $SOURCE_FILE_LOCATION
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
-          name: dotnet-results- ${{ matrix.dotnet }}
-          path: TestResults- ${{ matrix.dotnet }}
+          name: dotnet-results-${{ env.DOTNET_VERSION }}
+          path: TestResults-${{ env.DOTNET_VERSION }}
         if: ${{ always() }}
