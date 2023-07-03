@@ -45,10 +45,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var firstDay = new DateTime(DateTime.Today.Year,DateTime.Today.Month, 1);
-        var wholeMonth = Enumerable.Range(0, DateTime.DaysInMonth(firstDay.Year,firstDay.Month)).Select(i => firstDay.AddDays(i));
+        var startDay = DayOfWeek.Monday;
+        var dayAdjustment = 0;
 
-        var mondays = wholeMonth.Where(d => d.DayOfWeek == DayOfWeek.Monday);
+        var monthsFirstDay = new DateTime(DateTime.Today.Year,DateTime.Today.Month, 1);
+        var displayCalendarsFirstMonday = monthsFirstDay;
+
+        if (displayCalendarsFirstMonday.DayOfWeek != startDay)
+        {
+            dayAdjustment = (int)displayCalendarsFirstMonday.DayOfWeek;
+            displayCalendarsFirstMonday = displayCalendarsFirstMonday.AddDays(-dayAdjustment);
+        }
+        var wholeMonth = Enumerable.Range(0, DateTime.DaysInMonth(monthsFirstDay.Year, monthsFirstDay.Month) + dayAdjustment).Select(i => displayCalendarsFirstMonday.AddDays(i));
+
+        var mondays = wholeMonth.Where(d => d.DayOfWeek == startDay);
 
         _month = mondays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i)));
     }
