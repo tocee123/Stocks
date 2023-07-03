@@ -20,10 +20,10 @@
                         <table class="table table-accordion" style="width:100%">
                         @foreach (var item in day.DisplayDividendHistories)
                         {
-                                <tr>
-                                <td>@item.Ticker</td>
+                            <tr>
+                                <td><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
                                 <td>@item.Amount.ToDollarDisplay()</td>
-                                </tr>
+                            </tr>
                         }
                         </table>
                     </div>
