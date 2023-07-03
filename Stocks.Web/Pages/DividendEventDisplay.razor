@@ -4,24 +4,26 @@
 
 @if (_month != null)
 {
-    foreach (var day in _month)
+    foreach (var week in _month)
     {
-        <div class="@GetClassForCard(day)">
-            <div class="@GetClassForHeader(day)">
-                <h4>@day.DayOfWeek.ToString().Substring(0,3)</h4><p>@day.Day</p>
+        foreach (var day in week)
+        {
+            <div class="@GetClassForCard(day)">
+                <div class="@GetClassForHeader(day)">
+                    <h4>@day.DayOfWeek.ToString().Substring(0,3)</h4><p>@day.Day</p>
+                </div>
+                <div class="container">
+                </div>
             </div>
-            <div class="container">
-                
-            </div>
-        </div>
-    }    
+        }
+        <br/>
+    }      
 }
 
-
-
 @code {
+    int CurrentMonth = DateTime.Today.Month;
 
-    IEnumerable<DateTime> _month;
+    IEnumerable<IEnumerable<DateTime>> _month;
 
     private static IEnumerable<DayOfWeek> _weekend = new[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
 
@@ -36,7 +38,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var today = DateTime.Today;
-        _month = Enumerable.Range(0, DateTime.DaysInMonth(today.Year,today.Month)).Select(i => today.AddDays(i));
+        var firstDay = new DateTime(DateTime.Today.Year,DateTime.Today.Month, 1);
+        var wholeMonth = Enumerable.Range(0, DateTime.DaysInMonth(firstDay.Year,firstDay.Month)).Select(i => firstDay.AddDays(i));
+
+        var mondays = wholeMonth.Where(d => d.DayOfWeek == DayOfWeek.Monday);
+
+        _month = mondays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i)));
     }
 }
