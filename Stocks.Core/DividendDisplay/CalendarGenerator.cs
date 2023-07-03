@@ -6,9 +6,10 @@ public class CalendarGenerator : ICalendarGenerator
     readonly IDateProvider _dateTimeProvider;
     readonly IStocksRepository _stocksRepository;
 
-    public CalendarGenerator(IDateProvider dateTimeProvider)
+    public CalendarGenerator(IDateProvider dateTimeProvider, IStocksRepository stocksRepository)
     {
         _dateTimeProvider = dateTimeProvider;
+        _stocksRepository = stocksRepository;
     }
 
     public DateTime Today => _dateTimeProvider.GetToday();
@@ -34,22 +35,18 @@ public class CalendarGenerator : ICalendarGenerator
         var stockDividends = await _stocksRepository.GetStocksAsync();
 
         var dividendHistories = stockDividends.SelectMany(sd => sd.DividendHistories, (sd, dh) => new { sd.Ticker, DividendHistory = dh })
-            .Where(x => IsDvividendHistoryInCurrentMonth(x.DividendHistory));
+            .Where(x => IsDvividendHistoryInCurrentMonth(x.DividendHistory))
+            .SelectMany(x => DisplayDividendHistory.ToDisplayDividendHistories(x.Ticker, x.DividendHistory))
+            .GroupBy(x => x.Date)
+            .ToDictionary(x => x.Key, x => x.ToList());
 
         var mondays = wholeMonth.Where(d => d.DayOfWeek == startDay);
 
         var month = mondays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i))
-        .Select(d => new DisplayDay(d.Day, GetDisplayDateOfWeek(d), GetClassForCard(d), GetClassForHeader(d))));
+        .Select(d => new DisplayDay(d.Day, GetDisplayDateOfWeek(d), GetClassForCard(d), GetClassForHeader(d), dividendHistories.GetValueOrDefault(d))));
 
         return month;
     }
-
-    private string GetCss(DividendHistory dividendHistory, DateTime day)
-    => day switch
-    {
-        { } when dividendHistory.ExDate == day => "exDate",
-        { } when dividendHistory.PayDate == day => "payDate",
-    };
 
     private bool IsDvividendHistoryInCurrentMonth(DividendHistory dividendHistory)
         => dividendHistory.ExDate >= _dateTimeProvider.GetFirstDayOfCurrentMonth()
