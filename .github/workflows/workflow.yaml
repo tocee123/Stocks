@@ -1,4 +1,4 @@
-name: Prepare branch
+name: Run tests
 
 on:
   push:
