@@ -4,37 +4,44 @@
 
 @if (_month != null)
 {
-    foreach (var week in _month)
+    <table width="100%">        
+    @foreach (var week in _month)
     {
-        foreach (var day in week)
-        {
-            <div class="@GetClassForCard(day)">
-                <div class="@GetClassForHeader(day)">
-                    <h4>@day.DayOfWeek.ToString().Substring(0,3)</h4><p>@day.Day</p>
+        <tr>
+            @foreach (var day in week)
+            {
+                <div class="@GetClassForCard(day)">
+                    <div class="@GetClassForHeader(day)">
+                        <h4>@day.DayOfWeek.ToString().Substring(0,3)</h4><p>@day.Day</p>
+                    </div>
+                    <div class="container">
+                    </div>
                 </div>
-                <div class="container">
-                </div>
-            </div>
-        }
-        <br/>
-    }      
+            }
+        </tr>
+    }
+    </table>
 }
 
 @code {
-    int CurrentMonth = DateTime.Today.Month;
+    private static int CurrentMonth = DateTime.Today.Month;
 
     IEnumerable<IEnumerable<DateTime>> _month;
+
+    private static string GetClassForHeader(DateTime date) => date switch
+    {
+        { } when date.Month != CurrentMonth => "headerOtherMonth",
+        { } when IsWeekend(date) => "headerWeekend",
+        _ => "header",
+    };
 
     private static IEnumerable<DayOfWeek> _weekend = new[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
 
     private static bool IsWeekend(DateTime date)
     => _weekend.Contains(date.DayOfWeek);
 
-    private string GetClassForCard(DateTime date)
+    private static string GetClassForCard(DateTime date)
     => IsWeekend(date) ? "cardWeekend" : "card";
-
-    private string GetClassForHeader(DateTime date)
-    => IsWeekend(date) ? "headerWeekend" : "header";
 
     protected override async Task OnInitializedAsync()
     {

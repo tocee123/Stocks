@@ -14,7 +14,7 @@ div.cardWeekend {
     width: 7%;
 }
 
-div.header, div.headerWeekend {
+div.header, div.headerWeekend, div.headerOtherMonth {
     background-color: #4CAF50;
     color: white;
     padding: 10px;
@@ -23,6 +23,10 @@ div.header, div.headerWeekend {
 
 div.headerWeekend {
     background-color: #a6d8a8;
+}
+
+div.headerOtherMonth {
+    background-color: #bababa;
 }
 
 div.container {
