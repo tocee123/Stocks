@@ -3,7 +3,7 @@ name: .NET Core CI
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   AZURE_WEBAPP_NAME: StockDividend    # set this to your application's name
