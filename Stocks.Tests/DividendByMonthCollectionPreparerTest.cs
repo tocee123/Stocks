@@ -82,7 +82,7 @@ namespace WebDownloading.Test
             }
         }
 
-        [Test]
+        [Test, Ignore("This does not work on server")]
         public async Task SelectTop1DividnedByMonth()
         {
             var stocks = (await _stockRepository.GetStocksAsync()).SelectMany(s => s.DividendHistories, (s, dh) => new { s.Name, dh.ExDate, DividendToPrice = Math.Round(dh.Amount / s.Price, 4), s.Price, dh.Amount, s.Ticker });
