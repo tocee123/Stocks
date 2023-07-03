@@ -1,10 +1,12 @@
 ﻿using Stocks.Core.Repositories;
+using System.Data.SqlTypes;
 
 namespace Stocks.Core.DividendDisplay;
 public class CalendarGenerator : ICalendarGenerator
 {
     readonly IDateProvider _dateTimeProvider;
     readonly IStocksRepository _stocksRepository;
+    readonly DayOfWeek _startDay = DayOfWeek.Monday;
 
     public CalendarGenerator(IDateProvider dateTimeProvider, IStocksRepository stocksRepository)
     {
@@ -16,36 +18,49 @@ public class CalendarGenerator : ICalendarGenerator
 
     public async Task<IEnumerable<IEnumerable<DisplayDay>>> GenerateMonthAsync()
     {
-        var today = _dateTimeProvider.GetToday();
+        var dividendHistories = await GetDividendHistoriesByDays();
+        var weeksFirstDays = GetFirstdayOfTheWeekForTheCurrentMonth();
+        var weeks = GenerateWeeks(weeksFirstDays, dividendHistories);
 
-        var startDay = DayOfWeek.Monday;
-        var dayAdjustment = 0;
+        return weeks;
+    }
 
-        var monthsFirstDay = new DateTime(today.Year, today.Month, 1);
-        var displayCalendarsFirstMonday = monthsFirstDay;
+    private IEnumerable<IEnumerable<DisplayDay>> GenerateWeeks(IEnumerable<DateTime> weeksFirstDays, Dictionary<DateTime, List<DisplayDividendHistory>> dividendHistories)
+    => weeksFirstDays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i))
+        .Select(d => DisplayDay.ToDisplayDay(_dateTimeProvider, d, dividendHistories)));
 
-        if (displayCalendarsFirstMonday.DayOfWeek != startDay)
-        {
-            dayAdjustment = (int)displayCalendarsFirstMonday.DayOfWeek;
-            displayCalendarsFirstMonday = displayCalendarsFirstMonday.AddDays(-dayAdjustment);
-        }
-
-        var wholeMonth = Enumerable.Range(0, DateTime.DaysInMonth(monthsFirstDay.Year, monthsFirstDay.Month) + dayAdjustment).Select(i => displayCalendarsFirstMonday.AddDays(i));
-
+    private async Task<Dictionary<DateTime, List<DisplayDividendHistory>>> GetDividendHistoriesByDays()
+    {
         var stockDividends = await _stocksRepository.GetStocksAsync();
 
         var dividendHistories = stockDividends.SelectMany(sd => sd.DividendHistories, (sd, dh) => new { sd.Ticker, DividendHistory = dh })
             .Where(x => IsDvividendHistoryInCurrentMonth(x.DividendHistory))
             .SelectMany(x => DisplayDividendHistory.ToDisplayDividendHistories(x.Ticker, x.DividendHistory))
             .GroupBy(x => x.Date)
-            .ToDictionary(x => x.Key, x => x.ToList());
+            .ToDictionary(x => x.Key, x => x.OrderBy(x=>x.Ticker).ToList());
+        return dividendHistories;
+    }
 
-        var mondays = wholeMonth.Where(d => d.DayOfWeek == startDay);
+    private IEnumerable<DateTime> GetFirstdayOfTheWeekForTheCurrentMonth()
+    {
+        var today = _dateTimeProvider.GetToday();
+        var monthsFirstDay = new DateTime(today.Year, today.Month, 1);
+        var displayCalendarsFirstMonday = GetFirstMonday(monthsFirstDay, out var adjustment);
 
-        var month = mondays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i))
-        .Select(d => new DisplayDay(d.Day, GetDisplayDateOfWeek(d), GetClassForCard(d), GetClassForHeader(d), dividendHistories.GetValueOrDefault(d, new List<DisplayDividendHistory>()))));
+        return Enumerable.Range(0, DateTime.DaysInMonth(monthsFirstDay.Year, monthsFirstDay.Month) + adjustment).Select(i => displayCalendarsFirstMonday.AddDays(i))
+            .Where(d => d.DayOfWeek == _startDay);
+    }
 
-        return month;
+    private DateTime GetFirstMonday(DateTime date, out int adjustment)
+    {
+        adjustment = 0;
+        var displayCalendarsFirstMonday = date;
+        if (date.DayOfWeek != _startDay)
+        {
+            adjustment = (int)date.DayOfWeek;
+            displayCalendarsFirstMonday = displayCalendarsFirstMonday.AddDays(-adjustment);
+        }
+        return displayCalendarsFirstMonday;
     }
 
     private bool IsDvividendHistoryInCurrentMonth(DividendHistory dividendHistory)
@@ -53,18 +68,4 @@ public class CalendarGenerator : ICalendarGenerator
         || dividendHistory.ExDate <= _dateTimeProvider.GetLastDayOfCurrentMonth()
         || dividendHistory.PayDate >= _dateTimeProvider.GetFirstDayOfCurrentMonth()
         || dividendHistory.PayDate <= _dateTimeProvider.GetLastDayOfCurrentMonth();
-
-    private static string GetDisplayDateOfWeek(DateTime day)
-        => day.DayOfWeek.ToString()[..3];
-
-    private string GetClassForHeader(DateTime date) => date switch
-    {
-        { } when date == _dateTimeProvider.GetToday() => "headerToday",
-        { } when date.Month != _dateTimeProvider.GetToday().Month => "headerOtherMonth",
-        { } when _dateTimeProvider.IsWeekend(date) => "headerWeekend",
-        _ => "header",
-    };
-
-    private string GetClassForCard(DateTime date)
-    => _dateTimeProvider.IsWeekend(date) ? "cardWeekend" : "card";
 }
