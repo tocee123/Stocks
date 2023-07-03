@@ -1,5 +1,17 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+#header {
+    padding-left:20px;
+    width: 270px;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    background-color: white;
+    background: rgba(255,255,255,0.75);
+    border-radius: 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .exDate, .payDate {
     vertical-align: middle;
     height: 15px;
@@ -26,7 +38,8 @@ div.card, div.cardWeekend {
     overflow: hidden;
     float: left; /* add this */
     margin-left: 10px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
+    border-radius: 25px;
 }
 
 div.cardWeekend {
