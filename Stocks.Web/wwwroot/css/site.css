@@ -1,6 +1,6 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-div.card {
+div.card, div.cardWeekend {
     width: 15%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     text-align: center;
@@ -9,11 +9,19 @@ div.card {
     margin-left: 10px;
 }
 
-div.header {
+div.cardWeekend {
+    width: 7%;
+}
+
+div.header, div.headerWeekend {
     background-color: #4CAF50;
     color: white;
     padding: 10px;
-    font-size: 40px;
+    font-size: 2.5rem;
+}
+
+div.headerWeekend {
+    background-color: #a6d8a8;
 }
 
 div.container {

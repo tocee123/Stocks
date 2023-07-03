@@ -1,15 +1,17 @@
 ﻿@page "/dividendEventDisplay"
 
+<h1>@DateTime.Today.ToString("y")</h1>
+
 @if (_week != null)
 {
     foreach (var day in _week)
     {
-        <div class="card">
-            <div class="header">
-                <h1>1</h1>
+        <div class="@GetClassForCard(day)">
+            <div class="@GetClassForHeader(day)">
+                <h4>@day.DayOfWeek.ToString().Substring(0,3)</h4><p>@day.Day</p>
             </div>
             <div class="container">
-                <p>@day.ToShortDateString()</p>
+                
             </div>
         </div>
     }    
@@ -18,7 +20,14 @@
 
 
 @code {
+
     IEnumerable<DateTime> _week;
+
+    private string GetClassForCard(DateTime date)
+    => new[] { DayOfWeek.Saturday, DayOfWeek.Sunday }.Contains(date.DayOfWeek) ? "cardWeekend" : "card";
+
+    private string GetClassForHeader(DateTime date)
+    => new[] { DayOfWeek.Saturday, DayOfWeek.Sunday }.Contains(date.DayOfWeek) ? "headerWeekend" : "header";
 
     protected override async Task OnInitializedAsync()
     {
