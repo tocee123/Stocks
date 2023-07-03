@@ -6,8 +6,15 @@ public class DividendDisplayTests
     [Test]
     public void GenerateMonth_GeneratesMonth()
     {
-        var target = new CalendarGenerator();
+        var today = DateTime.Today;
+
+        var dateProvider = Substitute.For<IDateProvider>();
+        var target = new CalendarGenerator(dateProvider);
+
+        dateProvider.GetToday().Returns(today);
+
         var result = target.GenerateMonth();
         result.Should().NotBeNullOrEmpty();
+        result.Count().Should().BeGreaterThanOrEqualTo(DateTime.DaysInMonth(today.Year, today.Month));
     }
 }
