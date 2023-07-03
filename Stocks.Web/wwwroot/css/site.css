@@ -1,9 +1,16 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+h5.float {
+    display: inline;
+    float: left;
+    padding-left: 10px;
+}
+
 #header { 
     padding: 10px;
     margin-bottom: 10px;
     width: 270px;
+    height: 100px;
     position: sticky;
     top: 0;
     z-index: 9;

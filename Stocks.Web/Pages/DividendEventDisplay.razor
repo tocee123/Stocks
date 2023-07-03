@@ -4,8 +4,8 @@
 @inject ICalendarGenerator CalendarGenerator
 <div id="header">
     <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
-    <h5><span class="exDate"></span> Ex dividend</h5>
-    <h5><span class="payDate"></span> Pay date</h5>
+    <h5 class="float"><span class="exDate"></span> Ex dividend</h5>
+    <h5 class="float"><span class="payDate"></span> Pay date</h5>
 </div>
 @if (_month != null)
 {
