@@ -23,11 +23,16 @@
 
     IEnumerable<DateTime> _week;
 
+    private static IEnumerable<DayOfWeek> _weekend = new[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
+
+    private static bool IsWeekend(DateTime date)
+    => _weekend.Contains(date.DayOfWeek);
+
     private string GetClassForCard(DateTime date)
-    => new[] { DayOfWeek.Saturday, DayOfWeek.Sunday }.Contains(date.DayOfWeek) ? "cardWeekend" : "card";
+    => IsWeekend(date) ? "cardWeekend" : "card";
 
     private string GetClassForHeader(DateTime date)
-    => new[] { DayOfWeek.Saturday, DayOfWeek.Sunday }.Contains(date.DayOfWeek) ? "headerWeekend" : "header";
+    => IsWeekend(date) ? "headerWeekend" : "header";
 
     protected override async Task OnInitializedAsync()
     {
