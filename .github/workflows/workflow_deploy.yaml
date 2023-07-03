@@ -33,7 +33,7 @@ jobs:
     needs: build
     name: Deploy to Azure
     runs-on: windows-latest
-    if: github.ref != 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Check out branch
         uses: actions/checkout@main      
