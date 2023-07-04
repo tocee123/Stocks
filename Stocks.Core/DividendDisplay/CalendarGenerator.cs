@@ -44,8 +44,10 @@ public class CalendarGenerator : ICalendarGenerator
     {
         var today = _dateTimeProvider.GetToday();
         var displayCalendarsFirstMonday = GetWeeksMonday(today);
+        var numberOfDaysLeftInMonth = DateTime.DaysInMonth(today.Year, today.Month) - displayCalendarsFirstMonday.Day + 1;
 
-        return Enumerable.Range(0, DateTime.DaysInMonth(today.Year, today.Month)-today.Day+1).Select(i => today.AddDays(i))
+        return Enumerable.Range(0, numberOfDaysLeftInMonth)
+            .Select(i => displayCalendarsFirstMonday.AddDays(i))
             .Where(d => d.DayOfWeek == _startDay);
     }
 
