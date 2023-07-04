@@ -1,12 +1,7 @@
 # https://github.com/anothrNick/github-tag-action
 # example 2: on merge to master from pull request (recommended)
 name: Deploy to Azure
-on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
+on: [push]
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
