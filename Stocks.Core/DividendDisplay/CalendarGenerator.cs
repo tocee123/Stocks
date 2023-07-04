@@ -1,5 +1,4 @@
 ﻿using Stocks.Core.Repositories;
-using System.Data.SqlTypes;
 
 namespace Stocks.Core.DividendDisplay;
 public class CalendarGenerator : ICalendarGenerator
