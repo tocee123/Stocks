@@ -1,5 +1,4 @@
 ﻿using Stocks.Core.Repositories;
-using System.Data.SqlTypes;
 
 namespace Stocks.Core.DividendDisplay;
 public class CalendarGenerator : ICalendarGenerator
@@ -37,27 +36,27 @@ public class CalendarGenerator : ICalendarGenerator
             .Where(x => IsDvividendHistoryInCurrentMonth(x.DividendHistory))
             .SelectMany(x => DisplayDividendHistory.ToDisplayDividendHistories(x.Ticker, x.DividendHistory))
             .GroupBy(x => x.Date)
-            .ToDictionary(x => x.Key, x => x.OrderBy(x=>x.Ticker).ToList());
+            .ToDictionary(x => x.Key, x => x.OrderBy(x => x.Ticker).ToList());
         return dividendHistories;
     }
 
     private IEnumerable<DateTime> GetFirstdayOfTheWeekForTheCurrentMonth()
     {
         var today = _dateTimeProvider.GetToday();
-        var monthsFirstDay = new DateTime(today.Year, today.Month, 1);
-        var displayCalendarsFirstMonday = GetFirstMonday(monthsFirstDay, out var adjustment);
+        var displayCalendarsFirstMonday = GetWeeksMonday(today);
+        var numberOfDaysLeftInMonth = DateTime.DaysInMonth(today.Year, today.Month) - displayCalendarsFirstMonday.Day + 1;
 
-        return Enumerable.Range(0, DateTime.DaysInMonth(monthsFirstDay.Year, monthsFirstDay.Month) + adjustment).Select(i => displayCalendarsFirstMonday.AddDays(i))
+        return Enumerable.Range(0, numberOfDaysLeftInMonth)
+            .Select(i => displayCalendarsFirstMonday.AddDays(i))
             .Where(d => d.DayOfWeek == _startDay);
     }
 
-    private DateTime GetFirstMonday(DateTime date, out int adjustment)
+    private DateTime GetWeeksMonday(DateTime date)
     {
-        adjustment = 0;
         var displayCalendarsFirstMonday = date;
         if (date.DayOfWeek != _startDay)
         {
-            adjustment = (int)date.DayOfWeek;
+            var adjustment = (int)date.DayOfWeek - 1;
             displayCalendarsFirstMonday = displayCalendarsFirstMonday.AddDays(-adjustment);
         }
         return displayCalendarsFirstMonday;
