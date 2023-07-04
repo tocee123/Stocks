@@ -43,19 +43,18 @@ public class CalendarGenerator : ICalendarGenerator
     private IEnumerable<DateTime> GetFirstdayOfTheWeekForTheCurrentMonth()
     {
         var today = _dateTimeProvider.GetToday();
-        var displayCalendarsFirstMonday = GetFirstMonday(today, out var adjustment);
+        var displayCalendarsFirstMonday = GetFirstMonday(today);
 
-        return Enumerable.Range(0, DateTime.DaysInMonth(today.Year, today.Month) ).Select(i => displayCalendarsFirstMonday.AddDays(i))
+        return Enumerable.Range(0, DateTime.DaysInMonth(today.Year, today.Month)).Select(i => displayCalendarsFirstMonday.AddDays(i))
             .Where(d => d.DayOfWeek == _startDay);
     }
 
-    private DateTime GetFirstMonday(DateTime date, out int adjustment)
+    private DateTime GetFirstMonday(DateTime date)
     {
-        adjustment = 0;
         var displayCalendarsFirstMonday = date;
         if (date.DayOfWeek != _startDay)
         {
-            adjustment = (int)date.DayOfWeek - 1;
+            var adjustment = (int)date.DayOfWeek - 1;
             displayCalendarsFirstMonday = displayCalendarsFirstMonday.AddDays(-adjustment);
         }
         return displayCalendarsFirstMonday;
