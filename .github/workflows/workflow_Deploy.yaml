@@ -30,7 +30,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy to Azure
-    runs-on:  ubuntu-22.04
+    runs-on:  windows-latest
     #if: github.event.pull_request.merged == true
     steps:
       - name: Check out branch
