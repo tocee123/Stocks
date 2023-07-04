@@ -1,12 +1,12 @@
 name: Deploy to Azure
 on:
-#  push:
-#    branches:
-#      - main
-  pull_request:
-    types: [opened, closed]
+  push:
     branches:
       - main
+  pull_request:
+    branches:
+      - '*'
+      - '!main'
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
