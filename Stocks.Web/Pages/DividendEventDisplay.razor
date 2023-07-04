@@ -2,39 +2,48 @@
 @using Stocks.Core.DividendDisplay;
 
 @inject ICalendarGenerator CalendarGenerator
-<div id="header">
-    <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
-    <h5 class="float"><span class="exDate"></span> Ex dividend</h5>
-    <h5 class="float"><span class="payDate"></span> Pay date</h5>
-</div>
-@if (_month != null)
+@if (_month is null)
 {
+    <div id="header">
+        <h1 class="header">Loading...</h1>
+        <h5 class="float"><span class="exDate"></span> Ex dividend</h5>
+        <h5 class="float"><span class="payDate"></span> Pay date</h5>
+    </div>
+}
+else
+{
+    <div id="header">
+        <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
+        <h5 class="float"><span class="exDate"></span> Ex dividend</h5>
+        <h5 class="float"><span class="payDate"></span> Pay date</h5>
+    </div>
+
     <table width="100%">
-    @foreach (var week in _month)
-    {
-        <tr>
-            @foreach (var day in week)
-            {
-                <div class="@day.CardCss">
-                    <div class="@day.HeaderCss">
-                        <h4>@day.DayOfWeek</h4><p>@day.Day</p>
+        @foreach (var week in _month)
+        {
+            <tr>
+                @foreach (var day in week)
+                {
+                    <div class="@day.CardCss">
+                        <div class="@day.HeaderCss">
+                            <h4>@day.DayOfWeek</h4><p>@day.Day</p>
+                        </div>
+                        <div class="container">
+                            <table class="table table-accordion" style="width:100%">
+                                @foreach (var item in day.DisplayDividendHistories)
+                                {
+                                    <tr>
+                                        <td><span class="@item.Css"></span></td>
+                                        <td><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
+                                        <td>@item.Amount.ToDollarDisplay()</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
                     </div>
-                    <div class="container">
-                        <table class="table table-accordion" style="width:100%">
-                        @foreach (var item in day.DisplayDividendHistories)
-                        {
-                            <tr>
-                                <td><span class="@item.Css"></span></td>
-                                <td><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
-                                <td>@item.Amount.ToDollarDisplay()</td>
-                            </tr>
-                        }
-                        </table>
-                    </div>
-                </div>
-            }
-        </tr>
-    }
+                }
+            </tr>
+        }
     </table>
 }
 
