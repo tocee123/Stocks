@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <div class="sidebar">
+    <div class="sidebar" style="width:@NavMenuSize%">
         <NavMenu />
     </div>
 
@@ -15,3 +15,9 @@
         </div>
     </div>
 </div>
+
+@code{
+    private bool collapseNavMenu = false;
+    private string NavMenuSize => collapseNavMenu ? "10" : "20";
+   
+}

@@ -1,30 +1,32 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Stocks.Web</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <span @onclick="ToggleNavMenu" class=" navbar-brand">@CollapseText</span>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div>
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-briefcase" aria-hidden="true"></span> Stocks
+                <span class="oi oi-briefcase" aria-hidden="true"></span> 
+                <div class="@NavMenuCssClass">Stocks</div>
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="stockslegend">
-                <span class="oi oi-paperclip" aria-hidden="true"></span> Stocks legend
+                <span class="oi oi-paperclip" aria-hidden="true"></span> 
+                <div class="@NavMenuCssClass">Stocks legend</div>
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="StockDividendChapmpionsByMonthListView">
-                <span class="oi oi-excerpt" aria-hidden="true"></span>Dividend champions
+                <span class="oi oi-excerpt" aria-hidden="true"></span>
+                <div class="@NavMenuCssClass">Dividend champions</div>
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="DividendEventDisplay">
-                <span class="oi oi-excerpt" aria-hidden="true"></span>Dividend calendar
+                <span class="oi oi-excerpt" aria-hidden="true"></span>
+                <div class="@NavMenuCssClass">Dividend calendar</div>
             </NavLink>
         </li>
         @*
@@ -46,12 +48,18 @@
     </ul>
 </div>
 @code {
-    private bool collapseNavMenu = true;
+    private bool collapseNavMenu;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : "showElements";
+    private string CollapseText => collapseNavMenu ? ">" : "<";
+    
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        collapseNavMenu = false;
     }
 }

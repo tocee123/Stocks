@@ -1,5 +1,36 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+div.showElements {
+    animation: 0.5s fadeIn;
+}
+
+div.collapse {
+    display: none;
+    visibility: hidden;
+    animation: 1s fadeOut;
+}
+
+@keyframes fadeOut {
+    0% {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        visibility: visible;
+        opacity: 1;
+    }
+}
 h5.float {
     display: inline;
     float: left;
