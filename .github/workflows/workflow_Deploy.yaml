@@ -7,6 +7,7 @@ on:
       - closed
     branches:
       - main
+  workflow_dispatch:
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
@@ -16,7 +17,7 @@ env:
 jobs:
   build:
     name: Tag version
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -31,12 +32,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
         WITH_V: true
-        PRERELEASE: true
   deploy:
     needs: build
     name: Deploy to Azure
     runs-on:  windows-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
     steps:
       - name: Check out branch
         uses: actions/checkout@main      
