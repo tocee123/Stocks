@@ -4,6 +4,7 @@
 @using Stocks.Domain.Models;
 @using Stocks.Core.Loaders;
 @inject IDividendByMonthCollectionPreparer _dividendByMonthCollectionPreparer;
+@inject IJSRuntime JSRuntime;
 
 @if (_stocks == null)
 {
@@ -75,6 +76,11 @@ else
     {
         _stocks = await _dividendByMonthCollectionPreparer.GetMonthlyBestStocksByYear(_year);
         _stocks = _stocks.OrderBy(s => s.ExDate.Month);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("setTitle", $"Monthly dividend champions"); ;
     }
 
     private void Clear()
