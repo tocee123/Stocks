@@ -1,7 +1,11 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.navbar {
+    padding-left:30px;
+}
+
 div.showElements {
-    animation: 0s fadeIn;
+    display:block;
 }
 
 div.collapse {

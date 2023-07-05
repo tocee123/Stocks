@@ -25,7 +25,7 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="DividendEventDisplay">
-                <span class="oi oi-excerpt" aria-hidden="true"></span>
+                <span class="oi oi-calendar" aria-hidden="true"></span>
                 <div class="@NavMenuCssClass">Dividend calendar</div>
             </NavLink>
         </li>
@@ -39,7 +39,6 @@
     private bool collapseNavMenu;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : "showElements";
-    private string CollapseText => collapseNavMenu ? ">" : "<";
     
     private void ToggleNavMenu()
     {
