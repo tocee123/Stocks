@@ -10,7 +10,7 @@
     }
 </ul>
 <h3>Dividend to price ratio colors</h3>
-<ul>
+<ul style="list-style-type:none;">
     <li class="@Common.GetCssForDividendToPrice(_moreThan2)">More than @Common.ToPercentageDisplay(0.02)</li>
     <li class="@Common.GetCssForDividendToPrice(_between15and20)">Between @Common.ToPercentageDisplay(0.015) and @Common.ToPercentageDisplay(0.02)</li>
     <li class="@Common.GetCssForDividendToPrice(_between10and15)">Between @Common.ToPercentageDisplay(0.01) and @Common.ToPercentageDisplay(0.015)</li>
@@ -19,14 +19,6 @@
 </ul>
 @code
 {
-
-
-    DateTime _between3and7days = DateTime.Today.AddDays(4);
-    DateTime _between7and14days = DateTime.Today.AddDays(8);
-    DateTime _moreThan14days = DateTime.Today.AddDays(15);
-    DateTime _between0and3days = DateTime.Today.AddDays(2);
-    DateTime _lessThan0Days = DateTime.Today.AddDays(-1);
-
     double _moreThan2 = 0.021;
     double _between15and20 = 0.016;
     double _between10and15 = 0.014;
