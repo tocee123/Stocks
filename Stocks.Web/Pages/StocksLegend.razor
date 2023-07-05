@@ -20,6 +20,8 @@
 </ul>
 @code
 {
+
+
     DateTime _between3and7days = DateTime.Today.AddDays(4);
     DateTime _between7and14days = DateTime.Today.AddDays(8);
     DateTime _moreThan14days = DateTime.Today.AddDays(15);
@@ -35,8 +37,17 @@
 
 @code{
 
+
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await JSRuntime.InvokeVoidAsync("setTitle", $"Stock's legend"); ;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ClearButtonClass();
+    }
+
+    private record Color(string Class, string Text);
 }
