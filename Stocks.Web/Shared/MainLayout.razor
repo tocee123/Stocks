@@ -1,8 +1,8 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <div class="sidebar" style="width:@NavMenuSize%">
-        <NavMenu />
+    <div class="sidebar @NavMenuSize">
+        <NavMenu SetCollapse="@SetCollapse"/>
     </div>
 
     <div class="main">
@@ -17,7 +17,11 @@
 </div>
 
 @code{
-    private bool collapseNavMenu = false;
-    private string NavMenuSize => collapseNavMenu ? "10" : "20";
-   
+    private bool _collapseNavMenu = false;
+    private string NavMenuSize => _collapseNavMenu ? "shrunkNavbar" : "expandedNavbar";
+
+    public void SetCollapse(bool collapse)
+    {
+        _collapseNavMenu = collapse;
+    }   
 }

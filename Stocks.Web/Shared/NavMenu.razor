@@ -1,6 +1,6 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Stocks.Web</a>
-    <span @onclick="ToggleNavMenu" class=" navbar-brand">@CollapseText</span>
+﻿<div class="top-row navbar navbar-dark">
+    <span class="navbar-brand oi oi-menu" @onclick="ToggleNavMenu" aria-hidden="true"></span>
+    <div  class="navbar-brand @NavMenuCssClass" href="">Menu</div>
 </div>
 
 <div>
@@ -32,6 +32,10 @@
     </ul>
 </div>
 @code {
+
+    [Parameter]
+    public EventCallback<bool> SetCollapse { get; set; }
+
     private bool collapseNavMenu;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : "showElements";
@@ -40,6 +44,7 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+        SetCollapse.InvokeAsync(collapseNavMenu);
     }
 
     protected override async Task OnInitializedAsync()
