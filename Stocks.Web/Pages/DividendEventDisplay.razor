@@ -31,7 +31,19 @@ else
                             <h4>@day.DayOfWeek</h4><p>@day.Day</p>
                         </div>
                         <div class="container">
-                            <table class="table table-accordion" style="width:100%">
+                            <table width="100%">
+                            @foreach (var itemGroup in Partition(day.DisplayDividendHistories, 3))
+                            {
+                                <tr>
+                                @foreach (var item in itemGroup)
+                                {
+                                    <td ><span class="@item.Css"></span></td>
+                                    <td style="text-align:left;" ><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
+                                }
+                                </tr>
+                            }
+                            </table>
+                            @*<table class="table" style="width:100%">
                                 @foreach (var item in day.DisplayDividendHistories)
                                 {
                                     <tr>
@@ -40,7 +52,7 @@ else
                                         <td>@item.Amount.ToDollarDisplay()</td>
                                     </tr>
                                 }
-                            </table>
+                            </table>*@
                         </div>
                     </div>
                 }
@@ -61,4 +73,9 @@ else
     {
         await JSRuntime.InvokeVoidAsync("setTitle", $"Dividend calendar"); ;
     }
+
+    public static IEnumerable<IEnumerable<T>> Partition<T>(IEnumerable<T> values, int chunkSize)
+    => values.Select((x, i) => new { Index = i, Value = x })
+            .GroupBy(x => x.Index / chunkSize)
+            .Select(x => x.Select(v => v.Value));
 }
