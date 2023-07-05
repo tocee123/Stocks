@@ -1,57 +1,53 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Stocks.Web</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+﻿<div class="top-row navbar navbar-dark" @onclick="ToggleNavMenu">
+    <span class="navbar-brand oi oi-menu"  aria-hidden="true"></span>
+    <div  class="navbar-brand @NavMenuCssClass" href="">Menu</div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div>
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-briefcase" aria-hidden="true"></span> Stocks
+                <span class="oi oi-briefcase" aria-hidden="true"></span> 
+                <div class="@NavMenuCssClass">Stocks</div>
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="stockslegend">
-                <span class="oi oi-paperclip" aria-hidden="true"></span> Stocks legend
+                <span class="oi oi-paperclip" aria-hidden="true"></span> 
+                <div class="@NavMenuCssClass">Stocks legend</div>
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="StockDividendChapmpionsByMonthListView">
-                <span class="oi oi-excerpt" aria-hidden="true"></span>Dividend champions
+                <span class="oi oi-excerpt" aria-hidden="true"></span>
+                <div class="@NavMenuCssClass">Dividend champions</div>
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="DividendEventDisplay">
-                <span class="oi oi-excerpt" aria-hidden="true"></span>Dividend calendar
+                <span class="oi oi-calendar" aria-hidden="true"></span>
+                <div class="@NavMenuCssClass">Dividend calendar</div>
             </NavLink>
         </li>
-        @*
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="stocksview">
-                <span class="oi oi-briefcase" aria-hidden="true"></span> Stocks
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="download">
-                <span class="oi oi-badge" aria-hidden="true"></span> download
-            </NavLink>
-        </li>*@
     </ul>
 </div>
 @code {
-    private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    [Parameter]
+    public EventCallback<bool> SetCollapse { get; set; }
 
+    private bool collapseNavMenu;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : "showElements";
+    
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+        SetCollapse.InvokeAsync(collapseNavMenu);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        collapseNavMenu = false;
     }
 }

@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="22.1.37" />
   </ItemGroup>
 
   <ItemGroup>
