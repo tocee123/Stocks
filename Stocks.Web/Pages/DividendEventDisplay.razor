@@ -35,29 +35,6 @@ else
                             {
                                 <div style="float:left;">&nbsp;<span class="@item.Css" />&nbsp;<a style="text-align:left;" href="/stockdetail/@item.Ticker">@item.Ticker</a></div>
                             }
-
-                            @*<table width="100%">
-                                @foreach (var itemGroup in Partition(day.DisplayDividendHistories, 3))
-                                {
-                                    <tr>
-                                        @foreach (var item in itemGroup)
-                                        {
-                                            <td ><span class="@item.Css"></span></td>
-                                            <td style="text-align:left;" ><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
-                                        }
-                                    </tr>
-                                }
-                            </table>*@
-                            @*<table class="table" style="width:100%">
-                                @foreach (var item in day.DisplayDividendHistories)
-                                {
-                                    <tr>
-                                        <td><span class="@item.Css"></span></td>
-                                        <td><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
-                                        <td>@item.Amount.ToDollarDisplay()</td>
-                                    </tr>
-                                }
-                            </table>*@
                         </div>
                     </div>
                 }
