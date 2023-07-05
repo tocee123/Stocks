@@ -10,6 +10,15 @@
     <li class="@Common.GetCssForWhenToBuy(_moreThan14days)">More than 14 days @_moreThan14days.ToShortDateString()</li>
     <li class="@Common.GetCssForWhenToBuy(_lessThan0Days)">Past @_lessThan0Days.ToShortDateString()</li>
 </ul>
+
+<h1>NEW</h1>
+<h3>Date colors, when today is @DateTime.Today.ToShortDateString()</h3>
+<ul>
+    @foreach (var item in _dateColors)
+    {
+        <li class="@item.Class">@item.Text</li>
+    }
+</ul>
 <h3>Dividend to price ratio colors</h3>
 <ul>
     <li class="@Common.GetCssForDividendToPrice(_moreThan2)">More than @Common.ToPercentageDisplay(0.02)</li>
@@ -37,7 +46,8 @@
 
 @code{
 
-
+    IEnumerable<Color> _dateColors;
+    IEnumerable<Color> _dividendToPriceRacioColors;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -46,8 +56,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ClearButtonClass();
+        _dateColors = new[] { 
+            (2, "Between 0-3 days {0}"),
+            (4, "Between 3-7 days {0}"),
+            (8, "Between 7-14 days {0}"),
+            (15, "More than 14 days {0}"),
+            (-1, "Past {0}"),
+        }
+        .Select(x => Color.ToColor(x.Item1, x.Item2));
     }
 
-    private record Color(string Class, string Text);
+    private record Color(string Class, string Text)
+    {
+        internal static Color ToColor(int numberOfDays, string textFormat)
+        {
+            var date = DateTime.Today.AddDays(numberOfDays);
+            return new (Common.GetCssForWhenToBuy(date), string.Format(textFormat, date.ToShortDateString()));
+        }
+    }
 }
