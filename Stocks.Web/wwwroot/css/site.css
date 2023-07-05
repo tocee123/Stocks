@@ -39,7 +39,7 @@ h1.header {
 }
 
 div.card, div.cardWeekend {
-    height: 500px;
+    height: 15rem;
     width: 15%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     text-align: center;
@@ -51,7 +51,8 @@ div.card, div.cardWeekend {
 }
 
 div.cardWeekend {
-   height: 245px;
+   height: 7.25rem;
+   background-color: #a6d8a8;
 }
 
 div.header, div.headerWeekend, div.headerOtherMonth, div.headerToday {
@@ -59,10 +60,13 @@ div.header, div.headerWeekend, div.headerOtherMonth, div.headerToday {
     color: white;
     padding: 10px;
     font-size: 2.5rem;
+    height: 6.5rem;
 }
 
 div.headerWeekend {
     background-color: #a6d8a8;
+    float: left;
+    width:6rem;
 }
 
 div.headerOtherMonth {
@@ -73,13 +77,17 @@ div.headerToday {
     background-color: #0098b0;
 }
 
-div.container {
-    padding: 20px;
+div.container, div.containerToday, div.containerOtherMonth, div.containerWeekend {
+    padding: 10px;
 }
 
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+div.containerWeekend, div.containerOtherMonth {
+    overflow: hidden;
 }
+
+    html, body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
 
 a, .btn-link {
     color: #0366d6;
