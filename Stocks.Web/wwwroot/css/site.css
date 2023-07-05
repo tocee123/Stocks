@@ -52,6 +52,7 @@ div.card, div.cardWeekend {
 
 div.cardWeekend {
    height: 7.25rem;
+   background-color: #a6d8a8;
 }
 
 div.header, div.headerWeekend, div.headerOtherMonth, div.headerToday {
