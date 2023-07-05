@@ -45,6 +45,11 @@ else
     private IEnumerable<StockDividend> _upComingstocks;
     private IEnumerable<StockDividend> _oldStocks;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("setTitle", $"Dividend calendar"); ;
+    }
+
     string _tickerFilter;
     int _maxPrice;
     private bool _showSpecialDates = false;

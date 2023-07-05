@@ -2,6 +2,8 @@
 @using Stocks.Core.DividendDisplay;
 
 @inject ICalendarGenerator CalendarGenerator
+@inject IJSRuntime JSRuntime;
+
 @if (_month is null)
 {
     <div id="header">
@@ -53,5 +55,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         _month = await CalendarGenerator.GenerateMonthAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("setTitle", $"Dividend calendar"); ;
     }
 }
