@@ -30,7 +30,7 @@ else
                         <div class="@day.HeaderCss">
                             <h4>@day.DayOfWeek</h4><p>@day.Day</p>
                         </div>
-                        <div class="container">
+                        <div class="@day.ContainerCss">
                             <table width="100%">
                                 @foreach (var itemGroup in Partition(day.DisplayDividendHistories, 3))
                                 {

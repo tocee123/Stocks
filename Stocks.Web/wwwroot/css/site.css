@@ -64,6 +64,8 @@ div.header, div.headerWeekend, div.headerOtherMonth, div.headerToday {
 
 div.headerWeekend {
     background-color: #a6d8a8;
+    float: left;
+    width:8rem;
 }
 
 div.headerOtherMonth {
@@ -74,13 +76,17 @@ div.headerToday {
     background-color: #0098b0;
 }
 
-div.container {
-    padding: 20px;
+div.container, div.containerToday, div.containerOtherMonth, div.containerWeekend {
+    padding: 10px;
 }
 
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+div.containerWeekend, div.containerOtherMonth {
+    overflow: hidden;
 }
+
+    html, body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
 
 a, .btn-link {
     color: #0366d6;
