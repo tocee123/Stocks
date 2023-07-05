@@ -39,7 +39,7 @@ h1.header {
 }
 
 div.card, div.cardWeekend {
-    height: 300px;
+    height: 15rem;
     width: 15%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     text-align: center;
@@ -51,7 +51,7 @@ div.card, div.cardWeekend {
 }
 
 div.cardWeekend {
-   height: 145px;
+   height: 7.25rem;
 }
 
 div.header, div.headerWeekend, div.headerOtherMonth, div.headerToday {
@@ -59,6 +59,7 @@ div.header, div.headerWeekend, div.headerOtherMonth, div.headerToday {
     color: white;
     padding: 10px;
     font-size: 2.5rem;
+    height: 6.5rem;
 }
 
 div.headerWeekend {
