@@ -1,4 +1,5 @@
 ﻿@page "/stockslegend"
+@inject IJSRuntime JSRuntime;
 <h1>Stocks legend</h1>
 
 <h3>Date colors, when today is @DateTime.Today.ToShortDateString()</h3>
@@ -30,4 +31,12 @@
     double _between10and15 = 0.014;
     double _between05and10 = 0.009;
     double _lessThan05 = 0.004;
+}
+
+@code{
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("setTitle", $"Stock's legend"); ;
+    }
 }
