@@ -32,16 +32,16 @@ else
                         </div>
                         <div class="container">
                             <table width="100%">
-                            @foreach (var itemGroup in Partition(day.DisplayDividendHistories, 3))
-                            {
-                                <tr>
-                                @foreach (var item in itemGroup)
+                                @foreach (var itemGroup in Partition(day.DisplayDividendHistories, 3))
                                 {
-                                    <td ><span class="@item.Css"></span></td>
-                                    <td style="text-align:left;" ><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
+                                    <tr>
+                                        @foreach (var item in itemGroup)
+                                        {
+                                            <td ><span class="@item.Css"></span></td>
+                                            <td style="text-align:left;" ><a href="/stockdetail/@item.Ticker">@item.Ticker</a></td>
+                                        }
+                                    </tr>
                                 }
-                                </tr>
-                            }
                             </table>
                             @*<table class="table" style="width:100%">
                                 @foreach (var item in day.DisplayDividendHistories)
