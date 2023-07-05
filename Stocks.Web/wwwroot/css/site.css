@@ -1,13 +1,13 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 div.showElements {
-    animation: 0.5s fadeIn;
+    animation: 0s fadeIn;
 }
 
 div.collapse {
     display: none;
     visibility: hidden;
-    animation: 1s fadeOut;
+    animation: 0s fadeOut;
 }
 
 @keyframes fadeOut {
