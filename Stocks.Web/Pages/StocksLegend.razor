@@ -3,17 +3,7 @@
 <h1>Stocks legend</h1>
 
 <h3>Date colors, when today is @DateTime.Today.ToShortDateString()</h3>
-<ul>
-    <li class="@Common.GetCssForWhenToBuy(_between0and3days)">Between 0-3 days @_between0and3days.ToShortDateString()</li>
-    <li class="@Common.GetCssForWhenToBuy(_between3and7days)">Between 3-7 days @_between3and7days.ToShortDateString()</li>
-    <li class="@Common.GetCssForWhenToBuy(_between7and14days)">Between 7-14 days @_between7and14days.ToShortDateString()</li>
-    <li class="@Common.GetCssForWhenToBuy(_moreThan14days)">More than 14 days @_moreThan14days.ToShortDateString()</li>
-    <li class="@Common.GetCssForWhenToBuy(_lessThan0Days)">Past @_lessThan0Days.ToShortDateString()</li>
-</ul>
-
-<h1>NEW</h1>
-<h3>Date colors, when today is @DateTime.Today.ToShortDateString()</h3>
-<ul>
+<ul style="list-style-type:none;">
     @foreach (var item in _dateColors)
     {
         <li class="@item.Class">@item.Text</li>
