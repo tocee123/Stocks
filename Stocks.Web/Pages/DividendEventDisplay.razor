@@ -33,7 +33,27 @@ else
                         <div class="@day.ContainerCss" width="100%">
                             @foreach (var item in day.DisplayDividendHistories)
                             {
-                                <div style="float:left;">&nbsp;<span class="@item.Css" />&nbsp;<a style="text-align:left;" href="/stockdetail/@item.Ticker">@item.Ticker</a></div>
+                                <div class="dividendTooltip" style="float:left;">
+                                    &nbsp;
+                                    <span class="@item.Css" />&nbsp;
+                                    <a style="text-align:left;" href="/stockdetail/@item.Ticker">@item.Ticker</a>
+                                    <div class="tooltiptext" >
+                                        <div class="displayDay">
+                                            <h4>@day.Month</h4>
+                                            <h2>@day.Day</h2>
+                                        </div>
+                                        <div class="stockName">
+                                            <h3>@item.Ticker</h3>
+                                            <h4>@item.Name</h4>
+                                        </div>
+                                        <div class="stockdetail">
+                                            @foreach (var detail in item.Details)
+                                            {
+                                                <div> @detail.Title</div><h5>@detail.Value</h5><br/>
+                                            }  
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         </div>
                     </div>

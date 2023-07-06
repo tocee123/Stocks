@@ -32,9 +32,9 @@ public class CalendarGenerator : ICalendarGenerator
     {
         var stockDividends = await _stocksRepository.GetStocksAsync();
 
-        var dividendHistories = stockDividends.SelectMany(sd => sd.DividendHistories, (sd, dh) => new { sd.Ticker, DividendHistory = dh })
+        var dividendHistories = stockDividends.SelectMany(sd => sd.DividendHistories, (sd, dh) => new { Stock = sd, DividendHistory = dh })
             .Where(x => IsDvividendHistoryInCurrentMonth(x.DividendHistory))
-            .SelectMany(x => DisplayDividendHistory.ToDisplayDividendHistories(x.Ticker, x.DividendHistory))
+            .SelectMany(x => DisplayDividendHistory.ToDisplayDividendHistories(x.Stock, x.DividendHistory))
             .GroupBy(x => x.Date)
             .ToDictionary(x => x.Key, x => x.OrderBy(x => x.Ticker).ToList());
         return dividendHistories;

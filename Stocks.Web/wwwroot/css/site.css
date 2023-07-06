@@ -1,5 +1,77 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+/*https://stackoverflow.com/questions/39146047/display-tooltip-when-container-overflow-is-hidden*/
+
+.stockdetail {
+    padding-left:10px;
+    padding-top:5px;
+}
+    .stockdetail h5 {
+        text-align: right;
+        float: left;
+    }
+    .stockdetail div {
+        width:150px;
+        text-align:left;
+    }
+
+.stockName, .displayDay {
+    display: inline-block;
+    height: 120px;
+}
+.displayDay {
+    width: 100px;
+}
+.stockName {
+    width: 230px;
+}
+.dividendTooltip {
+    position: relative;
+    display: inline-block;
+}
+    .dividendTooltip .displayDay {
+        width:30%;
+        border-right: 1px dotted black;
+    }
+    .dividendTooltip div {
+        overflow: hidden;
+        float: left;
+        display:block;
+    }
+    .dividendTooltip h2, .dividendTooltip h4, .dividendTooltip h3 {
+        text-align: left;
+        margin-left: 10px;
+    }
+
+    .dividendTooltip h2 {
+        font-size:4.5rem;
+    }
+
+    .dividendTooltip .tooltiptext {
+        right: 20px;
+        top: 50px;
+        visibility: hidden;
+        position: fixed;
+        width: 350px;
+        height: 260px;
+        border: 1px solid green;
+        background-color: lightcyan;
+        box-shadow: 4px 3px 10px #000;
+        color: #000;
+        text-decoration-style: double;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+    .dividendTooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 0.9;
+    }
+
 .navbar {
     padding-left:30px;
 }
