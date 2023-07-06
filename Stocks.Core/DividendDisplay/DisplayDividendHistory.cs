@@ -13,8 +13,10 @@ public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, 
         new("Dividend yield:", (stock.DividendHistories.Where(dh=>dh.PayDate.Year == dividendHistory.PayDate.Year).Sum(dh=>dh.Amount)/stock.Price).ToPercentageDisplay()),
         };
 
-        var stockName = stock.Name.Contains("(")
-            ? stock.Name.Substring(0, stock.Name.IndexOf("("))
+        var characterToIndex = "(";
+
+        var stockName = stock.Name.Contains(characterToIndex)
+            ? stock.Name[..stock.Name.IndexOf(characterToIndex)]
             : stock.Name;
 
         var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, details);
