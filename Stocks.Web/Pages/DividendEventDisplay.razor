@@ -18,7 +18,7 @@ else
         <h5 class="float">Pay date <span class="payDate"/></h5>
         <h5 class="float">
             <label for="divdendYield">Divdend yield</label>
-            <input @bind=_minDividendYield style="width: 200px;" type="range" name="divdendYield" min="0" max="11">    
+            <input @bind=_minDividendYield style="width: 200px;" type="range" name="divdendYield" min="0" max="@_maxDividendYield">
         </h5>
     </div>
 
@@ -67,12 +67,14 @@ else
 
 @code {
     private int _minDividendYield;
+    private double _maxDividendYield;
 
     IEnumerable<IEnumerable<DisplayDay>> _month;
 
     protected override async Task OnInitializedAsync()
     {
         _month = await CalendarGenerator.GenerateMonthAsync();
+        //_maxDividendYield = _month.Max(m => m.Max(d => d.DisplayDividendHistories.Max(dh => dh.Yield)));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
