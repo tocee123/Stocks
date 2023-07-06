@@ -14,7 +14,7 @@
         float: left;
         display:block;
     }
-    .dividendTooltip h2, h4 {
+    .dividendTooltip h2, .dividendTooltip h4 {
         text-align: left;
         margin-left: 10px;
     }
