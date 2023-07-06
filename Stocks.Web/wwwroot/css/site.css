@@ -4,6 +4,7 @@
 
 .stockdetail {
     padding-left:10px;
+    padding-top:5px;
 }
     .stockdetail h5 {
         text-align: right;
@@ -24,10 +25,10 @@
 .stockName {
     width: 230px;
 }
-    .dividendTooltip {
-        position: relative;
-        display: inline-block;
-    }
+.dividendTooltip {
+    position: relative;
+    display: inline-block;
+}
     .dividendTooltip .displayDay {
         width:30%;
         border-right: 1px dotted black;
@@ -37,7 +38,7 @@
         float: left;
         display:block;
     }
-    .dividendTooltip h2, .dividendTooltip h4 {
+    .dividendTooltip h2, .dividendTooltip h4, .dividendTooltip h3 {
         text-align: left;
         margin-left: 10px;
     }
@@ -47,9 +48,12 @@
     }
 
     .dividendTooltip .tooltiptext {
+        right: 20px;
+        top: 50px;
         visibility: hidden;
+        position: fixed;
         width: 350px;
-        height: 250px;
+        height: 260px;
         border: 1px solid green;
         background-color: lightcyan;
         box-shadow: 4px 3px 10px #000;
@@ -58,9 +62,8 @@
         text-align: center;
         border-radius: 6px;
         padding: 5px 0;
-        position: fixed;
         z-index: 10;
-        /*opacity: 0;*/
+        opacity: 0;
         transition: opacity 1s;
     }
 
