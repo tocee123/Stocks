@@ -6,26 +6,28 @@
     display: inline-block;
 }
 
-.dividendTooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    /* Position the tooltip */
-    position: fixed;
-    z-index: 10;
-    opacity: 0;
-    transition: opacity 1s;
-}
+    .dividendTooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        border: 1px solid green;
+        background-color: lightcyan;
+        box-shadow: 4px 3px 10px #000;
+        color: #000;
+        text-decoration-style: double;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        /* Position the tooltip */
+        position: fixed;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 1s;
+    }
 
-.dividendTooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-    container: body;
-}
+    .dividendTooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 0.9;
+    }
 
 .navbar {
     padding-left:30px;
