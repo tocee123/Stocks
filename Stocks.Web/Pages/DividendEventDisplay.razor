@@ -39,12 +39,12 @@ else
                                     <a style="text-align:left;" href="/stockdetail/@item.Ticker">@item.Ticker</a>
                                     <div class="tooltiptext" >
                                         <div class="displayDay">
-                                            <h4>@CalendarGenerator.Today.ToString("MMMM")</h4>
+                                            <h4>@day.Month</h4>
                                             <h2>@day.Day</h2>
                                         </div>
                                         <div class="stockName">
-                                            <h4>@item.Ticker</h4>
-                                            <h4><a style="text-align:left;" href="/stockdetail/@item.Ticker">@item.Name</a</h4>
+                                            <h3>@item.Ticker</h3>
+                                            <h4>@item.Name</h4>
                                         </div>
                                         <div class="stockdetail">
                                             @foreach (var detail in item.Details)
