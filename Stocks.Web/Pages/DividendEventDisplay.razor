@@ -8,8 +8,6 @@
 {
     <div id="header">
         <h1 class="header">Loading...</h1>
-        <h5 class="float"><span class="exDate"></span> Ex dividend</h5>
-        <h5 class="float"><span class="payDate"></span> Pay date</h5>
     </div>
 }
 else
@@ -20,8 +18,7 @@ else
         <h5 class="float">Pay date <span class="payDate"/></h5>
         <h5 class="float">
             <label for="divdendYield">Divdend yield</label>
-            <input type="range" name="divdendYield"
-                   min="0" max="11">            
+            <input @bind=_minDividendYield style="width: 200px;" type="range" name="divdendYield" min="0" max="11">    
         </h5>
     </div>
 
@@ -69,6 +66,8 @@ else
 }
 
 @code {
+    private int _minDividendYield;
+
     IEnumerable<IEnumerable<DisplayDay>> _month;
 
     protected override async Task OnInitializedAsync()
@@ -80,9 +79,4 @@ else
     {
         await JSRuntime.InvokeVoidAsync("setTitle", $"Dividend calendar"); ;
     }
-
-    public static IEnumerable<IEnumerable<T>> Partition<T>(IEnumerable<T> values, int chunkSize)
-    => values.Select((x, i) => new { Index = i, Value = x })
-            .GroupBy(x => x.Index / chunkSize)
-            .Select(x => x.Select(v => v.Value));
 }
