@@ -16,8 +16,13 @@ else
 {
     <div id="header">
         <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
-        <h5 class="float"><span class="exDate"></span> Ex dividend</h5>
-        <h5 class="float"><span class="payDate"></span> Pay date</h5>
+        <h5 class="float">Ex dividend <span class="exDate" /></h5>
+        <h5 class="float">Pay date <span class="payDate"/></h5>
+        <h5 class="float">
+            <label for="divdendYield">Divdend yield</label>
+            <input type="range" name="divdendYield"
+                   min="0" max="11">            
+        </h5>
     </div>
 
     <table width="100%">
