@@ -4,7 +4,7 @@
 @inject ICalendarGenerator CalendarGenerator
 @inject IJSRuntime JSRuntime;
 
-@if (_month is null)
+@if (_monthByMaxYield is null)
 {
     <div id="header">
         <h1 class="header">Loading...</h1>
@@ -17,13 +17,13 @@ else
         <h5 class="float">Ex dividend <span class="exDate" /></h5>
         <h5 class="float">Pay date <span class="payDate"/></h5>
         <h5 class="float">
-            <label for="divdendYield">Divdend yield</label>
-            <input @bind=_minDividendYield style="width: 200px;" type="range" name="divdendYield" min="0" max="@_maxDividendYield">
+            <label style="width:180px;" for="divdendYield">Minimum yield: @_minDividendYield%</label>
+            <input @bind=_minDividendYield @oninput="@((args) => SetMinimumDividendYield(args.Value.ToString()))" style="width: 140px;" type="range" name="divdendYield" min="0" max="@_maxDividendYield">
         </h5>
     </div>
 
     <table width="100%">
-        @foreach (var week in _month)
+        @foreach (var week in _monthByMaxYield)
         {
             <tr>
                 @foreach (var day in week)
@@ -66,15 +66,22 @@ else
 }
 
 @code {
-    private int _minDividendYield;
+    private double _minDividendYield;
     private double _maxDividendYield;
 
     IEnumerable<IEnumerable<DisplayDay>> _month;
+    IEnumerable<IEnumerable<DisplayDay>> _monthByMaxYield;
+
+    public void SetMinimumDividendYield(string step)
+    {
+        _monthByMaxYield = _month.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.Yield > (double)Convert.ToInt32(step) / 100) }));
+    }
 
     protected override async Task OnInitializedAsync()
     {
         _month = await CalendarGenerator.GenerateMonthAsync();
-        //_maxDividendYield = _month.Max(m => m.Max(d => d.DisplayDividendHistories.Max(dh => dh.Yield)));
+        _monthByMaxYield = _month;
+        _maxDividendYield = _month.SelectMany(m => m.SelectMany(x => x.DisplayDividendHistories)).Max(m => m.Yield) * 100;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
