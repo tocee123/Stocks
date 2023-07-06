@@ -47,7 +47,10 @@ else
                                             <h4><a style="text-align:left;" href="/stockdetail/@item.Ticker">@item.Name</a</h4>
                                         </div>
                                         <div class="stockdetail">
-                                            <span>Dividend amount: @item.Amount.ToDollarDisplay()</span>
+                                            @foreach (var detail in item.Details)
+                                            {
+                                                <div> @detail.Title</div><h5>@detail.Value</h5><br/>
+                                            }  
                                         </div>
                                     </div>
                                 </div>

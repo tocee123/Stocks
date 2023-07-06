@@ -3,8 +3,17 @@
 /*https://stackoverflow.com/questions/39146047/display-tooltip-when-container-overflow-is-hidden*/
 
 .stockdetail {
-
+    padding-left:10px;
 }
+    .stockdetail h5 {
+        text-align: right;
+        float: left;
+    }
+    .stockdetail div {
+        width:150px;
+        text-align:left;
+    }
+
 .stockName, .displayDay {
     display: inline-block;
     height: 120px;
