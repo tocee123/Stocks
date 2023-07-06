@@ -5,10 +5,27 @@
     position: relative;
     display: inline-block;
 }
+    .dividendTooltip .displayDay {
+        width:30%;
+        border-right: 1px dotted black;
+    }
+    .dividendTooltip .stockName, .displayDay {
+        overflow: hidden;
+        float: left;
+    }
+    .dividendTooltip h2, h4 {
+        text-align: left;
+        margin-left: 10px;
+    }
+
+    .dividendTooltip h2 {
+        font-size:5rem;
+    }
 
     .dividendTooltip .tooltiptext {
         visibility: hidden;
-        width: 120px;
+        width: 250px;
+        height: 250px;
         border: 1px solid green;
         background-color: lightcyan;
         box-shadow: 4px 3px 10px #000;
