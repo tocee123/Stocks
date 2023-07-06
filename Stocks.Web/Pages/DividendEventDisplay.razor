@@ -43,7 +43,11 @@ else
                                             <h2>@day.Day</h2>
                                         </div>
                                         <div class="stockName">
-                                            <h4>@item.Name</h4>
+                                            <h4>@item.Ticker</h4>
+                                            <h4><a style="text-align:left;" href="/stockdetail/@item.Ticker">@item.Name</a</h4>
+                                        </div>
+                                        <div class="stockdetail">
+                                            <span>Dividend amount: @item.Amount.ToDollarDisplay()</span>
                                         </div>
                                     </div>
                                 </div>
