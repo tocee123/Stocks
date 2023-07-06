@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using Stocks.Domain.Helpers;
+﻿using Stocks.Domain.Helpers;
 
 namespace Stocks.Core.DividendDisplay;
 
