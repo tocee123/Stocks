@@ -2,7 +2,7 @@
 
 namespace Stocks.Core.DividendDisplay;
 
-public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, string Css, double Amount, double Yield, IEnumerable<DisplayDividendHistoryDetail> Details)
+public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, string Css, double Amount, double Yield, string InfoText, IEnumerable<DisplayDividendHistoryDetail> Details)
 {
     public static DisplayDividendHistory[] ToDisplayDividendHistories(StockDividend stock, DividendHistory dividendHistory)
     {
@@ -20,8 +20,8 @@ public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, 
             ? stock.Name[..stock.Name.IndexOf(characterToIndex)]
             : stock.Name;
 
-        var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, details);
-        var pay = ex with { Date = dividendHistory.PayDate, Css = "payDate" };
+        var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, "Ex-Dividend", details);
+        var pay = ex with { Date = dividendHistory.PayDate, Css = "payDate", InfoText="Pay date" };
         return new[] { ex, pay };
     }
 }
