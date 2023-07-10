@@ -22,23 +22,27 @@
     padding-left: 5px
 }
 
-    .stockName .exDate, .stockName .payDate {
-        width: auto;
-        height: auto;
-        border: 1px solid;
-        border-radius: 50%;
-        display: inline-block;
-        color: black;
-        padding: 0px 10px 0px 10px;
-        background-color: #91d2ff;
-        opacity: .8;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        text-align: center;
-    }
+.displayDay .exDate, .displayDay .payDate {
+    width: 95%;
+    height: 100px;
+    text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+    margin-bottom: 10px;
+    font-size: small;
+    vertical-align: central;
+    border: 1px solid;
+    border-radius: 50%;
+    display: inline-block;
+    color: white;
+    padding: 40px 10px 0px 10px;
+    background-color: #91d2ff;
+    opacity: .8;
+    box-shadow: 5px 5px 8px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
 
-    .stockName .payDate {
-        background-color: #0fb122;
-    }
+.displayDay .payDate {
+    background-color: #0fb122;
+}
 
 .displayDay {
     width: 100px;
