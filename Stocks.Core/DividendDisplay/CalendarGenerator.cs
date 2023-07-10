@@ -44,7 +44,8 @@ public class CalendarGenerator : ICalendarGenerator
     {
         var today = _dateTimeProvider.GetToday();
         var displayCalendarsFirstMonday = GetWeeksMonday(today);
-        var numberOfDaysLeftInMonth = DateTime.DaysInMonth(today.Year, today.Month) - displayCalendarsFirstMonday.Day + 1;
+        var oneFullMonth = 28;
+        var numberOfDaysLeftInMonth = DateTime.DaysInMonth(today.Year, today.Month) - displayCalendarsFirstMonday.Day + oneFullMonth;
 
         return Enumerable.Range(0, numberOfDaysLeftInMonth)
             .Select(i => displayCalendarsFirstMonday.AddDays(i))
