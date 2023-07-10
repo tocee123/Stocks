@@ -1,4 +1,5 @@
 ﻿using Stocks.Domain.Helpers;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Stocks.Core.DividendDisplay;
 
@@ -14,19 +15,29 @@ public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, 
         new("Dividend yield:", yield.ToPercentageDisplay()),
         };
 
-        var characterToIndex = "(";
-
-        var stockName = stock.Name.Contains(characterToIndex)
-            ? stock.Name[..stock.Name.IndexOf(characterToIndex)]
-            : stock.Name;
-
-        var stockNameMaxLength = 30;
-        stockName = stockName.Length > stockNameMaxLength
-            ? $"{stockName[..stockNameMaxLength]}..."
-            : stockName;
-
+        var stockName = stock.Name.RemoveTicker().ShrinkNAme();
         var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, "Ex-Dividend", details);
         var pay = ex with { Date = dividendHistory.PayDate, Css = "payDate", InfoText="Pay date" };
         return new[] { ex, pay };
+    }
+}
+
+public static class StockNameExtensions
+{
+    public static string RemoveTicker(this string name)
+    {
+        var characterToIndex = "(";
+
+        return name.Contains(characterToIndex)
+            ? name[..name.IndexOf(characterToIndex)]
+            : name;
+    }
+
+    public static string ShrinkNAme(this string name)
+    {
+        var stockNameMaxLength = 30;
+        return name.Length > stockNameMaxLength
+            ? $"{name[..stockNameMaxLength]}..."
+            : name;
     }
 }
