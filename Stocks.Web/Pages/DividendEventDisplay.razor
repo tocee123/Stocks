@@ -74,7 +74,13 @@ else
 
     public void SetMinimumDividendYield(string step)
     {
-        _monthByMaxYield = _month.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.Yield > (double)Convert.ToInt32(step) / 100) }));
+        _minDividendYield = Convert.ToInt32(step);
+        SetMinimumDividendYield();
+    }
+
+    public void SetMinimumDividendYield()
+    {
+        _monthByMaxYield = _month.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.Yield > (double)_minDividendYield / 100) }));
     }
 
     protected override async Task OnInitializedAsync()
@@ -82,6 +88,8 @@ else
         _month = await CalendarGenerator.GenerateMonthAsync();
         _monthByMaxYield = _month;
         _maxDividendYield = _month.SelectMany(m => m.SelectMany(x => x.DisplayDividendHistories)).Max(m => m.Yield) * 100;
+        _minDividendYield = 4;
+        SetMinimumDividendYield();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
