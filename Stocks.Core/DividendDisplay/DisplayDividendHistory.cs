@@ -1,8 +1,9 @@
 ﻿using Stocks.Domain.Helpers;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Stocks.Core.DividendDisplay;
 
-public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, string Css, double Amount, double Yield, IEnumerable<DisplayDividendHistoryDetail> Details)
+public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, string Css, double Amount, double Yield, string InfoText, IEnumerable<DisplayDividendHistoryDetail> Details)
 {
     public static DisplayDividendHistory[] ToDisplayDividendHistories(StockDividend stock, DividendHistory dividendHistory)
     {
@@ -14,14 +15,29 @@ public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, 
         new("Dividend yield:", yield.ToPercentageDisplay()),
         };
 
+        var stockName = stock.Name.RemoveTicker().ShrinkNAme();
+        var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, "Ex-Dividend", details);
+        var pay = ex with { Date = dividendHistory.PayDate, Css = "payDate", InfoText="Pay date" };
+        return new[] { ex, pay };
+    }
+}
+
+public static class StockNameExtensions
+{
+    public static string RemoveTicker(this string name)
+    {
         var characterToIndex = "(";
 
-        var stockName = stock.Name.Contains(characterToIndex)
-            ? stock.Name[..stock.Name.IndexOf(characterToIndex)]
-            : stock.Name;
+        return name.Contains(characterToIndex)
+            ? name[..name.IndexOf(characterToIndex)]
+            : name;
+    }
 
-        var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, details);
-        var pay = ex with { Date = dividendHistory.PayDate, Css = "payDate" };
-        return new[] { ex, pay };
+    public static string ShrinkNAme(this string name)
+    {
+        var stockNameMaxLength = 30;
+        return name.Length > stockNameMaxLength
+            ? $"{name[..stockNameMaxLength]}..."
+            : name;
     }
 }
