@@ -25,15 +25,15 @@
     .stockName .exDate {
         width: auto;
         height: auto;
-        border: 1px dotted;
+        border: 1px solid;
         border-radius: 50%;
         display: inline-block;
         color: black;
         padding: 0px 10px 0px 10px;
         background-color: #91d2ff;
         opacity: .8;
-        overflow: hidden;
-        float: left;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        text-align:center;
     }
 
     .stockName .payDate {
