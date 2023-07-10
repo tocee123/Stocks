@@ -20,6 +20,11 @@ public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, 
             ? stock.Name[..stock.Name.IndexOf(characterToIndex)]
             : stock.Name;
 
+        var stockNameMaxLength = 30;
+        stockName = stockName.Length > stockNameMaxLength
+            ? $"{stockName[..stockNameMaxLength]}..."
+            : stockName;
+
         var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, "Ex-Dividend", details);
         var pay = ex with { Date = dividendHistory.PayDate, Css = "payDate", InfoText="Pay date" };
         return new[] { ex, pay };
