@@ -1,13 +1,13 @@
 ﻿using Stocks.Core.Loaders;
-using Stocks.Dal.Entities;
-using StockDividendEntity = Stocks.Dal.Entities.StockDividend;
-using StockDividendCore = Stocks.Domain.Models.StockDividend;
 using Stocks.Core.Repositories;
+using Stocks.Dal.Entities;
+using StockDividendCore = Stocks.Domain.Models.StockDividend;
+using StockDividendEntity = Stocks.Dal.Entities.StockDividend;
 
 var loader = new StockDividendHistoryLoader();
 var stocksOfInterestRepository = new StocksOfInterestRespository();
 
-var histories = await Task.WhenAll(stocksOfInterestRepository.GetTickers().Select(async t => await loader.DownloadStockHistoryAsync(t)));
+var histories = (await Task.WhenAll(stocksOfInterestRepository.GetTickers().Select(async t => await loader.DownloadStockHistoryAsync(t)))).Where(s => !string.IsNullOrEmpty(s.Ticker));
 
 
 var contextFactory = new StockContextFactory();
