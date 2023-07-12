@@ -9,5 +9,5 @@ public class StockContext : DbContext
     {
     }
 
-    public DbSet<Stock> Person { get; set; }
+    public DbSet<Stock> Stock { get; set; }
 }
