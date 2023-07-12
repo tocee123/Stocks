@@ -48,9 +48,35 @@ namespace Stocks.Dal.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StockPrice",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StockId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockPrice", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StockPrice_Stock_StockId",
+                        column: x => x.StockId,
+                        principalTable: "Stock",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_StockDividend_StockId",
                 table: "StockDividend",
+                column: "StockId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockPrice_StockId",
+                table: "StockPrice",
                 column: "StockId");
         }
 
@@ -59,6 +85,9 @@ namespace Stocks.Dal.Migrations
         {
             migrationBuilder.DropTable(
                 name: "StockDividend");
+
+            migrationBuilder.DropTable(
+                name: "StockPrice");
 
             migrationBuilder.DropTable(
                 name: "Stock");

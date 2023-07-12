@@ -74,6 +74,30 @@ namespace Stocks.Dal.Migrations
                     b.ToTable("StockDividend");
                 });
 
+            modelBuilder.Entity("Stocks.Dal.Entities.StockPrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("StockPrice");
+                });
+
             modelBuilder.Entity("Stocks.Dal.Entities.StockDividend", b =>
                 {
                     b.HasOne("Stocks.Dal.Entities.Stock", "Stock")
@@ -85,9 +109,22 @@ namespace Stocks.Dal.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("Stocks.Dal.Entities.StockPrice", b =>
+                {
+                    b.HasOne("Stocks.Dal.Entities.Stock", "Stock")
+                        .WithMany("StockPrices")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("Stocks.Dal.Entities.Stock", b =>
                 {
                     b.Navigation("StockDividends");
+
+                    b.Navigation("StockPrices");
                 });
 #pragma warning restore 612, 618
         }
