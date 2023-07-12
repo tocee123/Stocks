@@ -7,4 +7,17 @@ public class Stock
 
     public ICollection<StockDividend> StockDividends { get; private set; } = new List<StockDividend>();
     public ICollection<StockPrice> StockPrices { get; private set; } = new List<StockPrice>();
+
+    public void AddStockDividends(IEnumerable<StockDividend> dividends)
+    {
+        foreach (var dividend in dividends)
+        {
+            StockDividends.Add(dividend);
+        }
+    }
+
+    public void AddPrice(StockPrice price)
+    {
+        StockPrices.Add(price);
+    }
 }
