@@ -6,4 +6,5 @@ public class Stock
     public string Name { get; set; }
 
     public ICollection<StockDividend> StockDividends { get; private set; } = new List<StockDividend>();
+    public ICollection<StockPrice> StockPrices { get; private set; } = new List<StockPrice>();
 }
