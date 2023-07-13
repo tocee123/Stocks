@@ -15,7 +15,7 @@ logger.LogInformation("Hello");
 var loader = new StockDividendHistoryLoader();
 var stocksOfInterestRepository = new StocksOfInterestRespository();
 
-var histories = (await Task.WhenAll(stocksOfInterestRepository.GetTickers().Take(2).Select(async t => await loader.DownloadStockHistoryAsync(t)))).Where(s => !string.IsNullOrEmpty(s.Ticker));
+var histories = (await Task.WhenAll(stocksOfInterestRepository.GetTickers().Select(async t => await loader.DownloadStockHistoryAsync(t)))).Where(s => !string.IsNullOrEmpty(s.Ticker));
 
 
 var contextFactory = new StockContextFactory();
@@ -28,14 +28,11 @@ foreach (var newStock in newStockEntities)
     var firstStock = stockEntities.FirstOrDefault(s => s.Ticker == newStock.Ticker);
     if (firstStock is null)
     {
+        logger.LogInformation($"Stock {newStock.Name} wasn't found, added.");
         context.Stock.Add(newStock);
     }
     else
     {
-        ///db.Produtos.Where(p => p.enterpriseID == '00000000000191' 
-        //&& p.productId != 14
-        //&& !db.SimilarProducts.Any(sp => sp.SimilarId == p.productId));
-
         var stockDividendsEntities = context.StockDividend.Where(sda => sda.StockId == firstStock.Id).ToArray();
 
         var newStockDividends = newStock.StockDividends.Where(sd => !stockDividendsEntities.Any(sda => sda.StockId == firstStock.Id && newStock.StockDividends.Select(x => x.ExDividend).ToArray().Contains(sda.ExDividend))).ToArray();
@@ -47,25 +44,6 @@ foreach (var newStock in newStockEntities)
         var newStockPrices = newStock.StockPrices.Where(sp => !stockPriceEntities.Any(sp => newStock.StockPrices.Select(x => x.Date).ToArray().Contains(sp.Date))).ToArray();
         logger.LogInformation($"Found {newStockPrices.Length} new prices for {firstStock.Ticker}");
         firstStock.AddPrices(newStockPrices);
-
-
-        //var newStockPrices = context.StockPrice.AsEnumerable().Except(newStock.StockPrices).ToArray();
-        //firstStock.AddPrices(newStockPrices);
-
-        //foreach (var newStockDividend in newStock.StockDividends)
-        //{
-        //    if (!context.StockDividend.Any(sd => sd.StockId == firstStock.Id && sd.ExDividend == newStockDividend.ExDividend && sd.PayoutDate == newStockDividend.PayoutDate))
-        //    {
-        //        firstStock.AddStockDividends(newStockDividend);
-        //    }
-        //}
-        //foreach (var newStockPrice in newStock.StockPrices)
-        //{
-        //    if (!context.StockPrice.Any(sd => sd.StockId == firstStock.Id && sd.Date == newStockPrice.Date))
-        //    {
-        //        firstStock.AddPrice(newStockPrice);
-        //    }
-        //}
     }
 }
 
