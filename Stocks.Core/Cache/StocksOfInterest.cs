@@ -12,7 +12,7 @@
                 result.AddRange(StocksOfItnerestForTony);
                 result.AddRange(StocksOfInterestWithChampions);
                 result.AddRange(StocksOfInterestWithChampions);
-                return result.ToArray();
+                return result.Distinct().ToArray();
             }
         }
 
