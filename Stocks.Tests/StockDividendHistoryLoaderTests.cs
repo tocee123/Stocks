@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net;
 using System.IO;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Stocks.Test
 {
@@ -12,7 +13,7 @@ namespace Stocks.Test
         [SetUp]
         public void Setup()
         {
-            _target = new StockDividendHistoryLoader();
+            _target = new StockDividendHistoryLoader(NullLogger<StockDividendHistoryLoader>.Instance);
         }
 
         [Test]

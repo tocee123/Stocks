@@ -6,7 +6,7 @@ namespace Stocks.Core.Repositories
     {
         public IEnumerable<string> GetTickers()
         {
-            return StocksOfInterest.Stocks;
+            return StocksOfInterest.Stocks.Distinct();
         }
     }
 }
