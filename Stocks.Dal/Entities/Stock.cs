@@ -16,8 +16,11 @@ public class Stock
         }
     }
 
-    public void AddPrice(StockPrice price)
+    public void AddPrices(params StockPrice[] prices)
     {
-        StockPrices.Add(price);
+        foreach (var price in prices)
+        {
+            StockPrices.Add(price);
+        }
     }
 }
