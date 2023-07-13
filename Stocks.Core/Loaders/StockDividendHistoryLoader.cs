@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 using Stocks.Core.Extensions;
 using System.Net;
 using System.Net.Http;
@@ -8,12 +9,18 @@ namespace Stocks.Core.Loaders
 {
     public class StockDividendHistoryLoader : IStockDividendHistoryLoader
     {
+        ILogger<StockDividendHistoryLoader> _logger;
+
+        public StockDividendHistoryLoader(ILogger<StockDividendHistoryLoader> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task<StockDividend> DownloadStockHistoryAsync(string ticker)
         {
+            var stock = new StockDividend();
             try
             {
-                var stock = new StockDividend();
-
                 var url = CreateUrlToYCharts(ticker);
                 var (pageExists, resultUrl) = await DoesPageExist(url);
                 if (pageExists)
@@ -21,13 +28,12 @@ namespace Stocks.Core.Loaders
                     var html = await DownloadHtml(resultUrl);
                     FillProperties(stock, ticker, html);
                 }
-                return stock;
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError($"Error while processing {ticker}\n{ex.Message}");
             }
+            return stock;
         }
 
         private static async Task<string> DownloadHtml(Uri resultUri)

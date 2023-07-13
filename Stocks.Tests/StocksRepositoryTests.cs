@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.Diagnostics;
 
 namespace WebDownloading.Test
@@ -11,7 +12,7 @@ namespace WebDownloading.Test
         public void Setup()
         {
             var configurationSub = Substitute.For<IConfiguration>();
-            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader()), new StocksOfInterestRespository());
+            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader(NullLogger<StockDividendHistoryLoader>.Instance)), new StocksOfInterestRespository());
         }
 
         [Test, Ignore("Failing on server")]
