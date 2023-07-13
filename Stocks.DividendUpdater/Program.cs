@@ -12,10 +12,8 @@ var logger = LoggerFactory.Create(builder =>
 }).CreateLogger<Program>();
 
 logger.LogInformation("Hello");
-var loader = new StockDividendHistoryLoader();
-var stocksOfInterestRepository = new StocksOfInterestRespository();
 
-var histories = (await Task.WhenAll(stocksOfInterestRepository.GetTickers().Select(async t => await loader.DownloadStockHistoryAsync(t)))).Where(s => !string.IsNullOrEmpty(s.Ticker));
+var histories = await GetHistories();
 
 
 var contextFactory = new StockContextFactory();
@@ -65,4 +63,12 @@ static Stock ToStockEntity(StockDividendCore history)
     }).ToArray());
     stock.AddPrices(new StockPrice { Date = DateTime.Today, Price = history.Price });
     return stock;
+}
+
+static async Task<IEnumerable<StockDividendCore>> GetHistories()
+{
+    var loader = new StockDividendHistoryLoader();
+    var stocksOfInterestRepository = new StocksOfInterestRespository();
+    var histories = await Task.WhenAll(stocksOfInterestRepository.GetTickers().Select(async t => await loader.DownloadStockHistoryAsync(t)));
+    return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
 }
