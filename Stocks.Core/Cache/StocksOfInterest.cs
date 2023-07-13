@@ -4,7 +4,17 @@
     {
         public static string Key { get => nameof(StocksOfInterest); }
 
-        public static string[] Stocks { get => StocksOfInterestWithChampions; }
+        public static string[] Stocks
+        {
+            get
+            {
+                var result = StocksOfInterestEtoro.ToList();
+                result.AddRange(StocksOfItnerestForTony);
+                result.AddRange(StocksOfInterestWithChampions);
+                result.AddRange(StocksOfInterestWithChampions);
+                return result.ToArray();
+            }
+        }
 
         private static string[] StocksOfInterestEtoro = new[] { "WMB", "MPLX", "EPD", "ET", "AGNC", "NLY", "LUMN", "MFA", "TWO", "PSEC", "TSN", "KMI", "MO", "IRM", "NYMT", "TEF", "ADT", "AEG", "PBCT", "HBAN", "ABR", "ISBC", "O", "LTC", "STAG", "MAIN", "PSEC", "ADC", "PBA", "SLG", "DXC", "PG", "KO", "XOM", "ABR", "ISBC", "HPE", "FFNW", "RVSB", "SHBI", "ASRV", "WVFC", "SBFG", "CBAN", "MWA", "SIRI","LYB","PNW","SAFT","NWE","OKE","EIX","GILD","PFG","OMC","AEP","SRE","REG","LAMR","SJM","ARCC", "QYLD",
             //champions
