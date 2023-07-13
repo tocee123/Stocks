@@ -6,10 +6,12 @@ using Stocks.Dal.Entities;
 using StockDividendCore = Stocks.Domain.Models.StockDividend;
 using StockDividendEntity = Stocks.Dal.Entities.StockDividend;
 
-var logger = LoggerFactory.Create(builder =>
+var loggerFactory = LoggerFactory.Create(builder =>
 {
     builder.AddConsole();
-}).CreateLogger<Program>();
+});
+
+var logger = loggerFactory.CreateLogger<Program>();
 
 //AddStockOfInterestIntoDb();
 
@@ -17,7 +19,7 @@ var contextFactory = new StockContextFactory();
 using var context = contextFactory.CreateDbContext(null);
 var stockEntities = context.Stock.ToArray();
 
-var histories = await GetHistories(context);
+var histories = await GetHistories(context, loggerFactory);
 var newStockEntities = histories.Select(ToStockEntity);
 
 foreach (var newStock in newStockEntities)
@@ -56,11 +58,10 @@ static Stock ToStockEntity(StockDividendCore history)
     return stock;
 }
 
-static async Task<IEnumerable<StockDividendCore>> GetHistories(StockContext context)
+static async Task<IEnumerable<StockDividendCore>> GetHistories(StockContext context, ILoggerFactory loggerFactory)
 {
-    var loader = new StockDividendHistoryLoader();
-    var stocksOfInterestRepository = new StocksOfInterestRespository();
-    var histories = await Task.WhenAll(context.StockOfInterest.Select(async t => await loader.DownloadStockHistoryAsync(t)));
+    var loader = new StockDividendHistoryLoader(loggerFactory.CreateLogger<StockDividendHistoryLoader>());
+    var histories = await Task.WhenAll(context.StockOfInterest.ToArray().Select(async soi => await loader.DownloadStockHistoryAsync(soi.Ticker)));
     return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
 }
 
