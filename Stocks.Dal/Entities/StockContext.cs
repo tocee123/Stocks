@@ -9,6 +9,9 @@ public class StockContext : DbContext
     {
     }
 
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //=> optionsBuilder.LogTo(Console.WriteLine);
+
     public DbSet<Stock> Stock { get; set; }
     public DbSet<StockDividend> StockDividend { get; set; }
     public DbSet<StockPrice> StockPrice { get; set; }

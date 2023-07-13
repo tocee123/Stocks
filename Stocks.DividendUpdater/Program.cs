@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
 using Stocks.Dal.Entities;
@@ -14,23 +15,42 @@ logger.LogInformation("Hello");
 var loader = new StockDividendHistoryLoader();
 var stocksOfInterestRepository = new StocksOfInterestRespository();
 
-var histories = (await Task.WhenAll(stocksOfInterestRepository.GetTickers().Take(10).Select(async t => await loader.DownloadStockHistoryAsync(t)))).Where(s => !string.IsNullOrEmpty(s.Ticker));
+var histories = (await Task.WhenAll(stocksOfInterestRepository.GetTickers().Take(2).Select(async t => await loader.DownloadStockHistoryAsync(t)))).Where(s => !string.IsNullOrEmpty(s.Ticker));
 
 
 var contextFactory = new StockContextFactory();
 using var context = contextFactory.CreateDbContext(null);
 var newStockEntities = histories.Select(ToStockEntity);
+var stockEntities = context.Stock.ToArray();
 foreach (var newStock in newStockEntities)
 {
     logger.LogInformation($"Processing {newStock.Name}");
-    var firstStock = context.Stock.FirstOrDefault(s => s.Ticker == newStock.Ticker);
+    var firstStock = stockEntities.FirstOrDefault(s => s.Ticker == newStock.Ticker);
     if (firstStock is null)
     {
         context.Stock.Add(newStock);
     }
     else
     {
+        ///db.Produtos.Where(p => p.enterpriseID == '00000000000191' 
+        //&& p.productId != 14
+        //&& !db.SimilarProducts.Any(sp => sp.SimilarId == p.productId));
 
+        var stockDividendsEntities = context.StockDividend.Where(sda => sda.StockId == firstStock.Id).ToArray();
+
+        var newStockDividends = newStock.StockDividends.Where(sd => !stockDividendsEntities.Any(sda => sda.StockId == firstStock.Id && newStock.StockDividends.Select(x => x.ExDividend).ToArray().Contains(sda.ExDividend))).ToArray();
+        logger.LogInformation($"Found {newStockDividends.Length} new dividend payments for {firstStock.Ticker}");
+        firstStock.AddStockDividends(newStockDividends);
+
+        var stockPriceEntities = context.StockPrice.Where(sda => sda.StockId == firstStock.Id).ToArray();
+
+        var newStockPrices = newStock.StockPrices.Where(sp => !stockPriceEntities.Any(sp => newStock.StockPrices.Select(x => x.Date).ToArray().Contains(sp.Date))).ToArray();
+        logger.LogInformation($"Found {newStockPrices.Length} new prices for {firstStock.Ticker}");
+        firstStock.AddPrices(newStockPrices);
+
+
+        //var newStockPrices = context.StockPrice.AsEnumerable().Except(newStock.StockPrices).ToArray();
+        //firstStock.AddPrices(newStockPrices);
 
         //foreach (var newStockDividend in newStock.StockDividends)
         //{
@@ -49,7 +69,6 @@ foreach (var newStock in newStockEntities)
     }
 }
 
-context.Stock.AddRange();
 context.SaveChanges();
 
 static Stock ToStockEntity(StockDividendCore history)
@@ -66,6 +85,6 @@ static Stock ToStockEntity(StockDividendCore history)
         PayoutDate = dh.PayDate,
         Note = dh.Type
     }).ToArray());
-    stock.AddPrice(new StockPrice { Date = DateTime.Today, Price = history.Price });
+    stock.AddPrices(new StockPrice { Date = DateTime.Today, Price = history.Price });
     return stock;
 }
