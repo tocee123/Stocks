@@ -11,12 +11,14 @@ var logger = LoggerFactory.Create(builder =>
     builder.AddConsole();
 }).CreateLogger<Program>();
 
-var histories = await GetHistories();
-var newStockEntities = histories.Select(ToStockEntity);
+//AddStockOfInterestIntoDb();
 
 var contextFactory = new StockContextFactory();
 using var context = contextFactory.CreateDbContext(null);
 var stockEntities = context.Stock.ToArray();
+
+var histories = await GetHistories(context);
+var newStockEntities = histories.Select(ToStockEntity);
 
 foreach (var newStock in newStockEntities)
 {
@@ -54,11 +56,11 @@ static Stock ToStockEntity(StockDividendCore history)
     return stock;
 }
 
-static async Task<IEnumerable<StockDividendCore>> GetHistories()
+static async Task<IEnumerable<StockDividendCore>> GetHistories(StockContext context)
 {
     var loader = new StockDividendHistoryLoader();
     var stocksOfInterestRepository = new StocksOfInterestRespository();
-    var histories = await Task.WhenAll(stocksOfInterestRepository.GetTickers().Select(async t => await loader.DownloadStockHistoryAsync(t)));
+    var histories = await Task.WhenAll(context.StockOfInterest.Select(async t => await loader.DownloadStockHistoryAsync(t)));
     return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
 }
 
@@ -78,4 +80,13 @@ void AddNewStockPriceEntities(StockContext context, Stock firstStock, Stock newS
     var newStockPrices = newStock.StockPrices.Where(sp => !stockPriceEntities.Any(sp => newStock.StockPrices.Select(x => x.Date).ToArray().Contains(sp.Date))).ToArray();
     logger.LogInformation($"Found {newStockPrices.Length} new prices for {firstStock.Ticker}");
     firstStock.AddPrices(newStockPrices);
+}
+
+static void AddStockOfInterestIntoDb()
+{
+    var stocksOfInterestRepository = new StocksOfInterestRespository();
+    var contextFactory = new StockContextFactory();
+    using var context = contextFactory.CreateDbContext(null);
+    context.StockOfInterest.AddRange(stocksOfInterestRepository.GetTickers().Select(t => new StockOfInterest { Ticker = t }));
+    context.SaveChanges();
 }
