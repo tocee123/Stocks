@@ -11,15 +11,13 @@ var logger = LoggerFactory.Create(builder =>
     builder.AddConsole();
 }).CreateLogger<Program>();
 
-logger.LogInformation("Hello");
-
 var histories = await GetHistories();
-
+var newStockEntities = histories.Select(ToStockEntity);
 
 var contextFactory = new StockContextFactory();
 using var context = contextFactory.CreateDbContext(null);
-var newStockEntities = histories.Select(ToStockEntity);
 var stockEntities = context.Stock.ToArray();
+
 foreach (var newStock in newStockEntities)
 {
     logger.LogInformation($"Processing {newStock.Name}");
@@ -31,17 +29,8 @@ foreach (var newStock in newStockEntities)
     }
     else
     {
-        var stockDividendsEntities = context.StockDividend.Where(sda => sda.StockId == firstStock.Id).ToArray();
-
-        var newStockDividends = newStock.StockDividends.Where(sd => !stockDividendsEntities.Any(sda => sda.StockId == firstStock.Id && newStock.StockDividends.Select(x => x.ExDividend).ToArray().Contains(sda.ExDividend))).ToArray();
-        logger.LogInformation($"Found {newStockDividends.Length} new dividend payments for {firstStock.Ticker}");
-        firstStock.AddStockDividends(newStockDividends);
-
-        var stockPriceEntities = context.StockPrice.Where(sda => sda.StockId == firstStock.Id).ToArray();
-
-        var newStockPrices = newStock.StockPrices.Where(sp => !stockPriceEntities.Any(sp => newStock.StockPrices.Select(x => x.Date).ToArray().Contains(sp.Date))).ToArray();
-        logger.LogInformation($"Found {newStockPrices.Length} new prices for {firstStock.Ticker}");
-        firstStock.AddPrices(newStockPrices);
+        AddNewStockDividendEntities(context, firstStock, newStock, logger);
+        AddNewStockPriceEntities(context, firstStock, newStock, logger);
     }
 }
 
@@ -71,4 +60,22 @@ static async Task<IEnumerable<StockDividendCore>> GetHistories()
     var stocksOfInterestRepository = new StocksOfInterestRespository();
     var histories = await Task.WhenAll(stocksOfInterestRepository.GetTickers().Select(async t => await loader.DownloadStockHistoryAsync(t)));
     return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
+}
+
+static void AddNewStockDividendEntities(StockContext context, Stock stock, Stock newStock, ILogger log)
+{
+    var stockDividendsEntities = context.StockDividend.Where(sda => sda.StockId == stock.Id).ToArray();
+
+    var newStockDividends = newStock.StockDividends.Where(sd => !stockDividendsEntities.Any(sda => sda.StockId == stock.Id && newStock.StockDividends.Select(x => x.ExDividend).ToArray().Contains(sda.ExDividend))).ToArray();
+    log.LogInformation($"Found {newStockDividends.Length} new dividend payments for {stock.Ticker}");
+    stock.AddStockDividends(newStockDividends);
+}
+
+void AddNewStockPriceEntities(StockContext context, Stock firstStock, Stock newStock, ILogger<Program> logger)
+{
+    var stockPriceEntities = context.StockPrice.Where(sda => sda.StockId == firstStock.Id).ToArray();
+
+    var newStockPrices = newStock.StockPrices.Where(sp => !stockPriceEntities.Any(sp => newStock.StockPrices.Select(x => x.Date).ToArray().Contains(sp.Date))).ToArray();
+    logger.LogInformation($"Found {newStockPrices.Length} new prices for {firstStock.Ticker}");
+    firstStock.AddPrices(newStockPrices);
 }
