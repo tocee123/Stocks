@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    <UserSecretsId>20ad72e7-9b0e-4cf7-b609-b218f7bbd56e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
