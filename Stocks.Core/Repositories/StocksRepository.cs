@@ -1,4 +1,5 @@
-﻿using Stocks.Dal;
+﻿using Microsoft.EntityFrameworkCore;
+using Stocks.Dal;
 
 namespace Stocks.Core.Repositories
 {
@@ -13,7 +14,24 @@ namespace Stocks.Core.Repositories
 
         public async Task<IEnumerable<StockDividend>> GetStocksAsync()
         {
-            return new StockDividend[0];
+            var result = from stock in _context.Stock
+                         select new StockDividend
+                         {
+                             Name = stock.Name,
+                             Ticker = stock.Ticker,
+                             Price = _context.StockPrice.OrderByDescending(sp => sp.Date).First(sp => sp.StockId == stock.Id).Price,
+                             IsCorrectlyDownloaded = true,
+                             DividendHistories = _context.StockDividend.Where(sd => sd.StockId == stock.Id).Select(sd => new DividendHistory { 
+                             Amount = sd.Amount,
+                             Type = sd.Note,
+                             DeclarationDate = sd.ExDividend.AddDays(-1),
+                             ExDate = sd.ExDividend,
+                             PayDate = sd.PayoutDate,
+                             RecordDate = sd.ExDividend.AddDays(1)
+                             }).ToArray(),
+                         };
+
+            return await result.ToArrayAsync();
         }
     }
 }

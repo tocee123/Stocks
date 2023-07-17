@@ -17,6 +17,8 @@ namespace WebDownloading.Test
         {
             var result = await _target.GetStocksAsync();
             result.Should().NotBeEmpty();
+            result.Count().Should().Be(1);
+            result.First().DividendHistories.Should().NotBeEmpty();
         }
     }
 }
