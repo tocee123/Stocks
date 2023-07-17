@@ -19,6 +19,7 @@ namespace WebDownloading.Test
             result.Should().NotBeEmpty();
             result.Count().Should().Be(1);
             result.First().DividendHistories.Should().NotBeEmpty();
+            result.First().DividendHistories.Count().Should().Be(15);
         }
     }
 }

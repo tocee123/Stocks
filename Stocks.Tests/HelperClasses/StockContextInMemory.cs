@@ -33,7 +33,7 @@ namespace Stocks.Test.HelperClasses
             var fixture = new Fixture();
             fixture.Customize<StockDividend>(c => c.Without(sd => sd.StockId));
             fixture.Customize<StockPrice>(c => c.Without(sd => sd.StockId));
-            stock.AddStockDividends(fixture.CreateMany<StockDividend>().ToArray());
+            stock.AddStockDividends(fixture.CreateMany<StockDividend>(30).ToArray());
             stock.AddPrices(fixture.CreateMany<StockPrice>().ToArray());
 
             context.Stock.Add(stock);
