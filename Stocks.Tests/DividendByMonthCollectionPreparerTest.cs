@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
-using Stocks.Test.HelperClasses;
+﻿using Stocks.Test.HelperClasses;
 using System.Text;
 
 namespace WebDownloading.Test

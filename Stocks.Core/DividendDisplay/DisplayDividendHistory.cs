@@ -1,5 +1,4 @@
 ﻿using Stocks.Domain.Helpers;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Stocks.Core.DividendDisplay;
 
