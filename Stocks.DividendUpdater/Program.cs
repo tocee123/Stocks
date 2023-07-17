@@ -61,7 +61,8 @@ static Stock ToStockEntity(StockDividendCore history)
 static async Task<IEnumerable<StockDividendCore>> GetHistories(StockContext context, ILoggerFactory loggerFactory)
 {
     var loader = new StockDividendHistoryLoader(loggerFactory.CreateLogger<StockDividendHistoryLoader>());
-    var histories = await Task.WhenAll(context.StockOfInterest.ToArray().Select(soi => loader.DownloadStockHistoryAsync(soi.Ticker)));
+    var stockLoader = new StocksLoader(loader);
+    var histories = await stockLoader.GetStockDividendsAsync(context.StockOfInterest.Select(soi=>soi.Ticker));
     return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
 }
 
