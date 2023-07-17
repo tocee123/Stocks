@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging.Abstractions;
-using System.Diagnostics;
+﻿using Stocks.Test.HelperClasses;
 
 namespace WebDownloading.Test
 {
@@ -11,19 +9,14 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            var configurationSub = Substitute.For<IConfiguration>();
-            _target = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader(NullLogger<StockDividendHistoryLoader>.Instance)), new StocksOfInterestRespository());
+            _target = new StocksRepository(StockContextInMemory.Create().AddTicker().AddStockDividend());
         }
 
-        [Test, Ignore("Failing on server")]
+        [Test]
         public async Task GetStocks_ReturnsNotEmptyList()
         {
-            var sw = Stopwatch.StartNew();
             var result = await _target.GetStocksAsync();
-            sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
+            result.Should().NotBeEmpty();
         }
     }
 }

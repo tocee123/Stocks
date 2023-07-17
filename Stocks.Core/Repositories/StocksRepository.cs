@@ -1,23 +1,19 @@
-﻿using Stocks.Core.Loaders;
+﻿using Stocks.Dal;
 
 namespace Stocks.Core.Repositories
 {
     public class StocksRepository : IStocksRepository
     {
-        private readonly IStocksLoader _stocksLoader;
-        private readonly IStocksOfInterestRespository _stocksOfInterestRespository;
+        private readonly StockContext _context;
 
-        public StocksRepository(IStocksLoader stocksLoader, IStocksOfInterestRespository stocksOfInterestRespository)
+        public StocksRepository(StockContext context)
         {
-            _stocksLoader = stocksLoader;
-            _stocksOfInterestRespository = stocksOfInterestRespository;
+            _context = context;
         }
 
         public async Task<IEnumerable<StockDividend>> GetStocksAsync()
         {
-            var tickers = _stocksOfInterestRespository.GetTickers();
-            var stockDividends = await _stocksLoader.GetStockDividendsAsync(tickers);
-            return stockDividends;
+            return new StockDividend[0];
         }
     }
 }
