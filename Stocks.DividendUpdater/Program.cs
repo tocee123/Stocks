@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
+using Stocks.Dal;
 using Stocks.Dal.Entities;
 using StockDividendCore = Stocks.Domain.Models.StockDividend;
 using StockDividendEntity = Stocks.Dal.Entities.StockDividend;

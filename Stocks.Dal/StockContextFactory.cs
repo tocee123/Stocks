@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
-namespace Stocks.Dal.Entities;
+namespace Stocks.Dal;
 
 public class StockContextFactory : IDesignTimeDbContextFactory<StockContext>
 {
