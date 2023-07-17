@@ -27,19 +27,17 @@ namespace Stocks.Test.HelperClasses
             return context;
         }
 
-        public static StockContext AddTicker(this StockContext context)
+        public static StockContext AddStock(this StockContext context)
         {
-            context.Stock.Add(new Stock { Name = "Test", Ticker = Ticker });
-            return context;
-        }
-
-        public static StockContext AddStockDividend(this StockContext context)
-        {
-            var stock = context.Stock.First(x => x.Ticker == Ticker);
-
+            var stock = new Stock { Name = "Test", Ticker = Ticker };
             var fixture = new Fixture();
-            fixture.Build<StockDividend>().With(sd => sd.StockId, stock.Id);
-            context.AddRange(fixture.CreateMany<StockDividend>());
+            fixture.Customize<StockDividend>(c => c.Without(sd => sd.StockId));
+            fixture.Customize<StockPrice>(c => c.Without(sd => sd.StockId));
+            stock.AddStockDividends(fixture.CreateMany<StockDividend>().ToArray());
+            stock.AddPrices(fixture.CreateMany<StockPrice>().ToArray());
+
+            context.Stock.Add(stock);
+            context.SaveChanges();
             return context;
         }
     }

@@ -14,7 +14,7 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _stockRepository = new StocksRepository(StockContextInMemory.Create().AddTicker().AddStockDividend());
+            _stockRepository = new StocksRepository(StockContextInMemory.Create().AddStock());
             _target = new DividendByMonthCollectionPreparer(_stockRepository);
         }
 

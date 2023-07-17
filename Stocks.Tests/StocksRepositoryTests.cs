@@ -9,7 +9,7 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _target = new StocksRepository(StockContextInMemory.Create().AddTicker().AddStockDividend());
+            _target = new StocksRepository(StockContextInMemory.Create().AddStock());
         }
 
         [Test]
