@@ -1,10 +1,8 @@
 ﻿@page "/"
 @using Stocks.Core.Repositories;
 @using Stocks.Domain.Models;
-@using Stocks.Core.Excel;
 @inject IJSRuntime JSRuntime
 @inject IStocksRepository stockRepository;
-@inject IStockExcelWriter stockExcelWriter;
 
 <h1>Let's see some stocks</h1>
 
@@ -15,7 +13,6 @@
 <button id="ShowSpecialDates" disabled="@IsDisabled()" class="btn @ShowSpecialDatesClass" @onclick="ShowSpecialDates">Extra info</button>
 <button id="ShowOnlyTheHighestRatioPerDay" disabled="@IsDisabled()" class="btn @ShowOnlyTheHighestRatioPerDayClass" @onclick="ShowOnlyTheHighestRatioPerDay">Highest D/P daily</button>
 <button id="ShowOnlyTheHighestRatioPerYear" disabled="@IsDisabled()" class="btn @ShowOnlyTheHighestRatioPerYearClass" @onclick="SwitchToHighestRatioPerYear">Highest D/P yearly</button>
-<button id="DownloadFile" disabled="@IsDisabled()" class="btn btn-info @DownloadFileClass" @onclick="DownloadFile">Download Excel</button>
 <br />
 <button class="btn btn-primary" disabled="@IsDisabled()" @onclick="ClearFilters">Clear</button>
 <label>Filter ticker: </label>
@@ -169,31 +166,6 @@ else
         ClearFilters();
         SetSwitchesToDefault();
         await UpdateStocks();
-    }
-
-    async Task DownloadFile()
-    {
-        ChangeDownloadButton(true);
-        await DownloadSeparated();
-        ChangeDownloadButton(false);
-    }
-
-    void ChangeDownloadButton(bool value)
-    {
-        isDownloading = value;
-        DownloadFileClass = GetButtonClass(value);
-    }
-
-    async Task DownloadSeparated()
-    {
-        await Task.Delay(200);
-        await JSRuntime.InvokeVoidAsync(
-         "downloadFromByteArray",
-         new
-         {
-             ByteArray = await stockExcelWriter.WriteToExcelAsync(),
-             FileName = "stocks.xlsx"
-         });
     }
 
     private void SetTickerFilter(string Value)

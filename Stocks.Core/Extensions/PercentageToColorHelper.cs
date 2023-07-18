@@ -1,14 +1,14 @@
 ﻿using System.Drawing;
 
-namespace Stocks.Core.Excel
+namespace Stocks.Core.Extensions
 {
     public static class PercentageToColorHelper
     {
         public static Color GetFontColorByDividendToPrice(this double dividendToPrice)
             => dividendToPrice > 0.02
-            || (dividendToPrice >= 0.015 && dividendToPrice <= 0.02)
+            || dividendToPrice >= 0.015 && dividendToPrice <= 0.02
             || dividendToPrice <= 0.005
-            ? Color.White 
+            ? Color.White
             : Color.Black;
 
         public static Color GetBackgroundColorByDividendToPrice(this double dividendToPrice)
