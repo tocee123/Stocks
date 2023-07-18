@@ -18,7 +18,7 @@ jobs:
   tagVersion:
     name: Tag version
     if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
-    runs-on: windows-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
@@ -26,16 +26,16 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.merge_commit_sha }}
         fetch-depth: '0'
-
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
         WITH_V: true
   build:
-    name: Build new version
+    needs: tagVersion
+    name: Deploy to Azure
     if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-22.04
+    runs-on: windows-latest
     permissions:
       contents: write
     steps:
@@ -57,24 +57,13 @@ jobs:
         env:
            ConnectionStrings.Redis: ${{ secrets.REDIS_CONNECTION }} 
            ConnectionStrings.StockWebDividendDB: ${{ secrets.STOCKWEBDIVIDENDDB_CONNECTION }}
-  deploy:
-    needs: build
-    name: Deploy to Azure
-    runs-on:  windows-latest
-    if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
-    steps:
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v2
         with: 
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} 
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
-  uploadArtifact:
-    needs: build
-    name: Upload artifact
-    runs-on:  ubuntu-22.04
-    if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
-    steps:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2   
         with:
           path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+
