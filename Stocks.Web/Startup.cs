@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,7 @@ using Stocks.Core.DividendDisplay;
 using Stocks.Core.Excel;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
+using Stocks.Dal;
 using Stocks.Web.Data;
 
 namespace Stocks.Web
@@ -39,6 +41,7 @@ namespace Stocks.Web
             services.AddTransient<IDividendByMonthCollectionPreparer, DividendByMonthCollectionPreparer>();
             services.AddTransient<ICalendarGenerator, CalendarGenerator>();
             services.AddTransient<IDateProvider, DateProvider>();
+            services.AddDbContext<StockContext>(options => options.UseSqlServer(Configuration.GetConnectionString("StockWebDividendDB")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

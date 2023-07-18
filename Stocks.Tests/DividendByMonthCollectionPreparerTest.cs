@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
+﻿using Stocks.Test.HelperClasses;
 using System.Text;
 
 namespace WebDownloading.Test
@@ -13,7 +13,7 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _stockRepository = new StocksRepository(new StocksLoader(new StockDividendHistoryLoader(NullLogger<StockDividendHistoryLoader>.Instance)), new StocksOfInterestRespository());
+            _stockRepository = new StocksRepository(StockContextInMemory.Create().AddStock());
             _target = new DividendByMonthCollectionPreparer(_stockRepository);
         }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Stocks.Dal.Entities;
 
-namespace Stocks.Dal.Entities;
+namespace Stocks.Dal;
 
 public class StockContext : DbContext
 {
