@@ -18,7 +18,7 @@ jobs:
   tagVersion:
     name: Tag version
     if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-22.04
+    runs-on: windows-latest
     permissions:
       contents: write
     steps:
