@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using Stocks.Core.Extensions;
+using System.Drawing;
 
 namespace WebDownloading.Test
 {

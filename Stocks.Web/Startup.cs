@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Stocks.Core.Cache;
 using Stocks.Core.DividendDisplay;
-using Stocks.Core.Excel;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
 using Stocks.Dal;
@@ -36,8 +35,6 @@ namespace Stocks.Web
             services.AddTransient<IStocksOfInterestRespository, StocksOfInterestRespository>();
             services.AddTransient<IStocksRepository, StocksRepository>();
             services.Decorate<IStocksRepository, StocksRepositoryCachingDecorator>();
-            services.AddTransient<IStockExcelWriter, StockExcelWriter>();
-            services.AddTransient<IExcelSaver, ExcelSaver>();
             services.AddTransient<IDividendByMonthCollectionPreparer, DividendByMonthCollectionPreparer>();
             services.AddTransient<ICalendarGenerator, CalendarGenerator>();
             services.AddTransient<IDateProvider, DateProvider>();
