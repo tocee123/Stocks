@@ -1,8 +1,10 @@
 ﻿using Stocks.Core.DividendDisplay;
 
-namespace Stocks.Test.Core;
-public class DividendDisplayTests
+namespace Stocks.Test.Core.DividendDisplay;
+public class CalendarGeneratorTests
 {
+
+
     [Test]
     public async Task GenerateMonth_GeneratesMonth()
     {
@@ -18,6 +20,6 @@ public class DividendDisplayTests
 
         var result = await target.GenerateMonthAsync();
         result.Should().NotBeNullOrEmpty();
-        result.Sum(x=>x.Count()).Should().BeGreaterThanOrEqualTo(1);
+        result.Sum(x => x.Count()).Should().BeGreaterThanOrEqualTo(1);
     }
 }
