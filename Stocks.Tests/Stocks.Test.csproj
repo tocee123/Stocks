@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Cache\**" />
+    <Compile Remove="Models\**" />
     <EmbeddedResource Remove="Cache\**" />
+    <EmbeddedResource Remove="Models\**" />
     <None Remove="Cache\**" />
+    <None Remove="Models\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,7 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <None Update="Core\DividendDisplay\MonthJson.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

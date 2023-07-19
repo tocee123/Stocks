@@ -1,5 +1,6 @@
 ﻿@page "/dividendEventDisplay"
 @using Stocks.Core.DividendDisplay;
+@using System.IO;
 
 @inject ICalendarGenerator CalendarGenerator
 @inject IJSRuntime JSRuntime;
@@ -88,7 +89,7 @@ else
     {
         _month = await CalendarGenerator.GenerateMonthAsync();
         _monthByMaxYield = _month;
-        _maxDividendYield = _month.SelectMany(m => m.SelectMany(x => x.DisplayDividendHistories)).Max(m => m.Yield) * 100;
+        _maxDividendYield = _month.GetMaximumYield();
         _minDividendYield = 4;
         SetMinimumDividendYield();
     }
