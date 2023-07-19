@@ -24,11 +24,6 @@ public class CalendarGenerator : ICalendarGenerator
         return weeks;
     }
 
-    public async Task<double> GetMaximumDividendYield()
-    {
-        return 0;
-    }
-
     private IEnumerable<IEnumerable<DisplayDay>> GenerateWeeks(IEnumerable<DateTime> weeksFirstDays, Dictionary<DateTime, List<DisplayDividendHistory>> dividendHistories)
     => weeksFirstDays.Select(d => Enumerable.Range(0, 7).Select(i => d.AddDays(i))
         .Select(d => DisplayDay.ToDisplayDay(_dateTimeProvider, d, dividendHistories)));
