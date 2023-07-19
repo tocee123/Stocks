@@ -3,22 +3,28 @@
 namespace Stocks.Test.Core.DividendDisplay;
 public class CalendarGeneratorTests
 {
+    private ICalendarGenerator _target;
+    private IStocksRepository _stocksRepository;
+    private IDateProvider _dateProvider;
 
+    [SetUp]
+    public void Setup()
+    {
+        _stocksRepository = Substitute.For<IStocksRepository>();
+        _dateProvider = Substitute.For<IDateProvider>();
+        _target = new CalendarGenerator(_dateProvider, _stocksRepository);
+    }
 
     [Test]
     public async Task GenerateMonth_GeneratesMonth()
     {
         var today = DateTime.Today;
-        var stockRepository = Substitute.For<IStocksRepository>();
-        var dateProvider = Substitute.For<IDateProvider>();
-        var target = new CalendarGenerator(dateProvider, stockRepository);
-
         var fixture = new Fixture().SetupFixtureToGenerateDateInCurrentMonth(today.Year, today.Month);
-        stockRepository.GetStocksAsync().Returns(fixture.CreateMany<StockDividend>());
+        _stocksRepository.GetStocksAsync().Returns(fixture.CreateMany<StockDividend>());
 
-        dateProvider.GetToday().Returns(today);
+        _dateProvider.GetToday().Returns(today);
 
-        var result = await target.GenerateMonthAsync();
+        var result = await _target.GenerateMonthAsync();
         result.Should().NotBeNullOrEmpty();
         result.Sum(x => x.Count()).Should().BeGreaterThanOrEqualTo(1);
     }
