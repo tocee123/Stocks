@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Cache\**" />
+    <Compile Remove="Models\**" />
     <EmbeddedResource Remove="Cache\**" />
+    <EmbeddedResource Remove="Models\**" />
     <None Remove="Cache\**" />
+    <None Remove="Models\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,10 +46,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Stocks.Core\Stocks.Core.csproj" />
     <ProjectReference Include="..\Stocks.Web\Stocks.Web.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
