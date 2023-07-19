@@ -3,7 +3,5 @@
 public static class DisplayDatesExtension
 {
     public static double GetMaximumYield(this IEnumerable<IEnumerable<DisplayDay>> month)
-    {
-        return month.SelectMany(m => m.SelectMany(x => x.DisplayDividendHistories)).Max(m => m.Yield) * 100;
-    }
+    => month.SelectMany(m => m.SelectMany(x => x.DisplayDividendHistories)).OrderByDescending(x => x.Yield).Skip(1).Max(m => m.Yield) * 100;
 }

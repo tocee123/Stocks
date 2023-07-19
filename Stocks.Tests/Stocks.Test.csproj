@@ -48,4 +48,10 @@
     <ProjectReference Include="..\Stocks.Web\Stocks.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Core\DividendDisplay\MonthJson.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
