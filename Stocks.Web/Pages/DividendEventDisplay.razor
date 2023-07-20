@@ -14,7 +14,7 @@
 else
 {
     <div id="header">
-        <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
+        <h1><button class="header" @onclick="Reset">@CalendarGenerator.Today.ToString("y")</button></h1>
         <h5 class="float"><button class="exDateHeader" @onclick="ToggleExDividend">Ex dividend</button> </h5>
         <h5 class="float"><button class="payDateHeader" @onclick="TogglePayDate">Pay date</button></h5>
         <h5 class="float">
@@ -71,21 +71,30 @@ else
     private double _minDividendYield;
     private double _maxDividendYield;
 
-    private bool _showExDividend = true;
-    private bool _showPayDate = true;
+    private bool _showExDividend = false;
+    private bool _showPayDate = false;
 
     IEnumerable<IEnumerable<DisplayDay>> _month;
     IEnumerable<IEnumerable<DisplayDay>> _monthByMaxYield;
 
+    private void Reset()
+    {
+        _showExDividend = false;
+        _showPayDate = false;
+        ShrinkSelection();    
+    }
+
     private void ToggleExDividend()
     {
-        _showExDividend = !_showExDividend;   
+        _showExDividend = true; 
+        _showPayDate= false;
         ShrinkSelection();
     }
 
     private void TogglePayDate()
     {
-        _showPayDate = !_showPayDate;
+        _showPayDate = true;
+        _showExDividend = false;
         ShrinkSelection();
     }
 
@@ -98,12 +107,14 @@ else
     private void ShrinkSelection()
     {
         _monthByMaxYield = _month.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.Yield > (double)_minDividendYield / 100) }));
-        if (!_showExDividend)
+        if (_showExDividend)
         {
-            _monthByMaxYield = _monthByMaxYield.Where()
-
+            _monthByMaxYield = _monthByMaxYield.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.EventType == EventType.ExDividend) }));
         }
-
+        if (_showPayDate)
+        {
+            _monthByMaxYield = _monthByMaxYield.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.EventType == EventType.PayDate) }));
+        }
     }
 
     protected override async Task OnInitializedAsync()

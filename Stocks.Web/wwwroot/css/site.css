@@ -184,9 +184,11 @@ button.payDateHeader {
     background-color: var(--payDateColor);
 }
 
-h1.header {
+button.header {
     font-family: Georgia;
     font-weight: 800;
+    border:none;
+    background-color:white;
 }
 
 div.card, div.cardWeekend {
