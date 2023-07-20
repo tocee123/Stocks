@@ -39,14 +39,14 @@
     display: inline-block;
     color: white;
     padding: 40px 10px 0px 10px;
-    background-color: #91d2ff;
+    background-color: var(--exDividendColor);
     opacity: .8;
     box-shadow: 5px 5px 8px 0 rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
 .displayDay .payDate, h5.payDateHeader {
-    background-color: #0fb122;
+    background-color: var(--payDateColor);
 }
 
 .displayDay {
@@ -177,11 +177,11 @@ h5.payDateHeader {
     width: 15px;
     border-radius: 50%;
     display: inline-block;
-    background-color: #91d2ff;
+    background-color: var(--exDividendColor);
 }
 
 .payDate {
-    background-color: #0fb122;
+    background-color: var(--payDateColor);
 }
 
 h1.header {
