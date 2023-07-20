@@ -15,8 +15,8 @@ else
 {
     <div id="header">
         <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
-        <h5 class="float"><button class="exDateHeader">Ex dividend</button> </h5>
-        <h5 class="float"><button class="payDateHeader">Pay date</button></h5>
+        <h5 class="float"><button class="exDateHeader" @onclick="ToggleExDividend">Ex dividend</button> </h5>
+        <h5 class="float"><button class="payDateHeader" @onclick="TogglePayDate">Pay date</button></h5>
         <h5 class="float">
             <label style="width:180px;" for="divdendYield">Minimum yield: @_minDividendYield%</label>
             <input @bind=_minDividendYield @oninput="@((args) => SetMinimumDividendYield(args.Value.ToString()))" style="width: 140px;" type="range" name="divdendYield" min="0" max="@_maxDividendYield">
@@ -71,18 +71,39 @@ else
     private double _minDividendYield;
     private double _maxDividendYield;
 
+    private bool _showExDividend = true;
+    private bool _showPayDate = true;
+
     IEnumerable<IEnumerable<DisplayDay>> _month;
     IEnumerable<IEnumerable<DisplayDay>> _monthByMaxYield;
+
+    private void ToggleExDividend()
+    {
+        _showExDividend = !_showExDividend;   
+        ShrinkSelection();
+    }
+
+    private void TogglePayDate()
+    {
+        _showPayDate = !_showPayDate;
+        ShrinkSelection();
+    }
 
     public void SetMinimumDividendYield(string step)
     {
         _minDividendYield = Convert.ToInt32(step);
-        SetMinimumDividendYield();
+        ShrinkSelection();
     }
 
-    public void SetMinimumDividendYield()
+    private void ShrinkSelection()
     {
         _monthByMaxYield = _month.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.Yield > (double)_minDividendYield / 100) }));
+        if (!_showExDividend)
+        {
+            _monthByMaxYield = _monthByMaxYield.Where()
+
+        }
+
     }
 
     protected override async Task OnInitializedAsync()
@@ -91,7 +112,7 @@ else
         _monthByMaxYield = _month;
         _maxDividendYield = _month.GetMaximumYield();
         _minDividendYield = 4;
-        SetMinimumDividendYield();
+        ShrinkSelection();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
