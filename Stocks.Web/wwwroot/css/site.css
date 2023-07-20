@@ -145,7 +145,7 @@ h5.float {
     padding: 0px 10px 0px 10px;
 }
 
-h5.exDateHeader, h5.payDateHeader {
+button.exDateHeader, button.payDateHeader {
     box-shadow: 5px 5px 8px 0 rgba(0, 0, 0, 0.2);
     border: 1px solid;
     background-color: var(--exDividendColor);
@@ -154,13 +154,13 @@ h5.exDateHeader, h5.payDateHeader {
     text-shadow: 1px 1px 2px #000000;
 }
 
-h5.payDateHeader {
+button.payDateHeader {
     background-color: var(--payDateColor);
 }
 #header {
     padding: 10px;
     margin-bottom: 10px;
-    width: 600px;
+    width: 620px;
     height: 100px;
     position: sticky;
     top: 0;
