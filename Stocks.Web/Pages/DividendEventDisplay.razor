@@ -15,8 +15,8 @@ else
 {
     <div id="header">
         <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
-        <h5 class="float">Ex dividend <span class="exDate" /></h5>
-        <h5 class="float">Pay date <span class="payDate"/></h5>
+        <h5 class="float exDateHeader">Ex dividend </h5>
+        <h5 class="float payDateHeader">Pay date</h5>
         <h5 class="float">
             <label style="width:180px;" for="divdendYield">Minimum yield: @_minDividendYield%</label>
             <input @bind=_minDividendYield @oninput="@((args) => SetMinimumDividendYield(args.Value.ToString()))" style="width: 140px;" type="range" name="divdendYield" min="0" max="@_maxDividendYield">
