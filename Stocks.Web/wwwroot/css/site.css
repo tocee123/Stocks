@@ -2,6 +2,11 @@
 
 /*https://stackoverflow.com/questions/39146047/display-tooltip-when-container-overflow-is-hidden*/
 
+:root {
+    --exDividendColor: #91d2ff;
+    --payDateColor: #0fb122;
+}
+
 .stockdetail {
     padding-left:10px;
     padding-top:5px;
@@ -34,14 +39,14 @@
     display: inline-block;
     color: white;
     padding: 40px 10px 0px 10px;
-    background-color: #91d2ff;
+    background-color: var(--exDividendColor);
     opacity: .8;
     box-shadow: 5px 5px 8px 0 rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
-.displayDay .payDate {
-    background-color: #0fb122;
+.displayDay .payDate, h5.payDateHeader {
+    background-color: var(--payDateColor);
 }
 
 .displayDay {
@@ -137,13 +142,26 @@ div.collapse {
 h5.float {
     display: inline;
     float: left;
-    padding-left: 10px;
+    padding: 0px 10px 0px 10px;
 }
 
-#header { 
+button.exDateHeader, button.payDateHeader {
+    box-shadow: 5px 5px 8px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid;
+    background-color: var(--exDividendColor);
+    border-radius: 25px;
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
+    width:120px;
+}
+
+button.payDateHeader {
+    background-color: var(--payDateColor);
+}
+#header {
     padding: 10px;
     margin-bottom: 10px;
-    width: 600px;
+    width: 650px;
     height: 100px;
     position: sticky;
     top: 0;
@@ -160,16 +178,18 @@ h5.float {
     width: 15px;
     border-radius: 50%;
     display: inline-block;
-    background-color: #91d2ff;
+    background-color: var(--exDividendColor);
 }
 
 .payDate {
-    background-color: #0fb122;
+    background-color: var(--payDateColor);
 }
 
-h1.header {
+button.header {
     font-family: Georgia;
     font-weight: 800;
+    border:none;
+    background-color:white;
 }
 
 div.card, div.cardWeekend {

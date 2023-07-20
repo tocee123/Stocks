@@ -14,9 +14,9 @@
 else
 {
     <div id="header">
-        <h1 class="header">@CalendarGenerator.Today.ToString("y")</h1>
-        <h5 class="float">Ex dividend <span class="exDate" /></h5>
-        <h5 class="float">Pay date <span class="payDate"/></h5>
+        <h1><button class="header" @onclick="Reset">@CalendarGenerator.Today.ToString("y")</button></h1>
+        <h5 class="float"><button class="exDateHeader" @onclick="ToggleExDividend">Ex dividend</button> </h5>
+        <h5 class="float"><button class="payDateHeader" @onclick="TogglePayDate">Pay date</button></h5>
         <h5 class="float">
             <label style="width:180px;" for="divdendYield">Minimum yield: @_minDividendYield%</label>
             <input @bind=_minDividendYield @oninput="@((args) => SetMinimumDividendYield(args.Value.ToString()))" style="width: 140px;" type="range" name="divdendYield" min="0" max="@_maxDividendYield">
@@ -71,18 +71,50 @@ else
     private double _minDividendYield;
     private double _maxDividendYield;
 
+    private bool _showExDividend = false;
+    private bool _showPayDate = false;
+
     IEnumerable<IEnumerable<DisplayDay>> _month;
     IEnumerable<IEnumerable<DisplayDay>> _monthByMaxYield;
+
+    private void Reset()
+    {
+        _showExDividend = false;
+        _showPayDate = false;
+        ShrinkSelection();    
+    }
+
+    private void ToggleExDividend()
+    {
+        _showExDividend = true; 
+        _showPayDate= false;
+        ShrinkSelection();
+    }
+
+    private void TogglePayDate()
+    {
+        _showPayDate = true;
+        _showExDividend = false;
+        ShrinkSelection();
+    }
 
     public void SetMinimumDividendYield(string step)
     {
         _minDividendYield = Convert.ToInt32(step);
-        SetMinimumDividendYield();
+        ShrinkSelection();
     }
 
-    public void SetMinimumDividendYield()
+    private void ShrinkSelection()
     {
         _monthByMaxYield = _month.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.Yield > (double)_minDividendYield / 100) }));
+        if (_showExDividend)
+        {
+            _monthByMaxYield = _monthByMaxYield.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.EventType == EventType.ExDividend) }));
+        }
+        if (_showPayDate)
+        {
+            _monthByMaxYield = _monthByMaxYield.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.EventType == EventType.PayDate) }));
+        }
     }
 
     protected override async Task OnInitializedAsync()
@@ -91,7 +123,7 @@ else
         _monthByMaxYield = _month;
         _maxDividendYield = _month.GetMaximumYield();
         _minDividendYield = 4;
-        SetMinimumDividendYield();
+        ShrinkSelection();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
