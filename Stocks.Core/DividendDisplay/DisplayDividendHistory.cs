@@ -2,12 +2,12 @@
 
 namespace Stocks.Core.DividendDisplay;
 
-public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, string Css, double Amount, double Yield, string InfoText, IEnumerable<DisplayDividendHistoryDetail> Details)
+public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, string Css, double Amount, double Yield, string InfoText, EventType EventType, IEnumerable<DisplayDividendHistoryDetail> Details)
 {
     public static DisplayDividendHistory[] ToDisplayDividendHistories(StockDividend stock, DividendHistory dividendHistory)
     {
         double yield = stock.DividendHistories.Where(dh => dh.PayDate.Year == dividendHistory.PayDate.Year).Sum(dh => dh.Amount) / stock.Price;
-        var details = new List<DisplayDividendHistoryDetail> { 
+        var details = new List<DisplayDividendHistoryDetail> {
         new("Current price:", stock.Price.ToDollarDisplay()),
         new("Current amount:", dividendHistory.Amount.ToDollarDisplay()),
         new("Dividend to price:", (dividendHistory.Amount/stock.Price).ToPercentageDisplay()),
@@ -15,10 +15,16 @@ public record DisplayDividendHistory(DateTime Date, string Ticker, string Name, 
         };
 
         var stockName = stock.Name.RemoveTicker().ShrinkNAme();
-        var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, "Ex-Dividend", details);
-        var pay = ex with { Date = dividendHistory.PayDate, Css = "payDate", InfoText="Pay date" };
+        var ex = new DisplayDividendHistory(dividendHistory.ExDate, stock.Ticker, stockName, "exDate", dividendHistory.Amount, yield, "Ex-Dividend", EventType.ExDividend, details);
+        var pay = ex with { EventType = EventType.PayDate, Date = dividendHistory.PayDate, Css = "payDate", InfoText = "Pay date" };
         return new[] { ex, pay };
     }
+}
+
+public enum EventType
+{
+    ExDividend,
+    PayDate
 }
 
 public static class StockNameExtensions
