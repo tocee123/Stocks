@@ -88,18 +88,16 @@ else
     }
 
     private void ToggleExDividend()
-    {
-        _showExDividendClicked = !_showExDividendClicked;
-        _showPayDateClicked = false;
-        _eventType = _showExDividendClicked ? EventType.ExDividend : EventType.All;
-        ShrinkSelection();
-    }
+    => ToggleDividendEvent(ref _showExDividendClicked, ref _showPayDateClicked, EventType.ExDividend);
 
     private void TogglePayDate()
+    => ToggleDividendEvent(ref _showPayDateClicked, ref _showExDividendClicked, EventType.PayDate);
+
+    private void ToggleDividendEvent(ref bool clicked, ref bool otherClicked, EventType eventType)
     {
-        _showPayDateClicked = !_showPayDateClicked;
-        _showExDividendClicked = false;
-        _eventType = _showPayDateClicked ? EventType.PayDate : EventType.All;
+        clicked = !clicked;
+        otherClicked = false;
+        _eventType = clicked ? eventType : EventType.All;
         ShrinkSelection();
     }
 
