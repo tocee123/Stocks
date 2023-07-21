@@ -71,30 +71,35 @@ else
     private double _minDividendYield;
     private double _maxDividendYield;
 
-    private bool _showExDividend = false;
-    private bool _showPayDate = false;
+    private bool _showExDividendClicked = false;
+    private bool _showPayDateClicked = false;
+
+    private EventType _eventType;
 
     IEnumerable<IEnumerable<DisplayDay>> _month;
     IEnumerable<IEnumerable<DisplayDay>> _monthByMaxYield;
 
     private void Reset()
     {
-        _showExDividend = false;
-        _showPayDate = false;
+        _showExDividendClicked = false;
+        _showPayDateClicked = false;
+        _eventType = EventType.All;
         ShrinkSelection();    
     }
 
     private void ToggleExDividend()
     {
-        _showExDividend = true; 
-        _showPayDate= false;
+        _showExDividendClicked = !_showExDividendClicked;
+        _showPayDateClicked = false;
+        _eventType = _showExDividendClicked ? EventType.ExDividend : EventType.All;
         ShrinkSelection();
     }
 
     private void TogglePayDate()
     {
-        _showPayDate = true;
-        _showExDividend = false;
+        _showPayDateClicked = !_showPayDateClicked;
+        _showExDividendClicked = false;
+        _eventType = _showPayDateClicked ? EventType.PayDate : EventType.All;
         ShrinkSelection();
     }
 
@@ -107,13 +112,9 @@ else
     private void ShrinkSelection()
     {
         _monthByMaxYield = _month.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.Yield > (double)_minDividendYield / 100) }));
-        if (_showExDividend)
+        if (_eventType != EventType.All)
         {
-            _monthByMaxYield = _monthByMaxYield.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.EventType == EventType.ExDividend) }));
-        }
-        if (_showPayDate)
-        {
-            _monthByMaxYield = _monthByMaxYield.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.EventType == EventType.PayDate) }));
+             _monthByMaxYield = _monthByMaxYield.Select(m => m.Select(x => x with { DisplayDividendHistories = x.DisplayDividendHistories.Where(dh => dh.EventType == _eventType) }));        
         }
     }
 
