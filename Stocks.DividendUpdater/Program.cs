@@ -1,9 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
 using Stocks.Dal;
 using Stocks.Dal.Entities;
+using Stocks.DividendUpdater;
+using System.Runtime.CompilerServices;
 using StockDividendCore = Stocks.Domain.Models.StockDividend;
 using StockDividendEntity = Stocks.Dal.Entities.StockDividend;
 
@@ -11,6 +15,14 @@ internal sealed class Program
 {
     static async Task Main(string[] args)
     {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", false, true)
+            .AddUserSecrets(typeof(Program).Assembly)
+            .Build();
+
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddOptions<Settings>().Bind(configuration.GetSection(Settings.SectionName));
+
         var loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.AddConsole();
