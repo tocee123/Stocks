@@ -7,7 +7,6 @@ using Stocks.Core.Repositories;
 using Stocks.Dal;
 using Stocks.Dal.Entities;
 using Stocks.DividendUpdater;
-using System.Runtime.CompilerServices;
 using StockDividendCore = Stocks.Domain.Models.StockDividend;
 using StockDividendEntity = Stocks.Dal.Entities.StockDividend;
 
