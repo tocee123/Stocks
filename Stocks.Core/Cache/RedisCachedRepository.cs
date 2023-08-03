@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using Stocks.Core.Enums;
@@ -9,9 +9,9 @@ namespace Stocks.Core.Cache
     {
         readonly string _redisConnectionString;
 
-        public RedisCachedRepository(IConfiguration configuration)
+        public RedisCachedRepository(IOptions<Settings> settings)
         {
-            _redisConnectionString = configuration.GetConnectionString("Redis");
+            _redisConnectionString = settings.Value.Redis;
         }
 
         public T Get<T>(string key)
