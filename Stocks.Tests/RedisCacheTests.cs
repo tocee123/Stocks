@@ -10,7 +10,7 @@ namespace WebDownloading.Test
         [SetUp]
         public void Setup()
         {
-            _target = new RedisCachedRepository(ConfigurationBuilderBuilder.Build());
+            _target = new RedisCachedRepository(ConfigurationBuilderBuilder.GetOptions());
         }
 
         [Test]

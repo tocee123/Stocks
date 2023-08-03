@@ -1,4 +1,4 @@
-﻿namespace Stocks.DividendUpdater;
+﻿namespace Stocks.Core;
 public class Settings
 {
     public const string SectionName = "ConnectionStrings";

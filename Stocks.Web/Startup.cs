@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Stocks.Core;
 using Stocks.Core.Cache;
 using Stocks.Core.DividendDisplay;
 using Stocks.Core.Loaders;
@@ -39,6 +40,7 @@ namespace Stocks.Web
             services.AddTransient<ICalendarGenerator, CalendarGenerator>();
             services.AddTransient<IDateProvider, DateProvider>();
             services.AddDbContext<StockContext>(options => options.UseSqlServer(Configuration.GetConnectionString("StockWebDividendDB")));
+            services.AddOptions<Settings>().Bind(Configuration.GetSection(Settings.SectionName));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
