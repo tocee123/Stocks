@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
 using Stocks.Dal;
@@ -7,13 +8,14 @@ using Stocks.Dal.Entities;
 using StockDividendCore = Stocks.Domain.Models.StockDividend;
 using StockDividendEntity = Stocks.Dal.Entities.StockDividend;
 
+namespace Stocks.DividendUpdater;
 public class Updater : IUpdater
 {
     readonly ILogger<Updater> _logger;
     readonly StockContext _context;
     readonly IStockDividendHistoryLoader _historyLoader;
 
-    public Updater(ILogger<Updater> logger, StockContext context, IStockDividendHistoryLoader historyLoader)
+    public Updater(ILogger<Updater> logger, StockContext context, IStockDividendHistoryLoader historyLoader, IOptions<Settings> options)
     {
         _logger = logger;
         _context = context;
@@ -98,4 +100,3 @@ public class Updater : IUpdater
         context.SaveChanges();
     }
 }
-

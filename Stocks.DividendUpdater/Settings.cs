@@ -1,5 +1,5 @@
 ﻿namespace Stocks.DividendUpdater;
-internal class Settings
+public class Settings
 {
     public const string SectionName = "ConnectionStrings";
     public string StockWebDividendDB { get; set; }

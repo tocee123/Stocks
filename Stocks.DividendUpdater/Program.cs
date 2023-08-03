@@ -16,7 +16,8 @@ internal sealed class Program
             .Build();
 
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddOptions<Settings>().Bind(configuration.GetSection(Settings.SectionName));
+        //this wont work here
+        //serviceCollection.AddOptions<Settings>().Bind(configuration.GetSection(Settings.SectionName));
         serviceCollection.AddLogging(builder =>
         {
             builder.AddConsole();
@@ -28,7 +29,6 @@ internal sealed class Program
 
         var updater = serviceCollection.BuildServiceProvider().GetRequiredService<IUpdater>();
         await updater.Update();
-        //AddStockOfInterestIntoDb();
     }    
 }
 
