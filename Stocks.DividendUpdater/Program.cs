@@ -24,6 +24,7 @@ internal sealed class Program
         });
         serviceCollection.AddTransient<IUpdater, Updater>();
         serviceCollection.AddTransient<IStockDividendHistoryLoader, StockDividendHistoryLoader>();
+        serviceCollection.AddTransient<IStocksLoader, StocksLoader>();
         serviceCollection.AddDbContext<StockContext>(options => options.UseSqlServer(configuration.GetConnectionString("StockWebDividendDB")));
 
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
 using Stocks.Dal;
@@ -14,19 +13,21 @@ public class Updater : IUpdater
     readonly ILogger<Updater> _logger;
     readonly StockContext _context;
     readonly IStockDividendHistoryLoader _historyLoader;
+    readonly IStocksLoader _stocksLoader;
 
-    public Updater(ILogger<Updater> logger, StockContext context, IStockDividendHistoryLoader historyLoader, IOptions<Settings> options)
+    public Updater(ILogger<Updater> logger, StockContext context, IStockDividendHistoryLoader historyLoader, IStocksLoader stocksLoader)
     {
         _logger = logger;
         _context = context;
         _historyLoader = historyLoader;
+        _stocksLoader = stocksLoader;
     }
 
     public async Task Update()
     {
         var stockEntities = _context.Stock.ToArray();
 
-        var histories = await GetHistories(_context);
+        var histories = await GetHistories();
         var newStockEntities = histories.Select(ToStockEntity);
 
         foreach (var newStock in newStockEntities)
@@ -66,10 +67,10 @@ public class Updater : IUpdater
         return stock;
     }
 
-    async Task<IEnumerable<StockDividendCore>> GetHistories(StockContext context)
+    async Task<IEnumerable<StockDividendCore>> GetHistories()
     {
-        var stockLoader = new StocksLoader(_historyLoader);
-        var histories = await stockLoader.GetStockDividendsAsync(context.StockOfInterest.Select(soi => soi.Ticker));
+        var tickers = _context.StockOfInterest.Select(soi => soi.Ticker);
+        var histories = await _stocksLoader.GetStockDividendsAsync(tickers);
         return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
     }
 
