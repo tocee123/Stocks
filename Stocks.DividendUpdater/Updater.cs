@@ -12,14 +12,12 @@ public class Updater : IUpdater
 {
     readonly ILogger<Updater> _logger;
     readonly StockContext _context;
-    readonly IStockDividendHistoryLoader _historyLoader;
     readonly IStocksLoader _stocksLoader;
 
-    public Updater(ILogger<Updater> logger, StockContext context, IStockDividendHistoryLoader historyLoader, IStocksLoader stocksLoader)
+    public Updater(ILogger<Updater> logger, StockContext context, IStocksLoader stocksLoader)
     {
         _logger = logger;
         _context = context;
-        _historyLoader = historyLoader;
         _stocksLoader = stocksLoader;
     }
 
