@@ -71,9 +71,6 @@ else
     private double _minDividendYield;
     private double _maxDividendYield;
 
-    private bool _showExDividendClicked = false;
-    private bool _showPayDateClicked = false;
-
     private EventType _eventType;
 
     IEnumerable<IEnumerable<DisplayDay>> _month;
@@ -81,23 +78,21 @@ else
 
     private void Reset()
     {
-        _showExDividendClicked = false;
-        _showPayDateClicked = false;
         _eventType = EventType.All;
         ShrinkSelection();    
     }
 
     private void ToggleExDividend()
-    => ToggleDividendEvent(ref _showExDividendClicked, ref _showPayDateClicked, EventType.ExDividend);
+    => ToggleDividendEvent(EventType.ExDividend);
 
     private void TogglePayDate()
-    => ToggleDividendEvent(ref _showPayDateClicked, ref _showExDividendClicked, EventType.PayDate);
+    => ToggleDividendEvent(EventType.PayDate);
 
-    private void ToggleDividendEvent(ref bool clicked, ref bool otherClicked, EventType eventType)
+    private void ToggleDividendEvent(EventType newEventType)
     {
-        clicked = !clicked;
-        otherClicked = false;
-        _eventType = clicked ? eventType : EventType.All;
+        _eventType = _eventType == newEventType 
+            ? EventType.All 
+            : newEventType;
         ShrinkSelection();
     }
 
