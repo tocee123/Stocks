@@ -1,5 +1,5 @@
 ﻿using Stocks.Core.Enums;
-using Stocks.Test;
+using Stocks.Test.HelperClasses;
 
 namespace WebDownloading.Test
 {
