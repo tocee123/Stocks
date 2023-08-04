@@ -1,6 +1,6 @@
 ﻿using Stocks.Core.DividendDisplay;
 
-namespace Stocks.Test.Core.DividendDisplay;
+namespace Stocks.Test.Stocks.Core.DividendDisplay;
 public class CalendarGeneratorShould
 {
     private ICalendarGenerator _target;
