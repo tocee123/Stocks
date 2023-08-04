@@ -3,7 +3,7 @@ using WebPagesCommon = Stocks.Web.Pages.Common;
 namespace Stocks.Test.HelperClasses.StockFitlers
 {
     [TestFixture]
-    public class StockDividendFilterByVisibilitySwitchTests
+    public class StockDividendFilterByVisibilitySwitchShould
     {
         [Test]
         public void Filter_ReturnsNotEmptyList()
@@ -14,7 +14,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         }
 
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
-        public void IsUpcoming_WhenTheDateIsBetweenTheRange_ReturnsTrue(int daysToAdd, bool expected)
+        public void ReturnTrueWhenWhenTheDateIsBetweenTheRange(int daysToAdd, bool expected)
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
             var result = StockDividendFilterByVisibilitySwitch.IsUpcoming(sd);
@@ -22,7 +22,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         }
 
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
-        public void Filter_WhenTheDateIsBetweenTheRange_ReturnsTrue(int daysToAdd, bool expected)
+        public void Filter_ReturnTrueWhenWhenTheDateIsBetweenTheRange(int daysToAdd, bool expected)
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
             var target = new StockDividendFilterByVisibilitySwitch(WebPagesCommon.SwitchToUpcoming);

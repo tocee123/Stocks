@@ -3,16 +3,44 @@ using WebPagesCommon = Stocks.Web.Pages.Common;
 
 namespace Stocks.Test.HelperClasses.StockFitlers
 {
-    public class StockDividendTableStockFilterTests
+    public class StockDividendTableStockFilterShould
     {
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
-        public void IsUpcoming_When(int daysToAdd, bool expected)
+        public void ReturnTrueWhenDateIsMoreThan1AndLessThan15DaysAhead(int daysToAdd, bool expected)
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
             var target = new StockDividendTableStockFilter("", WebPagesCommon.SwitchToUpcoming, 0);
 
             var result = target.ShouldDisplay(sd);
             Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
+        }
+
+        [TestCaseSource(nameof(IsRatioGraterThan1StockDividends))]
+        public void ReturnsTrueWhenRatioIsGreaterThan1(double price, double amount, bool expected)
+        {
+            var sd = CerateStockDividendWithPriceAndAmount(price, amount);
+            var target = new StockDividendTableStockFilter("", WebPagesCommon.SwitchToGraterThan1, 0);
+
+            var result = target.ShouldDisplay(sd);
+            Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
+        }
+
+        [TestCaseSource(nameof(FilterByTickerStockDividends))]
+        public void ReturnTrueWhenTickerContainsShortName(string ticker, bool expected)
+        {
+            var sd = CerateStockDividendWithTicker("test");
+            var target = new StockDividendTableStockFilter(ticker, null, 0);
+            var result = target.ShouldDisplay(sd);
+            Assert.AreEqual(expected, result, ticker);
+        }
+
+        [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
+        public void ReturnTrueWhenPriceIsLessThanMaxPrice(int price, int maxPrice, bool expected)
+        {
+            var stockDividend = CerateStockDividendWithPrie(price);
+            var target = new StockDividendTableStockFilter(null, null, maxPrice);
+            var result = target.ShouldDisplay(stockDividend);
+            Assert.AreEqual(expected, result, nameof(maxPrice));
         }
 
         private static IEnumerable<TestCaseData> IsUpcomingStockDividends
@@ -36,17 +64,6 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         private static StockDividend CerateStockDividendWithExDate(int daysToAdd)
             => new() { DividendHistories = new[] { new DividendHistory { ExDate = DateTime.Today.AddDays(daysToAdd) } } };
 
-
-        [TestCaseSource(nameof(IsRatioGraterThan1StockDividends))]
-        public void IsRatioGraterThan1_When(double price, double amount, bool expected)
-        {
-            var sd = CerateStockDividendWithPriceAndAmount(price, amount);
-            var target = new StockDividendTableStockFilter("", WebPagesCommon.SwitchToGraterThan1, 0);
-
-            var result = target.ShouldDisplay(sd);
-            Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
-        }
-
         private static IEnumerable<TestCaseData> IsRatioGraterThan1StockDividends
         {
             get
@@ -66,15 +83,6 @@ namespace Stocks.Test.HelperClasses.StockFitlers
 
         private static StockDividend CerateStockDividendWithPriceAndAmount(double price, double amount)
             => new() { DividendHistories = new[] { new DividendHistory { Amount = amount } }, Price = price };
-
-        [TestCaseSource(nameof(FilterByTickerStockDividends))]
-        public void FilterByShortName_When(string ticker, bool expected)
-        {
-            var sd = CerateStockDividendWithTicker("test");
-            var target = new StockDividendTableStockFilter(ticker, null, 0);
-            var result = target.ShouldDisplay(sd);
-            Assert.AreEqual(expected, result, ticker);
-        }
 
         private static IEnumerable<TestCaseData> FilterByTickerStockDividends
         {
@@ -97,24 +105,6 @@ namespace Stocks.Test.HelperClasses.StockFitlers
                     yield return new TestCaseData(search, expected);
                 }
             }
-        }
-
-        [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void ShouldDisplay_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
-        {
-            var stockDividend = CerateStockDividendWithPrie(price);
-            var target = new StockDividendTableStockFilter(null, null, maxPrice);
-            var result = target.ShouldDisplay(stockDividend);
-            Assert.AreEqual(expected, result, nameof(maxPrice));
-        }
-
-        [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void FilterByMaxPrice_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
-        {
-            var stockDividend = CerateStockDividendWithPrie(price);
-            var target = new StockDividendTableStockFilter(null, null, maxPrice);
-            var result = target.ShouldDisplay(stockDividend);
-            Assert.AreEqual(expected, result, nameof(maxPrice));
         }
 
         private static IEnumerable<TestCaseData> FilterByMaxPriceStockDividends
