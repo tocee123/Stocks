@@ -1,10 +1,10 @@
 ﻿using Stocks.Core.Enums;
 using Stocks.Test.HelperClasses;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.Stocks.Core.Cache
 {
     [TestFixture]
-    public class RedisCacheTests
+    public class RedisCachedRepositoryShould
     {
         private RedisCachedRepository _target;
         [SetUp]
