@@ -36,7 +36,7 @@ namespace Stocks.Test.Stocks.Core.Loaders
         }
 
         [Test]
-        public async Task DownloadStockHistoryAsync_WhenCorrectStockTickerIsGiven_ReturnsNotemptyClass()
+        public async Task ReturnNotEmptyInstanceWhenCorrectStockTickerIsGiven()
         {
             var ticker = "MPLX";
             var result = await _target.DownloadStockHistoryAsync(ticker);
@@ -49,7 +49,7 @@ namespace Stocks.Test.Stocks.Core.Loaders
 
         [TestCase("TAEF")]
         [TestCase("123asd")]
-        public async Task DownloadStockHistoryAsync_WhenIncorrectStockTickerIsGiven_IsCorrectlyDownloadedFalse(string ticker)
+        public async Task SetIsCorrectlyDownloadedToFalseWhenIncorrectStockTickerIsGiven(string ticker)
         {
             var result = await _target.DownloadStockHistoryAsync(ticker);
             Assert.IsNotNull(result);
@@ -59,14 +59,14 @@ namespace Stocks.Test.Stocks.Core.Loaders
         [TestCase("abc", false)]
         [TestCase("www.google.com", true)]
         [TestCase("http://google.com", true)]
-        public void IsCorrectUrl_WhenUrlIsGiven_ReturnsResultAccordingly(string url, bool expected)
+        public void CheckIfGivenUrlIsValid(string url, bool expected)
         {
             var result = StockDividendHistoryLoader.IsCorrectUrl(url, out var reusltUri);
             Assert.AreEqual(expected, result);
         }
 
         [Test]
-        public void FillProperties_tests()
+        public void ReadStocksFromFile()
         {
             var ticker = "qyld";
             var fileContent = File.ReadAllText($@"..\..\..\Files\{ticker}.html");
