@@ -1,10 +1,10 @@
 ﻿using Stocks.Test.HelperClasses;
 using System.Text;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.Stocks.Core.Loaders
 {
     [TestFixture]
-    public class DividendByMonthCollectionPreparerTest
+    public class DividendByMonthCollectionPreparerShould
 
     {
         private IDividendByMonthCollectionPreparer _target;

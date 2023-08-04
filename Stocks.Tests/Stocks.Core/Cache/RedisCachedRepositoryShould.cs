@@ -1,10 +1,10 @@
 ﻿using Stocks.Core.Enums;
-using Stocks.Test;
+using Stocks.Test.HelperClasses;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.Stocks.Core.Cache
 {
     [TestFixture]
-    public class RedisCacheTests
+    public class RedisCachedRepositoryShould
     {
         private RedisCachedRepository _target;
         [SetUp]
@@ -14,11 +14,11 @@ namespace WebDownloading.Test
         }
 
         [Test]
-        public async Task WriteToCache_WritesObjectInJsonFormat()
+        public async Task WriteObjectInJsonFormat()
         {
             var fixture = new Fixture();
             var stockDividends = fixture.Create<IEnumerable<StockDividend>>();
-            var key = $"{DateTime.Now.ToString("yyyy-MM-dd")}_{nameof(WriteToCache_WritesObjectInJsonFormat)}";
+            var key = $"{DateTime.Now.ToString("yyyy-MM-dd")}_{nameof(WriteObjectInJsonFormat)}";
             await _target.SetAsync(key, stockDividends, CacheDuration.OneMinute);
             var result = await _target.GetAsync<IEnumerable<StockDividend>>(key);
 
@@ -26,7 +26,7 @@ namespace WebDownloading.Test
         }
 
         [Test, Ignore("Needs a way to delete the cache")]
-        public async Task ReadStringFromCache_WhenKeyExists_ReturnsString()
+        public async Task ReturnValueWhenKeyExists()
         {
             var key = "123";
             var result = await _target.GetStringAsync(key);

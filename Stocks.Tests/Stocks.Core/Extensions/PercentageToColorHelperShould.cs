@@ -1,15 +1,22 @@
 ﻿using Stocks.Core.Extensions;
 using System.Drawing;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.Stocks.Core.Extensions
 {
     [TestFixture]
-    public class PercentageToColorHelperTests
+    public class PercentageToColorHelperShould
     {
         [Test, TestCaseSource(nameof(GetFontColorByDividendToPriceSource))]
-        public void GetFontColorByDividendToPrice_WhenRatioIsGiven_ReturnsColor(double ratio, Color expectedColor)
+        public void ReturnExpectedFontColorWhenRatioIsGiven(double ratio, Color expectedColor)
         {
             var result = ratio.GetFontColorByDividendToPrice();
+            Assert.AreEqual(expectedColor, result);
+        }
+
+        [Test, TestCaseSource(nameof(GetBackgroundColorByDividendToPriceSource))]
+        public void ReturnExpectedBackgroundColorWhenRatioIsGiven(double ratio, Color expectedColor)
+        {
+            var result = ratio.GetBackgroundColorByDividendToPrice();
             Assert.AreEqual(expectedColor, result);
         }
 
@@ -25,14 +32,7 @@ namespace WebDownloading.Test
                 yield return new TestCaseData(0.014, Color.Black);
                 yield return new TestCaseData(0.006, Color.Black);
             }
-        }
-
-        [Test, TestCaseSource(nameof(GetBackgroundColorByDividendToPriceSource))]
-        public void GetBackgroundColorByDividendToPrice_WhenRatioIsGiven_ReturnsColor(double ratio, Color expectedColor)
-        {
-            var result = ratio.GetBackgroundColorByDividendToPrice();
-            Assert.AreEqual(expectedColor, result);
-        }
+        }        
 
         private static IEnumerable<TestCaseData> GetBackgroundColorByDividendToPriceSource
         {

@@ -3,10 +3,10 @@
 namespace Stocks.Test.HelperClasses.StockFitlers
 {
     [TestFixture]
-    public class StockDividendFilterByTicketTests
+    public class StockDividendFilterByTicketShould
     {
         [Test]
-        public void Filter_ReturnsNotEmptyList()
+        public void ReturnTrueWhenNullOrOneElementInList()
         {
             var target = new StockDividendFilterByTicker();
             Assert.IsTrue(target.Filter(null));
@@ -14,21 +14,24 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         }
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]
-        public void Filter_ReturnsNotEmptyList(string ticker, bool expected)
+        public void ReturnsFilteredTickers(string ticker, bool expected)
         {
-            var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendFilterByTicker(ticker);
-            var result = target.Filter(sd);
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expected, result);
+            Filter(target.Filter, ticker, expected);
         }
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]
-        public void FilterByShortName_WhenSearchIsGiven_ReturnsExpected(string ticker, bool expected)
+        public void ReturnsShouldFilteredTickers(string ticker, bool expected)
+        {
+            var target = new StockDividendFilterByTicker(ticker);
+            Filter(target.ShouldFilter, ticker, expected);
+        }
+
+        private static void Filter(Func<StockDividend, bool> filter, string ticker, bool expected)
         {
             var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendFilterByTicker(ticker);
-            var result = target.ShouldFilter(sd);
+            var result = filter(sd);
             Assert.AreEqual(expected, result, ticker);
         }
 

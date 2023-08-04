@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Stocks.Core;
 
-namespace Stocks.Test
+namespace Stocks.Test.HelperClasses
 {
     public class ConfigurationBuilderBuilder
     {

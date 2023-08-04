@@ -1,19 +1,19 @@
 ﻿using Stocks.Domain.Helpers;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.Stocks.Domain.Helpers
 {
     [TestFixture]
-    public class DateCalculatorTests
+    public class DateCalculatorShould
     {
         [TestCaseSource(nameof(WeekendDays))]
-        public void CalculateWhenToBuy_WhenExDateIsWeekend_ReturnsFriday(DateTime date)
+        public void ReturnFridayForCalculateWhenToBuyWhenExDateIsWeekend(DateTime date)
         {
             var result = DateCalculator.CalculateWhenToBuy(date);
             Assert.AreEqual(DayOfWeek.Friday, result.DayOfWeek);
         }
 
         [TestCaseSource(nameof(WeekendDays))]
-        public void CalculateWhenToSell_WhenExDateIsWeekend_ReturnsMonday(DateTime date)
+        public void ReturnMondayForCalculateWhenToSellWhenExDateIsWeekend(DateTime date)
         {
             var result = DateCalculator.CalculateWhenToSell(date);
             Assert.AreEqual(DayOfWeek.Monday, result.DayOfWeek);

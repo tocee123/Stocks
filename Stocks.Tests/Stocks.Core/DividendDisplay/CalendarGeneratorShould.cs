@@ -1,7 +1,7 @@
 ﻿using Stocks.Core.DividendDisplay;
 
-namespace Stocks.Test.Core.DividendDisplay;
-public class CalendarGeneratorTests
+namespace Stocks.Test.Stocks.Core.DividendDisplay;
+public class CalendarGeneratorShould
 {
     private ICalendarGenerator _target;
     private IStocksRepository _stocksRepository;
@@ -16,7 +16,7 @@ public class CalendarGeneratorTests
     }
 
     [Test]
-    public async Task GenerateMonth_GeneratesMonth()
+    public async Task GenerateMonth()
     {
         var today = DateTime.Today;
         var fixture = new Fixture().SetupFixtureToGenerateDateInCurrentMonth(today.Year, today.Month);
