@@ -1,11 +1,12 @@
 ﻿using Stocks.Test.HelperClasses;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.Stocks.Core.Repositories
 {
     [TestFixture]
-    public class StocksRepositoryTests
+    public class StocksRepositoryShould
     {
         private StocksRepository _target;
+
         [SetUp]
         public void Setup()
         {
@@ -13,7 +14,7 @@ namespace WebDownloading.Test
         }
 
         [Test]
-        public async Task GetStocks_ReturnsNotEmptyList()
+        public async Task ReturnNotEmptyList()
         {
             var result = await _target.GetStocksAsync();
             result.Should().NotBeEmpty();

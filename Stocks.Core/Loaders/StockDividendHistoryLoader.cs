@@ -9,7 +9,7 @@ namespace Stocks.Core.Loaders
 {
     public class StockDividendHistoryLoader : IStockDividendHistoryLoader
     {
-        ILogger<StockDividendHistoryLoader> _logger;
+        readonly ILogger<StockDividendHistoryLoader> _logger;
 
         public StockDividendHistoryLoader(ILogger<StockDividendHistoryLoader> logger)
         {

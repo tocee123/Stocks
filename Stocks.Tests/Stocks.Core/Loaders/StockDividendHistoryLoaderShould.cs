@@ -3,10 +3,10 @@ using System.Net;
 using System.IO;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Stocks.Test
+namespace Stocks.Test.Stocks.Core.Loaders
 {
     [TestFixture]
-    public class StockDividendHistoryLoaderTests
+    public class StockDividendHistoryLoaderShould
     {
         private IStockDividendHistoryLoader _target;
 
@@ -17,7 +17,7 @@ namespace Stocks.Test
         }
 
         [Test]
-        public async Task TaskTest()
+        public async Task ReturnWebPageContent()
         {
             string url = "https://dividendhistory.org/payout/QYLD/";
             var handler = new HttpClientHandler()
@@ -31,7 +31,7 @@ namespace Stocks.Test
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
             var content = await client.GetStringAsync(url);
-
+            content.Should().NotBeNullOrEmpty();
             Console.WriteLine(content);
         }
 
