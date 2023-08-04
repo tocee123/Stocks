@@ -1,9 +1,9 @@
 ﻿using Stocks.Domain.Helpers;
 
-namespace WebDownloading.Test
+namespace Stocks.Test.Stocks.Domain.Helpers
 {
     [TestFixture]
-    public class DateCalculatorTests
+    public class DateCalculatorShould
     {
         [TestCaseSource(nameof(WeekendDays))]
         public void CalculateWhenToBuy_WhenExDateIsWeekend_ReturnsFriday(DateTime date)
