@@ -3,10 +3,10 @@
 namespace Stocks.Test.HelperClasses.StockFitlers
 {
     [TestFixture]
-    public class StockDividendFilterByMaxPriceTests
+    public class StockDividendFilterByMaxPriceShould
     {
         [Test]
-        public void Filter_ReturnsNotEmptyList()
+        public void ReturnTrueWhenNullOrOneElementInList()
         {
             var target = new StockDividendFilterByMaxPrice();
             Assert.IsTrue(target.Filter(null));
@@ -14,7 +14,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
-        public void Filter_WhenPriceIsSet_FiltersAccordingly(int price, int maxPrice, bool expected)
+        public void FilterOutDividendsWherePriceIsLessThenMaxPrice(int price, int maxPrice, bool expected)
         {
             var sd = CerateStockDividendWithPrice(price);
             var target = new StockDividendFilterByMaxPrice(maxPrice);

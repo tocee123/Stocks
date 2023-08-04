@@ -4,10 +4,10 @@ using System.IO;
 
 namespace Stocks.Test.Core.DividendDisplay;
 
-public class DisplayDatesExtensionTests
+public class DisplayDatesExtensionShould
 {
     [Test]
-    public void GetMaximumYield_ReturnsTheMaximumYield()
+    public void GetSecondMaximumYield()
     {
         var fixture = new Fixture();
         var month = fixture.CreateMany<IEnumerable<DisplayDay>>();
@@ -24,7 +24,7 @@ public class DisplayDatesExtensionTests
     }
 
     [Test]
-    public void GetMaximumYield_WhenRealDataIsGiven_ReturnsMax()
+    public void GetSecondMaximumYield_WhenRealDataIsGiven()
     {
         var path = "Core\\DividendDisplay\\MonthJson.txt";
         var month = JsonConvert.DeserializeObject<IEnumerable<IEnumerable<DisplayDay>>>(File.ReadAllText(path));
