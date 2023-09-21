@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Stocks.Core\Stocks.Core.csproj" />
+    <ProjectReference Include="..\Stocks.Dal\Stocks.Dal.csproj" />
     <ProjectReference Include="..\Stocks.Web\Stocks.Web.csproj" />
   </ItemGroup>
 
