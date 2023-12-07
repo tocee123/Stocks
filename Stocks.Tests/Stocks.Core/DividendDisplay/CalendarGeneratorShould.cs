@@ -19,7 +19,7 @@ public class CalendarGeneratorShould
     public async Task GenerateMonth()
     {
         var today = DateTime.Today;
-        var fixture = new Fixture().SetupFixtureToGenerateDateInCurrentMonth(today.Year, today.Month);
+        var fixture = new Fixture().SetupFixtureToGenerateDateInCurrentMonth();
         _stocksRepository.GetStocksAsync().Returns(fixture.CreateMany<StockDividend>());
 
         _dateProvider.GetToday().Returns(today);
