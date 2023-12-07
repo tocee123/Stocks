@@ -21,9 +21,30 @@ public class Updater : IUpdater
         _stocksLoader = stocksLoader;
     }
 
+    public async Task SetIsDeleted()
+    {
+        var stockEntities = _context.Stock.Include(s => s.StockDividends).ToArray();
+
+        var histories = await GetHistories();
+        var newStockEntities = histories.Select(ToStockEntity);
+
+        foreach (var newStock in newStockEntities)
+        {
+            _logger.LogInformation($"Processing {newStock.Name}");
+            var firstStock = stockEntities.FirstOrDefault(s => s.Ticker == newStock.Ticker);
+            if (firstStock is null)
+            {
+                continue;
+            }
+            MarkIsDeleted(firstStock, newStock);
+        }
+
+        _context.SaveChanges();
+    }
+
     public async Task Update()
     {
-        var stockEntities = _context.Stock.ToArray();
+        var stockEntities = _context.Stock.Include(s => s.StockDividends).ToArray();
 
         var histories = await GetHistories();
         var newStockEntities = histories.Select(ToStockEntity);
@@ -67,9 +88,17 @@ public class Updater : IUpdater
 
     async Task<IEnumerable<StockDividendCore>> GetHistories()
     {
-        var tickers = _context.StockOfInterest.Select(soi => soi.Ticker);
+        var tickers = _context.StockOfInterest.Select(soi => soi.Ticker).Where(s => s == "IEP");
         var histories = await _stocksLoader.GetStockDividendsAsync(tickers);
         return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
+    }
+
+    private void MarkIsDeleted(Stock stockInDb, Stock stockFromNet)
+    {
+        foreach (var dividendInDb in stockInDb.StockDividends.Except(stockFromNet.StockDividends))
+        {
+            dividendInDb.IsDeleted = true;
+        }
     }
 
     void UpdateNewStockDividendEntities(Stock stockInDb, Stock stockFromNet)
