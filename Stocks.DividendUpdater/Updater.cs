@@ -21,6 +21,7 @@ public class Updater : IUpdater
         _stocksLoader = stocksLoader;
     }
 
+    //Todo Make it nicer
     public async Task SetIsDeleted()
     {
         var stockEntities = _context.Stock.Include(s => s.StockDividends).ToArray();
@@ -88,7 +89,7 @@ public class Updater : IUpdater
 
     async Task<IEnumerable<StockDividendCore>> GetHistories()
     {
-        var tickers = _context.StockOfInterest.Select(soi => soi.Ticker).Where(s => s == "IEP");
+        var tickers = _context.StockOfInterest.Select(soi => soi.Ticker);
         var histories = await _stocksLoader.GetStockDividendsAsync(tickers);
         return histories.Where(s => !string.IsNullOrEmpty(s.Ticker));
     }
