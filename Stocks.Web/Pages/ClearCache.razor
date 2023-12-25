@@ -1,0 +1,26 @@
+﻿@page "/ClearCache"
+@using Stocks.Core.Cache;
+<h3>ClearCache</h3>
+@inject ICachedRepository cachedRepository
+
+@if (isProcessing)
+{
+    <p><em>Cache being deleted...</em></p>
+}
+else
+{
+    <p><em>Cache is cleared...</em></p>
+
+}
+
+@code {
+
+    private bool isProcessing = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isProcessing = true;
+        await cachedRepository.Clear();
+        isProcessing = false;
+    }
+}

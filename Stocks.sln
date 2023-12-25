@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stocks.Test", "Stocks.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stocks.Domain", "Stocks.Domain\Stocks.Domain.csproj", "{45357BE0-960A-49D4-B5E3-25E4EC975961}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stocks.Dal", "Stocks.Dal\Stocks.Dal.csproj", "{C7408380-C49C-4A46-BDA4-76147735B6AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stocks.Dal", "Stocks.Dal\Stocks.Dal.csproj", "{C7408380-C49C-4A46-BDA4-76147735B6AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stocks.DividendUpdater", "Stocks.DividendUpdater\Stocks.DividendUpdater.csproj", "{67D2CF8D-D47E-4A39-BA65-195BAC29F41B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stocks.DividendUpdater", "Stocks.DividendUpdater\Stocks.DividendUpdater.csproj", "{67D2CF8D-D47E-4A39-BA65-195BAC29F41B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C10D4497-87D9-4CCA-AEE9-E669CBA4D962}"
 EndProject
