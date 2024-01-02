@@ -9,8 +9,8 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void ReturnTrueWhenNullOrOneElementInList()
         {
             var target = new StockDividendFilterByMaxPrice();
-            Assert.IsTrue(target.Filter(null));
-            Assert.IsTrue(target.Filter(new()));
+            target.Filter(null).Should().BeTrue();
+            target.Filter(new()).Should().BeTrue();
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
@@ -19,7 +19,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
             var sd = CerateStockDividendWithPrice(price);
             var target = new StockDividendFilterByMaxPrice(maxPrice);
             var result = target.Filter(sd);
-            Assert.AreEqual(expected, result);
+            result.Should().Be(expected);
         }
 
         private static StockDividend CerateStockDividendWithPrice(int price)

@@ -10,14 +10,14 @@ namespace Stocks.Test.Stocks.Core.Extensions
         public void ReturnExpectedFontColorWhenRatioIsGiven(double ratio, Color expectedColor)
         {
             var result = ratio.GetFontColorByDividendToPrice();
-            Assert.AreEqual(expectedColor, result);
+            result.Should().Be(expectedColor);
         }
 
         [Test, TestCaseSource(nameof(GetBackgroundColorByDividendToPriceSource))]
         public void ReturnExpectedBackgroundColorWhenRatioIsGiven(double ratio, Color expectedColor)
         {
             var result = ratio.GetBackgroundColorByDividendToPrice();
-            Assert.AreEqual(expectedColor, result);
+            result.Should().Be(expectedColor);
         }
 
         private static IEnumerable<TestCaseData> GetFontColorByDividendToPriceSource
@@ -32,7 +32,7 @@ namespace Stocks.Test.Stocks.Core.Extensions
                 yield return new TestCaseData(0.014, Color.Black);
                 yield return new TestCaseData(0.006, Color.Black);
             }
-        }        
+        }
 
         private static IEnumerable<TestCaseData> GetBackgroundColorByDividendToPriceSource
         {

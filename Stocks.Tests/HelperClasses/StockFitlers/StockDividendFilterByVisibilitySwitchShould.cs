@@ -9,8 +9,8 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void Filter_ReturnsNotEmptyList()
         {
             var target = new StockDividendFilterByVisibilitySwitch();
-            Assert.IsTrue(target.Filter(null));
-            Assert.IsTrue(target.Filter(new()));
+            target.Filter(null).Should().BeTrue();
+            target.Filter(new()).Should().BeTrue();
         }
 
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
@@ -18,7 +18,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         {
             var sd = CerateStockDividendWithExDate(daysToAdd);
             var result = StockDividendFilterByVisibilitySwitch.IsUpcoming(sd);
-            Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
+            result.Should().Be(expected, because: $"ExDate: {sd.LatestDividendHistory.ExDate}");
         }
 
         [TestCaseSource(nameof(IsUpcomingStockDividends))]
@@ -29,7 +29,8 @@ namespace Stocks.Test.HelperClasses.StockFitlers
 
             var result = target.Filter(sd);
 
-            Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
+
+            result.Should().Be(expected, because: $"ExDate: {sd.LatestDividendHistory.ExDate}");
         }
 
         private static IEnumerable<TestCaseData> IsUpcomingStockDividends
@@ -59,7 +60,8 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         {
             var sd = CerateStockDividendWithPriceAndAmount(price, amount);
             var result = StockDividendFilterByVisibilitySwitch.IsRatioGraterThan1(sd);
-            Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
+
+            result.Should().Be(expected, because: $"DividendToPrice: {sd.DividendToPrice}");
         }
 
         [TestCaseSource(nameof(IsRatioGraterThan1StockDividends))]
@@ -70,7 +72,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
 
             var result = target.Filter(sd);
 
-            Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
+            result.Should().Be(expected, because: $"DividendToPrice: {sd.DividendToPrice}");
         }
 
         private static IEnumerable<TestCaseData> IsRatioGraterThan1StockDividends
@@ -101,7 +103,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
 
             var result = target.Filter(sd);
 
-            Assert.AreEqual(expected, result, $"Special: {sd.HasSpecial}");
+            result.Should().Be(expected, because: $"Special: {sd.HasSpecial}");
         }
 
         private static IEnumerable<TestCaseData> HasSpecialStockDividends
