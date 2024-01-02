@@ -7,7 +7,7 @@ using Stocks.Dal.Entities;
 using StockDividendCore = Stocks.Domain.Models.StockDividend;
 using StockDividendEntity = Stocks.Dal.Entities.StockDividend;
 
-namespace Stocks.DividendUpdater;
+namespace Stocks.DividendUpdater.Setup;
 public class Updater : IUpdater
 {
     readonly ILogger<Updater> _logger;
