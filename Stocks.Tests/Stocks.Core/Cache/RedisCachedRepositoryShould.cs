@@ -28,7 +28,7 @@ namespace Stocks.Test.Stocks.Core.Cache
             await _target.SetAsync(key, stockDividends, CacheDuration.OneMinute);
             var result = await _target.GetAsync<IEnumerable<StockDividend>>(key);
 
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
 
         [Test, Ignore("Needs a way to delete the cache")]
@@ -36,7 +36,7 @@ namespace Stocks.Test.Stocks.Core.Cache
         {
             var key = "123";
             var result = await _target.GetStringAsync(key);
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
     }
 }

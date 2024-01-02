@@ -9,8 +9,8 @@ namespace Stocks.Test.HelperClasses.StockFitlers
         public void ReturnTrueWhenNullOrOneElementInList()
         {
             var target = new StockDividendFilterByTicker();
-            Assert.IsTrue(target.Filter(null));
-            Assert.IsTrue(target.Filter(new()));
+            target.Filter(null).Should().BeTrue();
+            target.Filter(new()).Should().BeTrue();
         }
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]
@@ -32,7 +32,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
             var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendFilterByTicker(ticker);
             var result = filter(sd);
-            Assert.AreEqual(expected, result, ticker);
+            result.Should().Be(expected, because: ticker);
         }
 
         private static StockDividend CerateStockDividendWithTicker(string ticker)

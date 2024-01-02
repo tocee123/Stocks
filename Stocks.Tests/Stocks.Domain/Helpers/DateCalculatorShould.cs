@@ -9,14 +9,14 @@ namespace Stocks.Test.Stocks.Domain.Helpers
         public void ReturnFridayForCalculateWhenToBuyWhenExDateIsWeekend(DateTime date)
         {
             var result = DateCalculator.CalculateWhenToBuy(date);
-            Assert.AreEqual(DayOfWeek.Friday, result.DayOfWeek);
+            result.DayOfWeek.Should().Be(DayOfWeek.Friday);
         }
 
         [TestCaseSource(nameof(WeekendDays))]
         public void ReturnMondayForCalculateWhenToSellWhenExDateIsWeekend(DateTime date)
         {
             var result = DateCalculator.CalculateWhenToSell(date);
-            Assert.AreEqual(DayOfWeek.Monday, result.DayOfWeek);
+            result.DayOfWeek.Should().Be(DayOfWeek.Monday);
         }
 
         private static IEnumerable<DateTime> WeekendDays

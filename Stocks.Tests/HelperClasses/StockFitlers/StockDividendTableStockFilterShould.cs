@@ -12,7 +12,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
             var target = new StockDividendTableStockFilter("", WebPagesCommon.SwitchToUpcoming, 0);
 
             var result = target.ShouldDisplay(sd);
-            Assert.AreEqual(expected, result, $"ExDate: {sd.LatestDividendHistory.ExDate}");
+            result.Should().Be(expected, because: $"ExDate: {sd.LatestDividendHistory.ExDate}");
         }
 
         [TestCaseSource(nameof(IsRatioGraterThan1StockDividends))]
@@ -22,7 +22,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
             var target = new StockDividendTableStockFilter("", WebPagesCommon.SwitchToGraterThan1, 0);
 
             var result = target.ShouldDisplay(sd);
-            Assert.AreEqual(expected, result, $"DividendToPrice: {sd.DividendToPrice}");
+            result.Should().Be(expected, because: $"DividendToPrice: {sd.DividendToPrice}");
         }
 
         [TestCaseSource(nameof(FilterByTickerStockDividends))]
@@ -31,7 +31,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
             var sd = CerateStockDividendWithTicker("test");
             var target = new StockDividendTableStockFilter(ticker, null, 0);
             var result = target.ShouldDisplay(sd);
-            Assert.AreEqual(expected, result, ticker);
+            result.Should().Be(expected, because: ticker);
         }
 
         [TestCaseSource(nameof(FilterByMaxPriceStockDividends))]
@@ -40,7 +40,7 @@ namespace Stocks.Test.HelperClasses.StockFitlers
             var stockDividend = CerateStockDividendWithPrie(price);
             var target = new StockDividendTableStockFilter(null, null, maxPrice);
             var result = target.ShouldDisplay(stockDividend);
-            Assert.AreEqual(expected, result, nameof(maxPrice));
+            result.Should().Be(expected, because: nameof(maxPrice));
         }
 
         private static IEnumerable<TestCaseData> IsUpcomingStockDividends
