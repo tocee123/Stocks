@@ -1,5 +1,7 @@
-﻿using Stocks.Core.Enums;
-using Stocks.Test.HelperClasses;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Stocks.Core;
+using Stocks.Core.Enums;
 
 namespace Stocks.Test.Stocks.Core.Cache
 {
@@ -10,7 +12,11 @@ namespace Stocks.Test.Stocks.Core.Cache
         [SetUp]
         public void Setup()
         {
-            _target = new RedisCachedRepository(ConfigurationBuilderBuilder.GetOptions());
+            var configuration = new ConfigurationBuilder()
+               .AddJsonFile($"appsettings.Development.json", optional: false)
+               .Build();
+            var options = Options.Create(new Settings { Redis = configuration.GetConnectionString("Redis") });
+            _target = new RedisCachedRepository(options);
         }
 
         [Test]

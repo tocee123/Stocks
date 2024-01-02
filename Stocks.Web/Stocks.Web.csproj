@@ -10,11 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
-    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="22.1.37" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="24.1.43" />
   </ItemGroup>
 
   <ItemGroup>
