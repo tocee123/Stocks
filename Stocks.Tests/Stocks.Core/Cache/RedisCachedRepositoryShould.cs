@@ -15,8 +15,9 @@ namespace Stocks.Test.Stocks.Core.Cache
             var configuration = new ConfigurationBuilder()
                .AddJsonFile($"appsettings.Development.json", optional: false)
                .Build();
-            var options = Options.Create(new Settings { Redis = configuration.GetConnectionString("Redis") });
-            _target = new RedisCachedRepository(options);
+            var mockedOptions = Substitute.For<IOptionsMonitor<DbAccess>>();
+            mockedOptions.Get(DbAccess.Redis).Returns(new DbAccess { ConnectionString = configuration.GetConnectionString("Redis") });
+            _target = new RedisCachedRepository(mockedOptions);
         }
 
         [Test]
