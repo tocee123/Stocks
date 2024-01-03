@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Stocks.Dal;
 
+namespace Stocks.Dal;
 public class StockContextFactoryWithOptions : IDbContextFactory<StockContext>
 {
     private readonly string _connectionString;
