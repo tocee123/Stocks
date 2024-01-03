@@ -8,9 +8,9 @@ public class RedisCachedRepository : ICachedRepository
 {
     readonly ConfigurationOptions _redisConnectionString;
 
-    public RedisCachedRepository(IOptions<Settings> settings)
+    public RedisCachedRepository(IOptionsMonitor<DbAccess> settings)
     {
-        _redisConnectionString = ConfigurationOptions.Parse(settings.Value.Redis);
+        _redisConnectionString = ConfigurationOptions.Parse(settings.Get(DbAccess.Redis).ConnectionString);
         _redisConnectionString.ConnectRetry = 5;
         _redisConnectionString.AllowAdmin = true;
     }
