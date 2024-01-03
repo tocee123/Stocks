@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Stocks.Core.Loaders;
-using Stocks.Core.Repositories;
 using Stocks.Dal;
 using Stocks.Dal.Entities;
 using StockDividendCore = Stocks.Domain.Models.StockDividend;
@@ -131,14 +130,5 @@ public class Updater : IUpdater
         var newStockPrices = newStock.StockPrices.Where(sp => !stockPriceEntities.Any(sp => newStock.StockPrices.Select(x => x.Date).ToArray().Contains(sp.Date))).ToArray();
         _logger.LogInformation($"Found {newStockPrices.Length} new prices for {firstStock.Ticker}");
         firstStock.AddPrices(newStockPrices);
-    }
-
-    static void AddStockOfInterestIntoDb()
-    {
-        var stocksOfInterestRepository = new StocksOfInterestRespository();
-        var contextFactory = new StockContextFactory();
-        using var context = contextFactory.CreateDbContext(null);
-        context.StockOfInterest.AddRange(stocksOfInterestRepository.GetTickers().Select(t => new StockOfInterest { Ticker = t }));
-        context.SaveChanges();
     }
 }

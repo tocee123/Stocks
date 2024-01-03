@@ -26,6 +26,8 @@
     <ProjectReference Include="..\Stocks.Core\Stocks.Core.csproj" />
     <ProjectReference Include="..\Stocks.Dal\Stocks.Dal.csproj" />
     <ProjectReference Include="..\Stocks.Domain\Stocks.Domain.csproj" />
+    <ProjectReference Include="..\Stocks.Infrastructure\Stocks.Infrastructure.csproj" />
+    <ProjectReference Include="..\Stocks.ServiceConfiguration\Stocks.ServiceConfiguration.csproj" />
   </ItemGroup>
 
 </Project>
