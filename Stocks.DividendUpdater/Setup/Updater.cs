@@ -95,7 +95,8 @@ public class Updater : IUpdater
 
     private void MarkIsDeleted(Stock stockInDb, Stock stockFromNet)
     {
-        foreach (var dividendInDb in stockInDb.StockDividends.Except(stockFromNet.StockDividends))
+        foreach (var dividendInDb in stockInDb.StockDividends.Except(stockFromNet.StockDividends)
+            .Where(s => !s.IsDeleted))
         {
             dividendInDb.IsDeleted = true;
         }
@@ -105,7 +106,7 @@ public class Updater : IUpdater
     {
         var stockDividendsEntities = _context.StockDividend.Where(sda => sda.StockId == stockInDb.Id).ToArray();
 
-        var newStockDividends = stockFromNet.StockDividends.Where(newDividend => stockDividendsEntities.All(existingDividend => existingDividend.StockId == stockInDb.Id && existingDividend.PayoutDate != newDividend.PayoutDate))
+        var newStockDividends = stockFromNet.StockDividends.Where(newDividend => stockDividendsEntities.All(existingDividend => existingDividend.StockId == stockInDb.Id && (existingDividend.PayoutDate != newDividend.PayoutDate || existingDividend.IsDeleted)))
             .ToArray();
 
         foreach (var dividend in stockInDb.StockDividends)
