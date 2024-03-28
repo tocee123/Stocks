@@ -30,7 +30,6 @@ internal sealed class Program
 
         var updater = serviceCollection.BuildServiceProvider().GetRequiredService<IUpdater>();
 
-        await updater.SetIsDeleted();
         await updater.Update();
     }
 }

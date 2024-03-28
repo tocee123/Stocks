@@ -20,28 +20,6 @@ public class Updater : IUpdater
         _stocksLoader = stocksLoader;
     }
 
-    //Todo Make it nicer
-    public async Task SetIsDeleted()
-    {
-        var stockEntities = _context.Stock.Include(s => s.StockDividends).ToArray();
-
-        var histories = await GetHistories();
-        var newStockEntities = histories.Select(ToStockEntity);
-
-        foreach (var newStock in newStockEntities)
-        {
-            _logger.LogInformation($"Processing {newStock.Name}");
-            var firstStock = stockEntities.FirstOrDefault(s => s.Ticker == newStock.Ticker);
-            if (firstStock is null)
-            {
-                continue;
-            }
-            MarkIsDeleted(firstStock, newStock);
-        }
-
-        _context.SaveChanges();
-    }
-
     public async Task Update()
     {
         var stockEntities = _context.Stock.Include(s => s.StockDividends).ToArray();
@@ -63,6 +41,7 @@ public class Updater : IUpdater
                 UpdateNewStockDividendEntities(firstStock, newStock);
                 AddUpdatedPricesForStockDividends(firstStock, newStock);
                 AddNewStockPriceEntities(firstStock, newStock);
+                MarkIsDeleted(firstStock, newStock);
             }
         }
 
