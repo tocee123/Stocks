@@ -1,19 +1,22 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Stocks.Core.Updater;
 
 namespace Stocks.DividendUpdater.Function
 {
-    public class Function1
+    public class StockUpdateFunction
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<StockUpdateFunction> _logger;
+        private readonly IUpdater _updater;
 
-        public Function1(ILoggerFactory loggerFactory)
+        public StockUpdateFunction(ILogger<StockUpdateFunction> logger, IUpdater updater)
         {
-            _logger = loggerFactory.CreateLogger<Function1>();
+            _logger = logger;
+            _updater = updater;
         }
 
         [Function("Function1")]
-        public void Run([TimerTrigger("/10 * * * * *")] TimerInfo myTimer)
+        public void Run([TimerTrigger("%Schedule%")] TimerInfo myTimer)
         {
             _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
