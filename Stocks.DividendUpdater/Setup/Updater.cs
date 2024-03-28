@@ -104,11 +104,6 @@ public class Updater : IUpdater
 
     void UpdateNewStockDividendEntities(Stock stockInDb, Stock stockFromNet)
     {
-        var stockDividendsEntities = _context.StockDividend.Where(sda => sda.StockId == stockInDb.Id).ToArray();
-
-        var newStockDividends = stockFromNet.StockDividends.Where(newDividend => stockDividendsEntities.All(existingDividend => existingDividend.StockId == stockInDb.Id && (existingDividend.PayoutDate != newDividend.PayoutDate || existingDividend.IsDeleted)))
-            .ToArray();
-
         foreach (var dividend in stockInDb.StockDividends)
         {
             var dividendFromNet = stockFromNet.StockDividends.FirstOrDefault(s => s.ExDividend == dividend.ExDividend);
@@ -119,6 +114,11 @@ public class Updater : IUpdater
             dividend.Note = dividendFromNet.Note;
             dividend.Amount = dividendFromNet.Amount;
         }
+
+        var stockDividendsEntities = _context.StockDividend.Where(sda => sda.StockId == stockInDb.Id).ToArray();
+
+        var newStockDividends = stockFromNet.StockDividends.Where(newDividend => stockDividendsEntities.All(existingDividend => existingDividend.StockId == stockInDb.Id && (existingDividend.PayoutDate != newDividend.PayoutDate || existingDividend.IsDeleted)))
+            .ToArray();
 
         _logger.LogInformation($"Found {newStockDividends.Length} new dividend payments for {stockInDb.Ticker}");
         stockInDb.AddStockDividends(newStockDividends);
