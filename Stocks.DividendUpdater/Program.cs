@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Stocks.Core.Loaders;
-using Stocks.DividendUpdater.Setup;
+using Stocks.Core.Updater;
 using Stocks.Infrastructure.Configurations;
 
 internal sealed class Program

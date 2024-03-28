@@ -1,4 +1,4 @@
-﻿namespace Stocks.DividendUpdater.Setup;
+﻿namespace Stocks.Core.Updater;
 public interface IUpdater
 {
     Task Update();

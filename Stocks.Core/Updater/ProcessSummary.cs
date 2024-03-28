@@ -1,4 +1,4 @@
-﻿namespace Stocks.DividendUpdater.Setup;
+﻿namespace Stocks.Core.Updater;
 public class ProcessSummary
 {
     public int IsDeletedUpdatedCount { get; set; }
