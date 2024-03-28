@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Stocks.Dal;
 
-namespace Stocks.Infrastructure.Configurations;
+namespace Stocks.ServiceConfiguration;
 
 public static class ServiceCollectionExtensions
 {
