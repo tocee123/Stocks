@@ -1,5 +1,5 @@
-﻿public interface IUpdater
+﻿namespace Stocks.DividendUpdater.Setup;
+public interface IUpdater
 {
-    Task SetIsDeleted();
     Task Update();
 }
