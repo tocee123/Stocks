@@ -5,6 +5,7 @@
     <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>c3fdd7eb-7d27-4c3b-9adf-c5fa55a5d9e9</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="appsettings.json">

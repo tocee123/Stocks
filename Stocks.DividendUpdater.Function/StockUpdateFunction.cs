@@ -15,11 +15,12 @@ namespace Stocks.DividendUpdater.Function
             _updater = updater;
         }
 
-        [Function("Function1")]
-        public void Run([TimerTrigger("%Schedule%")] TimerInfo myTimer)
+        [Function("UpdateStockDividends")]
+        public async Task Run([TimerTrigger("%Schedule%")] TimerInfo myTimer)
         {
             _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
+            await _updater.Update();
             if (myTimer.ScheduleStatus is not null)
             {
                 _logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
