@@ -10,8 +10,8 @@ namespace Stocks.DividendUpdater.Setup;
 public class Updater : IUpdater
 {
     readonly ILogger<Updater> _logger;
-    readonly StockContext _context;
     readonly IStocksLoader _stocksLoader;
+    readonly StockContext _context;
 
     public Updater(ILogger<Updater> logger, StockContext context, IStocksLoader stocksLoader)
     {
@@ -61,6 +61,7 @@ public class Updater : IUpdater
             else
             {
                 UpdateNewStockDividendEntities(firstStock, newStock);
+                AddUpdatedPricesForStockDividends(firstStock, newStock);
                 AddNewStockPriceEntities(firstStock, newStock);
             }
         }
@@ -102,7 +103,7 @@ public class Updater : IUpdater
         }
     }
 
-    void UpdateNewStockDividendEntities(Stock stockInDb, Stock stockFromNet)
+    static void UpdateNewStockDividendEntities(Stock stockInDb, Stock stockFromNet)
     {
         foreach (var dividend in stockInDb.StockDividends)
         {
@@ -114,7 +115,11 @@ public class Updater : IUpdater
             dividend.Note = dividendFromNet.Note;
             dividend.Amount = dividendFromNet.Amount;
         }
+    }
 
+
+    void AddUpdatedPricesForStockDividends(Stock stockInDb, Stock stockFromNet)
+    {
         var stockDividendsEntities = _context.StockDividend.Where(sda => sda.StockId == stockInDb.Id).ToArray();
 
         var newStockDividends = stockFromNet.StockDividends.Where(newDividend => stockDividendsEntities.All(existingDividend => existingDividend.StockId == stockInDb.Id && (existingDividend.PayoutDate != newDividend.PayoutDate || existingDividend.IsDeleted)))
@@ -123,6 +128,7 @@ public class Updater : IUpdater
         _logger.LogInformation($"Found {newStockDividends.Length} new dividend payments for {stockInDb.Ticker}");
         stockInDb.AddStockDividends(newStockDividends);
     }
+
 
     void AddNewStockPriceEntities(Stock firstStock, Stock newStock)
     {
