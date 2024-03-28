@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Stocks.Core.Loaders;
 using Stocks.Core.Updater;
-using Stocks.Infrastructure.Configurations;
+using Stocks.ServiceConfiguration;
 
 internal sealed class Program
 {

@@ -8,7 +8,7 @@ using Stocks.Core.Cache;
 using Stocks.Core.DividendDisplay;
 using Stocks.Core.Loaders;
 using Stocks.Core.Repositories;
-using Stocks.Infrastructure.Configurations;
+using Stocks.ServiceConfiguration;
 using Stocks.Web.Data;
 
 namespace Stocks.Web

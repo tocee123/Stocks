@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
@@ -14,10 +13,10 @@ namespace Stocks.DividendUpdater.Function
         }
 
         [Function("Function1")]
-        public void Run([TimerTrigger("0 0 6 * * *")] TimerInfo myTimer)
+        public void Run([TimerTrigger("/10 * * * * *")] TimerInfo myTimer)
         {
             _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            
+
             if (myTimer.ScheduleStatus is not null)
             {
                 _logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
