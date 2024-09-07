@@ -12,44 +12,55 @@ public class Updater : IUpdater
     readonly ILogger<Updater> _logger;
     readonly IStocksLoader _stocksLoader;
     readonly StockContext _context;
-    readonly ProcessSummary _processSummary;
+    ProcessSummary _processSummary;
 
     public Updater(ILogger<Updater> logger, StockContext context, IStocksLoader stocksLoader)
     {
         _logger = logger;
         _context = context;
         _stocksLoader = stocksLoader;
-        _processSummary = new ProcessSummary();
     }
 
     public async Task Update()
     {
-        var stockEntities = _context.Stock.Include(s => s.StockDividends).ToArray();
-
-        var histories = await GetHistories();
-        var newStockEntities = histories.Select(ToStockEntity);
-
-        foreach (var newStock in newStockEntities)
+        do
         {
-            _logger.LogInformation($"Processing {newStock.Name}");
-            var firstStock = stockEntities.FirstOrDefault(s => s.Ticker == newStock.Ticker);
-            if (firstStock is null)
+            try
             {
-                _logger.LogInformation($"Stock {newStock.Name} wasn't found, added.");
-                _context.Stock.Add(newStock);
+                _processSummary = new ProcessSummary();
+                var stockEntities = _context.Stock.Include(s => s.StockDividends).ToArray();
+
+                var histories = await GetHistories();
+                var newStockEntities = histories.Select(ToStockEntity);
+
+                foreach (var newStock in newStockEntities)
+                {
+                    _logger.LogInformation($"Processing {newStock.Name}");
+                    var firstStock = stockEntities.FirstOrDefault(s => s.Ticker == newStock.Ticker);
+                    if (firstStock is null)
+                    {
+                        _logger.LogInformation($"Stock {newStock.Name} wasn't found, added.");
+                        _context.Stock.Add(newStock);
+                    }
+                    else
+                    {
+                        UpdateNewStockDividendEntities(firstStock, newStock);
+                        AddUpdatedPricesForStockDividends(firstStock, newStock);
+                        AddNewStockPriceEntities(firstStock, newStock);
+                        MarkIsDeleted(firstStock, newStock);
+                    }
+                }
+
+                _context.SaveChanges();
+
+                _logger.LogInformation(_processSummary.ToString());
             }
-            else
+            catch (Exception ex)
             {
-                UpdateNewStockDividendEntities(firstStock, newStock);
-                AddUpdatedPricesForStockDividends(firstStock, newStock);
-                AddNewStockPriceEntities(firstStock, newStock);
-                MarkIsDeleted(firstStock, newStock);
+                _logger.LogError(ex.ToString());
             }
-        }
 
-        _context.SaveChanges();
-
-        _logger.LogInformation(_processSummary.ToString());
+        } while (!_processSummary.IsFinished);
     }
 
     static Stock ToStockEntity(StockDividendCore history)
@@ -83,7 +94,7 @@ public class Updater : IUpdater
             .Where(s => !s.IsDeleted))
         {
             dividendInDb.IsDeleted = true;
-            _processSummary.IsDeletedUpdatedCount++;
+            _processSummary.IncreaseIsDeletedUpdated();
         }
     }
 
@@ -108,7 +119,7 @@ public class Updater : IUpdater
         var newStockDividends = stockFromNet.StockDividends.Where(newDividend => stockDividendsEntities.All(existingDividend => existingDividend.StockId == stockInDb.Id && (existingDividend.PayoutDate != newDividend.PayoutDate || existingDividend.IsDeleted)))
             .ToArray();
 
-        _processSummary.NewDividendPaymentsCount += newStockDividends.Length;
+        _processSummary.AddNewDividendPaymentsCount(newStockDividends.Length);
         stockInDb.AddStockDividends(newStockDividends);
     }
 
@@ -118,7 +129,7 @@ public class Updater : IUpdater
         var stockPriceEntities = _context.StockPrice.Where(sda => sda.StockId == firstStock.Id).ToArray();
 
         var newStockPrices = newStock.StockPrices.Where(sp => !stockPriceEntities.Any(sp => newStock.StockPrices.Select(x => x.Date).ToArray().Contains(sp.Date))).ToArray();
-        _processSummary.NewPriceCount += newStockPrices.Length;
+        _processSummary.AddNewPricesCount(newStockPrices.Length);
         firstStock.AddPrices(newStockPrices);
     }
 }
