@@ -31,3 +31,9 @@ jobs:
           name: dotnet-results-${{ env.DOTNET_VERSION }}
           path: TestResults-${{ env.DOTNET_VERSION }}
         if: ${{ always() }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
